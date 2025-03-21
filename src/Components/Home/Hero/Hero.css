@@ -1,0 +1,46 @@
+.home_hero{
+    background-color: #0072C0;
+}
+.home_hero .main-content-box .content-box h1{
+    font-size: 60px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+.home_hero .main-content-box .content-box p{
+    font-size: 17px;
+    font-weight: 400;
+    color: #CCE5FF;
+    width: 100%;
+    max-width: 605px;
+}
+.home_hero .slick-dots {
+    bottom: 25px;
+}
+.home_hero .slick-dots li{
+    width: initial;
+    height: initial;
+}
+.home_hero .slick-dots li button:before {
+    opacity: .25;
+    color: #FFFFFF;
+    font-size: 0;
+    height: 0;
+    width: 0;
+}
+.home_hero .slick-dots li.slick-active button:before {
+    opacity: .75;
+    color: #FFFFFF;
+    font-size: 0;
+    height: 0;
+    width: 0;
+}
+.home_hero .slick-dots li button {
+    width: 8px;
+    height: 8px;
+    background-color: #ffffff;
+}
+.home_hero .slick-dots li.slick-active button{
+    width: 20px;
+    height: 8px;
+    background-color: #ffffff;
+}

@@ -1,0 +1,68 @@
+.Header .infobox{
+    padding: 4px 0;
+    border-bottom: 1px solid #EAEAEA;
+}
+
+.Header .infobox ul li a{
+    font-size: 14px;
+    font-weight: 400;
+    color: #56778F;
+}
+.Header .infobox ul li a i{
+    font-size: 14px;
+    color: #0070BC;
+}
+.Header .searchbar-category-barr button{
+    background-color: #ffffff;
+    border: 1px solid #0071BC1A;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #184363;
+    white-space: nowrap;
+    padding: 10px 16px;
+}
+.Header .searchbar-category-barr .input-group{
+    border: 1px solid #0071BC1A;
+    border-radius: 40px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+}
+.Header .searchbar-category-barr .input-group input{
+    border: none;
+    font-size: 15px;
+    padding: 11px 16px;
+    width: calc(100% - 56px);
+}
+.searchbar-category-barr .input-group .input-group-text{
+    border: none;
+    background-color: #0070BC;
+    color: #ffffff;
+    padding: 11px 16px;
+    width: 56px;
+}
+.Header .logo-cartbox ul li a{
+    font-size: 16px;
+    color: #184363;
+}
+.Header .logo-serach .brand-name{
+    width: 100%;
+    max-width: 185px;
+}
+
+.Header .menu-box{
+    background-color: #EDF4F6;
+    padding: 17px;
+}
+.Header .menu-box ul li:not(:last-child){
+    margin-right: 48px;
+}
+.Header .menu-box ul li a.active{
+    color: #0070BC;
+}
+.Header .menu-box ul li a{
+    color: #184363;
+    font-size: 15px;
+    font-weight: 700;
+}
