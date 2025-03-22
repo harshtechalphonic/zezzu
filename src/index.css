@@ -86,3 +86,11 @@ button:hover {
 .slick-next:before {
   content: "\f105"; /* Right arrow for next */
 }
+@media screen and (max-width:576px) {
+  .slick-next {
+    right: 2px !important;
+  }
+  .slick-prev {
+    left: 2px !important;
+  }
+}

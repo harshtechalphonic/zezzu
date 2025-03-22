@@ -38,36 +38,39 @@ export default function Footer() {
                                                 </div>
                                 </div>
                             </div>
-                            <div className='col-lg-3 mt-5'>
+                            <div className='col-lg-3 col-md-4 mt-5'>
                                 <div className='menu-box'>
-                                    <h4>Company Profile</h4>
+                                    <h4>Quick Links</h4>
                                     <ul className='list-unstyled mt-4'>
                                         <li><a href="#!">Home</a></li>
                                         <li><a href="#!">About Us</a></li>
                                         <li><a href="#!">Our Products</a></li>
+                                        <li><a href="#!">Track Orders</a></li>
                                         <li><a href="#!">Contact Us</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            <div className='col-lg-3 mt-5'>
+                            <div className='col-lg-3 col-md-4 mt-5'>
                                 <div className='menu-box'>
-                                    <h4>Company Profile</h4>
+                                    <h4>Our Brand</h4>
                                     <ul className='list-unstyled mt-4'>
-                                        <li><a href="#!">Home</a></li>
-                                        <li><a href="#!">About Us</a></li>
-                                        <li><a href="#!">Our Products</a></li>
-                                        <li><a href="#!">Contact Us</a></li>
+                                        <li><a href="#!">Apple</a></li>
+                                        <li><a href="#!">Samsung</a></li>
+                                        <li><a href="#!">Amazon</a></li>
+                                        <li><a href="#!">Coca-Cola</a></li> 
+                                        <li><a href="#!">Nike</a></li> 
                                     </ul>
                                 </div>
                             </div>
-                            <div className='col-lg-3 mt-5'>
+                            <div className='col-lg-3 col-md-4 mt-5'>
                                 <div className='menu-box'>
-                                    <h4>Company Profile</h4>
+                                    <h4>Categories</h4>
                                     <ul className='list-unstyled mt-4'>
-                                        <li><a href="#!">Home</a></li>
-                                        <li><a href="#!">About Us</a></li>
-                                        <li><a href="#!">Our Products</a></li>
-                                        <li><a href="#!">Contact Us</a></li>
+                                        <li><a href="#!">Personal Care </a></li>
+                                        <li><a href="#!">Kitchen</a></li>
+                                        <li><a href="#!">Clothing</a></li>
+                                        <li><a href="#!">Electronic</a></li>
+                                        <li><a href="#!">Qorem</a></li>
                                     </ul>
                                 </div>
                             </div>

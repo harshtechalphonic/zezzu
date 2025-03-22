@@ -54,8 +54,8 @@ export default function Categories() {
         slidesToShow: 6,
         slidesToScroll: 1,
         arrows: true,
-        // autoplay: true,
-        // autoplaySpeed: 3000,
+        autoplay: true,
+        autoplaySpeed: 3000,
         responsive: [
             {
               breakpoint: 1200,
@@ -91,7 +91,7 @@ export default function Categories() {
           <div className='container'>
             <div className='feature-product-tile d-flex align-items-center justify-content-between'>
               <div className='title-box'>
-                <h2>Shop by health concerns </h2>
+                <h2>Categories </h2>
               </div>
             </div> 
 

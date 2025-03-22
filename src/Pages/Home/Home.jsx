@@ -2,8 +2,14 @@ import React, { useEffect } from 'react'
 import './Home.css'
 import Header from '../../Components/Partials/Header/Header'
 import Footer from '../../Components/Partials/Footer/Footer'
-import Categories from '../../Components/Home/Categories/Categories'
 import Hero from '../../Components/Home/Hero/Hero'
+import Categories from '../../Components/Home/Categories/Categories'
+import BestSelling from '../../Components/Home/BestSelling/BestSelling'
+import HotOffer from '../../Components/Home/HotOffer/HotOffer'
+import SuperSaving from '../../Components/Home/SuperSaving/SuperSaving'
+import MultiBanners from '../../Components/Home/MultiBanners/MultiBanners'
+import DealsOfDay from '../../Components/Home/DealsOfDay/DealsOfDay'
+import CategoryBestSellers from '../../Components/Home/CategoryBestSellers/CategoryBestSellers'
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -48,20 +54,20 @@ export default function Home() {
 
   return (
     <>
-        <Header/>
+      <Header/>
 
-        <Hero/>
+      <Hero/>
 
         <section className='gprscertified'>
             <div className='container'>
                 <div className='row'>
                     {gps.map((item) =>(
-                        <div className='col-lg-3' key={item.id}>
-                            <div class="gprscertified-box d-flex align-items-center  gap-3">
-                                <div class="gprscertified-icon">
-                                    <img alt="" src={item.image} alt={item.imagesAlt}/>
+                        <div className='col-lg-3 col-md-6 mb-lg-0 mb-3' key={item.id}>
+                            <div className="gprscertified-box d-flex align-items-center  gap-3">
+                                <div className="gprscertified-icon">
+                                    <img src={item.image} alt={item.imagesAlt}/>
                                 </div>
-                                <div class="gprscertified-content">
+                                <div className="gprscertified-content">
                                     <h4 className='mb-0'>{item.title}</h4>
                                 </div>
                             </div>
@@ -71,13 +77,17 @@ export default function Home() {
             </div>
         </section>
 
-        <Categories/>
+      <Categories/>
 
-       
+      <BestSelling/>
 
+      <HotOffer/>
+      <SuperSaving/>
+      <MultiBanners/>
+      <DealsOfDay/>
+      <CategoryBestSellers/>
 
-
-        <Footer/>
+      <Footer/>
     </>
   )
 }
