@@ -28,6 +28,7 @@
     overflow: hidden;
     width: 100%;
     max-width: 600px;
+    margin: 0 20px;
 }
 .Header .searchbar-category-barr .input-group input{
     border: none;
@@ -65,4 +66,70 @@
     color: #184363;
     font-size: 15px;
     font-weight: 700;
+}
+.Header .searchbar-category-barr button.touggle-btn{
+    border-radius: 8px;
+    display: none;
+}
+.mobsideMenu .brand-name{
+    width: 100%;
+    max-width: 140px;
+}
+.mobsideMenu  .menu-box {
+    background-color: #EDF4F6;
+    padding: 17px;
+    height: 100%;
+}
+.mobsideMenu .menu-box ul li{
+    width: 100%;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    padding: 8px 16px;
+}
+
+.mobsideMenu .menu-box ul li a.active{
+    color: #ffffff;
+}
+.mobsideMenu .menu-box ul li:has(a.active) {
+    background-color: #0070BC;
+}
+.mobsideMenu .menu-box ul li:hover {
+    background-color: #0070BC;
+}
+.mobsideMenu .menu-box ul li:hover a {
+    color: #ffffff;
+}
+.mobsideMenu .menu-box ul li a{
+    color: #184363;
+    font-size: 15px;
+    font-weight: 700;
+    width: 100%;
+}
+@media screen and (max-width:991px) {
+    .logo-serach{
+        flex-wrap: wrap;
+    }
+    .searchbar-category-barr{
+        order: -1;
+        margin-bottom: 12px;
+    }
+    .Header .searchbar-category-barr button.touggle-btn{
+        display: block;
+    }
+    .Header .searchbar-category-barr.justify-content-center{
+       justify-content: space-between !important;
+    }
+    .Header .menu-box.desktop {
+       display: none;
+    }
+    .Header .infobox ul li a{
+        width: -webkit-fill-available;
+    }
+    
+}
+@media screen and (max-width:576px) {
+    .searchbar-category-barr{
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 }

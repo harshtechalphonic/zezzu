@@ -7,40 +7,40 @@ export default function Categories() {
   const products = [
     {
       id: 1,
-      link: "#!",
+      link: "/product",
         image: "/PersonalCare.png",
-      title: "Personal Care",
-    },
-    {
-      id: 2,
-      link: "#!",
-      image: "/Kitchen.png",
-      title: "Kitchen",
-    },
-    {
-      id: 3,
-      link: "#!",
-      image: "/Clothing.png",
-      title: "Clothing",
+        title: "Personal Care",
+      },
+      {
+        id: 2,
+        link: "/product",
+        image: "/Kitchen.png",
+        title: "Kitchen",
+      },
+      {
+        id: 3,
+        link: "/product",
+        image: "/Clothing.png",
+        title: "Clothing",
     }
     ,
     {
       id: 4,
-      link: "#!",
+      link: "/product",
       image: "/Electronic.png",
       title: "Electronic",
     }
     ,
     {
       id: 5,
-      link: "#!",
+      link: "/product",
       image: "/Qorem.png",
-      title: "Qorem",     
+      title: "Qorem",
     }
     ,
     {
       id: 6,
-      link: "#!",
+      link: "/product",
       image: "/Yorem.png",
       title: "Yorem",
       
@@ -54,8 +54,8 @@ export default function Categories() {
         slidesToShow: 6,
         slidesToScroll: 1,
         arrows: true,
-        // autoplay: true,
-        // autoplaySpeed: 3000,
+        autoplay: true,
+        autoplaySpeed: 3000,
         responsive: [
             {
               breakpoint: 1200,
@@ -91,7 +91,7 @@ export default function Categories() {
           <div className='container'>
             <div className='feature-product-tile d-flex align-items-center justify-content-between'>
               <div className='title-box'>
-                <h2>Shop by health concerns </h2>
+                <h2>Categories </h2>
               </div>
             </div> 
 
