@@ -12,6 +12,7 @@ import DealsOfDay from '../../Components/Home/DealsOfDay/DealsOfDay'
 import CategoryBestSellers from '../../Components/Home/CategoryBestSellers/CategoryBestSellers'
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { useSelector } from 'react-redux'
 
 // images 
 // import grs_certified from '../../assets/grs_certified.png'
@@ -19,6 +20,8 @@ import "aos/dist/aos.css";
 
 
 export default function Home() {
+
+  const products = useSelector();
     useEffect(() => {
         AOS.init({ duration: 1000 });
       }, []);
