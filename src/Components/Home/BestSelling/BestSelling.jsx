@@ -126,7 +126,7 @@ export default function BestSelling() {
                 <h2><span>Best</span> Selling</h2>
               </div>
               <div className='title-box'>
-                <a href="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></a>
+                <Link href="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></Link>
               </div>
             </div>            
 

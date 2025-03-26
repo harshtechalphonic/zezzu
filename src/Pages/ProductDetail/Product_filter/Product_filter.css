@@ -14,8 +14,8 @@
     font-weight: 600;
     text-align: left;
     padding: 8px 16px ;
-    border-bottom: 1px solid #eaeaea;
-    border-top: 1px solid #eaeaea;
+    /* border-bottom: 1px solid #eaeaea;
+    border-top: 1px solid #eaeaea; */
   }
   
   .filter-contaienr .search-input {
@@ -27,29 +27,46 @@
     max-width: -webkit-fill-available;
   }
   
-  .filter-contaienr .category-item {
+  .filter-contaienr .category-item .accordion-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 8px 16px;
-    border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
     transition: background-color 0.2s ease;
   }
-  .filter-contaienr .category-item.active {
+  .filter-contaienr .category-item .accordion-header:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .filter-contaienr .category-item.active .accordion-header {
     background-color: #0071BC;
     color: #ffffff;
   }
-  .filter-contaienr .category-item.active:hover {
+  .filter-contaienr .category-item.active:hover .accordion-header {
     background-color: #0071BC;
   }
   
-  .filter-contaienr .category-item:hover {
+  .filter-contaienr .category-item:hover .accordion-header {
     background-color: #ececec;
   }
-  
+  .filter-contaienr .category-item.active .accordion-body ul li:hover {
+    background-color: #ececec;
+  }
+  .filter-contaienr .category-item.active .accordion-body ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  .filter-contaienr .category-item.active .accordion-body ul li:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
   .filter-contaienr .arrow-icon {
     font-size: 20px;
     color: #6c757d;
@@ -64,13 +81,20 @@
   }
 
 
+  .fliterbox {
+    position: sticky;
+    top: 32px;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+    scrollbar-width: none;
+  }
 
   .filterrange_box .wrapper {
     width: 100%;
     background: #fff;
     border-radius: 10px;
     padding: 10px 15px 20px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1); */
   }
  
   .filterrange_box .price-input {
@@ -153,8 +177,72 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
 
   }
-@media screen and (max-width:1200px) {
-  .filterrange_box .price-input {
-    flex-wrap: wrap;
+  .fliterbox .fliterbox-tile .title-box h2{
+    font-size: 24px;
+    color: #0071BC;
+    font-weight: 600;
+    margin-bottom: 0;
   }
-}
+  .fliterbox .fliterbox-tile .title-box a{
+    font-size: 14px;
+    color: #000000;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+  .category-item {
+    cursor: pointer;
+  }
+  .category-item:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+  .rating-check-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  .rating-check-item:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+  @media screen and (max-width:1200px) {
+    .filterrange_box .price-input {
+      flex-wrap: wrap;
+    }
+  }
+  @media screen and (max-width:768px) {
+    .filter-contaienr{
+      position: absolute;
+      top: 36px;
+      background-color: #ffffff;
+      z-index: 999;
+      display: none;
+    }
+    .fliterbox {
+      position: relative;
+      top: 0;
+      height: auto;
+      overflow-y: initial;
+      scrollbar-width: none;
+    }
+    .filter-categoy {
+      display: flex  ;
+      flex-wrap: wrap;
+      justify-content: space-between;
+  }
+    .filter-categoy.my-4 .card {
+      width: 100%;
+      max-width: calc(100% / 2 - 10px);
+  }
+  }
+  .filter-contaienr.show{
+    display: block !important;
+  }
+  .custom-select:focus {
+    box-shadow: none;
+    outline: none;
+  }
+  /* .filter-btn */

@@ -120,7 +120,7 @@ export default function SuperSaving() {
                 <h2><span>Super</span>  saving deals</h2>
               </div>
               <div className='title-box'>
-                <a href="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></a>
+                <Link to="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></Link>
               </div>
             </div>            
 
