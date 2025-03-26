@@ -20,27 +20,36 @@ export default function ProductFilter() {
                 <div class="filter-contaienr">
                     <div class="filter-categoy my-4">
                         <div class="card categories-card mb-3">
-                            <input type="text" class="form-control search-input" placeholder="Search"/>
+                            {/* <input type="text" class    ="form-control search-input" placeholder="Search"/> */}
                             <div class="categories-header">Categories</div>
                             <div class="list-group">
                             <div class="category-item active">
-                                    All Products <i class="fa-solid fa-angle-right"></i>
+                                    All  <i class="fa-solid fa-angle-right"></i>
                                 </div>
                                 <div class="category-item ">
-                                    Silver foil medium delivery bag <i class="fa-solid fa-angle-right"></i>
+                                Kitchen <i class="fa-solid fa-angle-right"></i>
                                 </div>
                                 <div class="category-item">
-                                    Milk delivery bag <i class="fa-solid fa-angle-right"></i>
+                                Clothing <i class="fa-solid fa-angle-right"></i>
                                 </div>
                                 <div class="category-item">
-                                    Cake delivery bag <i class="fa-solid fa-angle-right"></i>
+                                Personal Care <i class="fa-solid fa-angle-right"></i>
+                                </div>                               
+                            </div>
+                        </div>
+
+                        <div class="card categories-card mb-3">
+                            <div class="categories-header"> Sub Categories</div>
+                            <div class="list-group">
+                            <div class="category-item active">
+                                    All  
+                                </div>
+                                <div class="category-item ">
+                                Mens  
                                 </div>
                                 <div class="category-item">
-                                    Insulated large meal delivery bag <i class="fa-solid fa-angle-right"></i>
-                                </div>
-                                <div class="category-item">
-                                    Insulated large meal delivery bag <i class="fa-solid fa-angle-right"></i>
-                                </div>
+                                Womens 
+                                </div>                              
                             </div>
                         </div>
 

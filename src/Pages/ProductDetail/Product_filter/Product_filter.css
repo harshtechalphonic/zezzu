@@ -154,5 +154,7 @@
 
   }
 @media screen and (max-width:1200px) {
-  
+  .filterrange_box .price-input {
+    flex-wrap: wrap;
+  }
 }
