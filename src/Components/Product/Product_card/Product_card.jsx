@@ -153,7 +153,7 @@ export default function Product_card() {
   return (
     <div className='row Product_card'>
       {products.map((product) => (
-        <div key={product.id} className='col-lg-3 col-md-4 col-sm-6 mb-3'>
+        <div key={product.id} className='col-lg-3 col-md-6 col-sm-6 mb-3'>
           <div className="feature-card">
             <span className="disco">{product.discount}</span>
             <span className="wishicon" onClick={() => toggleWishlist(product.id)} style={{ cursor: 'pointer', fontSize: '16px' }}>
@@ -178,7 +178,7 @@ export default function Product_card() {
                 <p className="slashPrice">₹ {product.slashPrice}</p>
               </div>
             </div>
-            <a href="#!" className="cart-btn">Add to Cart <FontAwesomeIcon icon={faBagShopping} className="ms-2" /></a>
+            <a href="/cart" className="cart-btn">Add to Cart <FontAwesomeIcon icon={faBagShopping} className="ms-2" /></a>
           </div>
         </div>
       ))}
