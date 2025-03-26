@@ -18,12 +18,12 @@ export default function Header() {
         <div className="container">
           <ul className="list-unstyled d-flex align-items-center justify-content-between mb-0">
             <li className='d-flex align-items-center flex-wrap gap-lg-5 gap-md-4 gap-2'>
-              <a href="#!"><i className='me-2'><FontAwesomeIcon icon={faLocationDot}/></i> Store location</a>
-              <a href="#!"><i className='me-2'><FontAwesomeIcon icon={faPhoneVolume}/></i> +91 95974 95674</a>
+              <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faLocationDot}/></i> Store location</Link>
+              <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faPhoneVolume}/></i> +91 95974 95674</Link>
             </li>
             <li className='d-flex align-items-center flex-wrap gap-lg-5 gap-md-4 gap-2 text-lg-start text-end'>                            
-              <a href="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> My account</a>
-              <a href="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> Become a seller</a>
+              <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> My account</Link>
+              <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> Become a seller</Link>
             </li>
           </ul>
         </div>
@@ -32,9 +32,9 @@ export default function Header() {
       <div className='container'>
         <div className='logo-serach d-flex align-items-center justify-content-between py-3'>
           <div className='brand-name'>
-            <a href="/">
+            <Link to="/">
               <img src={logo} alt="Logo" />
-            </a>
+            </Link>
           </div>
 
           <div className='searchbar-category-barr d-flex align-items-center justify-content-center w-100'>
@@ -54,8 +54,8 @@ export default function Header() {
 
           <div className='logo-cartbox'>
             <ul className='list-unstyled d-flex gap-3 mb-0'>
-              <li><a href="#!"><FontAwesomeIcon icon={faHeart}/></a></li>
-              <li><a href="#!"><FontAwesomeIcon icon={faCartShopping}/></a></li>
+              <li><Link to="#!"><FontAwesomeIcon icon={faHeart}/></Link></li>
+              <li><Link to="/cart"><FontAwesomeIcon icon={faCartShopping}/></Link></li>
             </ul>
           </div>
         </div>
@@ -78,9 +78,9 @@ export default function Header() {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
                 <div className='brand-name'>
-                    <a href="/">
+                    <Link to="/">
                         <img src={logo} alt="Logo" />
-                    </a>
+                    </Link>
                 </div>
           </Offcanvas.Title>
         </Offcanvas.Header>
