@@ -2,6 +2,7 @@ import React from 'react'
 import "./HotOffer.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightLong } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
 
 export default function HotOffer() {
   return (
@@ -16,7 +17,7 @@ export default function HotOffer() {
                         <p>Norem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem.
                         </p>
                         <div className='button-dark mt-4'>
-                                    <a href="">SHOP NOW  <FontAwesomeIcon icon={faArrowRightLong    }/></a>
+                                    <Link to="/product">SHOP NOW  <FontAwesomeIcon icon={faArrowRightLong    }/></Link>
                         </div>
                     </div>
                 </div>

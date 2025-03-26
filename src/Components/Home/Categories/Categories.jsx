@@ -7,40 +7,40 @@ export default function Categories() {
   const products = [
     {
       id: 1,
-      link: "#!",
+      link: "/product",
         image: "/PersonalCare.png",
-      title: "Personal Care",
-    },
-    {
-      id: 2,
-      link: "#!",
-      image: "/Kitchen.png",
-      title: "Kitchen",
-    },
-    {
-      id: 3,
-      link: "#!",
-      image: "/Clothing.png",
-      title: "Clothing",
+        title: "Personal Care",
+      },
+      {
+        id: 2,
+        link: "/product",
+        image: "/Kitchen.png",
+        title: "Kitchen",
+      },
+      {
+        id: 3,
+        link: "/product",
+        image: "/Clothing.png",
+        title: "Clothing",
     }
     ,
     {
       id: 4,
-      link: "#!",
+      link: "/product",
       image: "/Electronic.png",
       title: "Electronic",
     }
     ,
     {
       id: 5,
-      link: "#!",
+      link: "/product",
       image: "/Qorem.png",
-      title: "Qorem",     
+      title: "Qorem",
     }
     ,
     {
       id: 6,
-      link: "#!",
+      link: "/product",
       image: "/Yorem.png",
       title: "Yorem",
       

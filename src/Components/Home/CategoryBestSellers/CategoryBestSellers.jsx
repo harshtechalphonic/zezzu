@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightLong, faBagShopping, faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function CategoryBestSellers() {
     const products = [
@@ -17,6 +18,7 @@ export default function CategoryBestSellers() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+            link: "/product-detail"
         },
         {
           id: 2,
@@ -27,6 +29,7 @@ export default function CategoryBestSellers() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+            link: "/product-detail"
         },
         {
           id: 3,
@@ -37,6 +40,7 @@ export default function CategoryBestSellers() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+            link: "/product-detail"
         }
         ,
         {
@@ -48,6 +52,7 @@ export default function CategoryBestSellers() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+            link: "/product-detail"
         },
         {
             id: 5,
@@ -58,9 +63,10 @@ export default function CategoryBestSellers() {
             reviews: 12,
             price: 212,
             slashPrice: 312,
+              link: "/product-detail"
           },
           {
-            id: 5,
+            id: 6,
             discount: "-20%",
             image: "/PersonalCare.png",
             title: "Professionals Design Perfect Hair",
@@ -68,6 +74,7 @@ export default function CategoryBestSellers() {
             reviews: 12,
             price: 212,
             slashPrice: 312,
+              link: "/product-detail"
           }
       ];
 
@@ -124,7 +131,7 @@ export default function CategoryBestSellers() {
                 <h2><span>Best Sellers</span>     in this category</h2>
               </div>
               <div className='title-box'>
-                <a href="#!">View All <FontAwesomeIcon icon={faArrowRightLong}/></a>
+                <Link to="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></Link>
               </div>
             </div>            
 
@@ -139,11 +146,13 @@ export default function CategoryBestSellers() {
                                       color={wishlist[product.id] ? "red" : "black"} 
                                     />
                                   </span>
+                                  <Link  to={product.link}>
                   <div className="card-img">
                     <img src={product.image} alt="Product" />
                   </div>
+                  </Link>
                   <div className="product-detail">
-                    <h3>{product.title}</h3>
+                    <h3><Link to={product.link}>{product.title}</Link></h3>
                     <div className="rating d-flex align-items-center ">
                       {[...Array(Math.floor(product.rating))].map((_, i) => (
                         <FontAwesomeIcon key={i} icon={faStar} />

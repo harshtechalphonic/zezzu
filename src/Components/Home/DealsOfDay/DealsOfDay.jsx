@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightLong, faBagShopping, faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function DealsOfDay() {
     const products = [
@@ -17,6 +18,7 @@ export default function DealsOfDay() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+          link: "/product-detail"
         },
         {
           id: 2,
@@ -27,6 +29,7 @@ export default function DealsOfDay() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+          link: "/product-detail"
         },
         {
           id: 3,
@@ -37,6 +40,7 @@ export default function DealsOfDay() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+          link: "/product-detail"
         }
         ,
         {
@@ -48,6 +52,7 @@ export default function DealsOfDay() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+          link: "/product-detail"
         },
         {
             id: 5,
@@ -58,6 +63,7 @@ export default function DealsOfDay() {
             reviews: 12,
             price: 212,
             slashPrice: 312,
+            link: "/product-detail"
           }
           ,
       ];
@@ -115,7 +121,7 @@ export default function DealsOfDay() {
                 <h2><span>Deals</span>   of the day</h2>
               </div>
               <div className='title-box'>
-                <a href="#!">View All <FontAwesomeIcon icon={faArrowRightLong}/></a>
+                <Link to="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></Link>
               </div>
             </div>            
 
@@ -134,7 +140,7 @@ export default function DealsOfDay() {
                     <img src={product.image} alt="Product" />
                   </div>
                   <div className="product-detail">
-                    <h3>{product.title}</h3>
+                    <h3><Link to={product.link}>{product.title}</Link></h3>
                     <div className="rating d-flex align-items-center ">
                       {[...Array(Math.floor(product.rating))].map((_, i) => (
                         <FontAwesomeIcon key={i} icon={faStar} />

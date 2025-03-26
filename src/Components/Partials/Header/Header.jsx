@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import './Header.css'
 import logo from '../../../assets/zezzu.png'
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import { Link } from 'react-router-dom'
 
 export default function Header() {
   const [show, setShow] = useState(false);    
@@ -31,7 +32,7 @@ export default function Header() {
       <div className='container'>
         <div className='logo-serach d-flex align-items-center justify-content-between py-3'>
           <div className='brand-name'>
-            <a href="#!">
+            <a href="/">
               <img src={logo} alt="Logo" />
             </a>
           </div>
@@ -62,13 +63,13 @@ export default function Header() {
 
       <div className='menu-box desktop'>
         <ul className='d-flex align-items-center list-unstyled justify-content-center mb-0'>
-          <li><a href="#!" className='active'>Home</a></li>
-          <li><a href="#!">Kitchen</a></li>
-          <li><a href="#!">Clothing</a></li>
-          <li><a href="#!">Personal Care</a></li>
-          <li><a href="#!">About Us</a></li>
-          <li><a href="#!">Contact Us</a></li>
-          <li><a href="#!">Track Order</a></li>
+          <li><Link to="/" className='active'>Home</Link></li>
+          <li><Link to="/product">Kitchen</Link></li>
+          <li><Link tp="/product">Clothing</Link></li>
+          <li><Link to="/product">Personal Care</Link></li>
+          <li><Link to="#!">About Us</Link></li>
+          <li><Link to="#!">Contact Us</Link></li>
+          <li><Link to="#!">Track Order</Link></li>
         </ul>
       </div>
 
@@ -77,7 +78,7 @@ export default function Header() {
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
                 <div className='brand-name'>
-                    <a href="#!">
+                    <a href="/">
                         <img src={logo} alt="Logo" />
                     </a>
                 </div>
@@ -86,13 +87,13 @@ export default function Header() {
         <Offcanvas.Body>
         <div className='menu-box'>
         <ul className='d-flex flex-wrap align-items-center list-unstyled justify-content-center mb-0'>
-          <li><a href="#!" className='active'>Home</a></li>
-          <li><a href="#!">Kitchen</a></li>
-          <li><a href="#!">Clothing</a></li>
-          <li><a href="#!">Personal Care</a></li>
-          <li><a href="#!">About Us</a></li>
-          <li><a href="#!">Contact Us</a></li>
-          <li><a href="#!">Track Order</a></li>
+        <li><Link to="/" className='active'>Home</Link></li>
+          <li><Link to="/product">Kitchen</Link></li>
+          <li><Link tp="/product">Clothing</Link></li>
+          <li><Link to="/product">Personal Care</Link></li>
+          <li><Link to="#!">About Us</Link></li>
+          <li><Link to="#!">Contact Us</Link></li>
+          <li><Link to="#!">Track Order</Link></li>
         </ul>
       </div>
         </Offcanvas.Body>

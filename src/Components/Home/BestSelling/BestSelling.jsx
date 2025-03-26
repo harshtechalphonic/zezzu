@@ -6,6 +6,7 @@ import { faArrowRightLong, faBagShopping, faStar, faStarHalfAlt } from '@fortawe
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom';
 
 export default function BestSelling() {
     const products = [
@@ -18,6 +19,7 @@ export default function BestSelling() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+           link: "/product-detail"
         },
         {
           id: 2,
@@ -28,6 +30,8 @@ export default function BestSelling() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+           link: "/product-detail"
+
         },
         {
           id: 3,
@@ -38,6 +42,8 @@ export default function BestSelling() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+           link: "/product-detail"
+
         }
         ,
         {
@@ -49,6 +55,8 @@ export default function BestSelling() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+           link: "/product-detail"
+
         }
         ,
         {
@@ -60,6 +68,8 @@ export default function BestSelling() {
           reviews: 12,
           price: 212,
           slashPrice: 312,
+           link: "/product-detail"
+
         }
       ];
 
@@ -116,7 +126,7 @@ export default function BestSelling() {
                 <h2><span>Best</span> Selling</h2>
               </div>
               <div className='title-box'>
-                <a href="#!">View All <FontAwesomeIcon icon={faArrowRightLong}/></a>
+                <a href="/product">View All <FontAwesomeIcon icon={faArrowRightLong}/></a>
               </div>
             </div>            
 
@@ -135,7 +145,7 @@ export default function BestSelling() {
                     <img src={product.image} alt="Product" />
                   </div>
                   <div className="product-detail">
-                    <h3>{product.title}</h3>
+                    <h3><Link to={product.link}>{product.title}</Link></h3>
                     <div className="rating d-flex align-items-center ">
                       {[...Array(Math.floor(product.rating))].map((_, i) => (
                         <FontAwesomeIcon key={i} icon={faStar} />
