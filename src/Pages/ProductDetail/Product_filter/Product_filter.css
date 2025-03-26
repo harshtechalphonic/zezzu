@@ -61,4 +61,97 @@
   }
   .All_Products .product-section .feature-product-tile .title-box h2 span {
     color: #0071BC;
+<<<<<<< HEAD
+=======
+  }
+
+
+
+  .filterrange_box .wrapper {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 15px 20px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+  }
+ 
+  .filterrange_box .price-input {
+    width: 100%;
+    display: flex;
+    margin: 0 0 20px;
+  }
+  .filterrange_box .price-input .field {
+    display: flex;
+    width: 100%;
+    height: 45px;
+    align-items: center;
+  }
+  .filterrange_box .field input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    font-size: 16px;
+    margin-left: 8px;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #999;
+    -moz-appearance: textfield;
+  }
+  .filterrange_box input[type="number"]::-webkit-outer-spin-button,
+  .filterrange_box input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  .filterrange_box .price-input .separator {
+    width: 130px;
+    display: flex;
+    font-size: 16px;
+    align-items: center;
+    justify-content: center;
+  }
+  .filterrange_box .slider {
+    height: 5px;
+    position: relative;
+    background: #ddd;
+    border-radius: 5px;
+  }
+  .filterrange_box .slider .progress {
+    height: 100%;
+    left: 25%;
+    right: 25%;
+    position: absolute;
+    border-radius: 5px;
+    background: #17a2b8;
+  }
+  .filterrange_box  .range-input {
+    position: relative;
+  }
+  .filterrange_box .range-input input {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    top: -5px;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+  }
+  .filterrange_box input[type="range"]::-webkit-slider-thumb {
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    background: #17a2b8;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+  }
+  .filterrange_box input[type="range"]::-moz-range-thumb {
+    height: 17px;
+    width: 17px;
+    border: none;
+    border-radius: 50%;
+    background: #17a2b8;
+    pointer-events: auto;
+    -moz-appearance: none;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+>>>>>>> 8ac5910ec37236342a9fbc05cfc3a2de764ee0ff
   }
