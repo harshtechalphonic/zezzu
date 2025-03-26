@@ -39,11 +39,11 @@
     transition: background-color 0.2s ease;
   }
   .filter-contaienr .category-item.active {
-    background-color: #289262;
+    background-color: #0071BC;
     color: #ffffff;
   }
   .filter-contaienr .category-item.active:hover {
-    background-color: #289262;
+    background-color: #0071BC;
   }
   
   .filter-contaienr .category-item:hover {
@@ -118,7 +118,7 @@
     right: 25%;
     position: absolute;
     border-radius: 5px;
-    background: #17a2b8;
+    background: #0071BC;
   }
   .filterrange_box  .range-input {
     position: relative;
@@ -137,7 +137,7 @@
     height: 17px;
     width: 17px;
     border-radius: 50%;
-    background: #17a2b8;
+    background: #0071BC;
     pointer-events: auto;
     -webkit-appearance: none;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
@@ -147,8 +147,11 @@
     width: 17px;
     border: none;
     border-radius: 50%;
-    background: #17a2b8;
+    background: #0071BC;
     pointer-events: auto;
     -moz-appearance: none;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
   }
+@media screen and (max-width:) {
+  
+}
