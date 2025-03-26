@@ -61,8 +61,6 @@
   }
   .All_Products .product-section .feature-product-tile .title-box h2 span {
     color: #0071BC;
-<<<<<<< HEAD
-=======
   }
 
 
@@ -155,6 +153,6 @@
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
 
   }
-@media screen and (max-width:) {
+@media screen and (max-width:1200px) {
   
 }
