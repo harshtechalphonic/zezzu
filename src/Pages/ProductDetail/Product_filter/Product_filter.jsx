@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import './Product_filter.css';
 
+<<<<<<< HEAD
+export default function ProductFilter() {
+=======
 
 export default function ProductFilter() {
     const [minPrice, setMinPrice] = useState(2500);
@@ -16,6 +19,7 @@ export default function ProductFilter() {
       const value = Math.max(Number(e.target.value), minPrice + 100);
       setMaxPrice(value);
     };
+>>>>>>> 8ac5910ec37236342a9fbc05cfc3a2de764ee0ff
   return (
                 <div class="filter-contaienr">
                     <div class="filter-categoy my-4">
@@ -45,6 +49,13 @@ export default function ProductFilter() {
                         </div>
 
                         <div class="card categories-card mb-3">
+<<<<<<< HEAD
+                            <div class="categories-header">Pricing</div>
+                            <div class="list-group">
+                            <div class="category-item active">
+                                    All Products <i class="fa-solid fa-angle-right"></i>
+                                </div>                               
+=======
                             <div class="categories-header">Price Range</div>
                             <div className="d-flex filterrange_box">
                                 <div className="wrapper">
@@ -96,6 +107,7 @@ export default function ProductFilter() {
                                     />
                                     </div>
                                 </div>
+>>>>>>> 8ac5910ec37236342a9fbc05cfc3a2de764ee0ff
                             </div>
                         </div>
 
@@ -104,7 +116,11 @@ export default function ProductFilter() {
                             <div class="list-group">                                
                                 <div class="rating-check-item ">
                                     <div class="form-check">
+<<<<<<< HEAD
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked/>
+=======
                                         <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
+>>>>>>> 8ac5910ec37236342a9fbc05cfc3a2de764ee0ff
                                         <label class="form-check-label" for="flexCheckChecked">
                                             Checked checkbox
                                         </label>
