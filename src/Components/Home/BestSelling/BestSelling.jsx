@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom';
 
 export default function BestSelling() {
+
     const products = [
         {
           id: 1,

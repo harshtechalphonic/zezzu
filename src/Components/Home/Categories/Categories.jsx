@@ -4,23 +4,19 @@ import Slider from "react-slick";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { categoriesAction } from "../../../store/Categories/categoriesSlice";
+import config from "../../../Config/config.json"
+import CategoriesApi from "../../../API/CategoriesAPi";
 
 export default function Categories() {
-  const categories = useSelector((store) => store.categories);
-  const [category, setCategory] = useState([]);
-  const dispatch = useDispatch();
+  const fetch_categories = useSelector((store) => store.categories);
+  const [categories,setCategory] = useState([])
   useEffect(() => {
-    if (categories.status) return;
-    axios
-      .get("https://demotechalphonic.site/multivendor/api/category")
-      .then(function (response) {
-        dispatch(categoriesAction.getCategory(response.data))
-        setCategory(response.data.categories);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [categories.status]);
+    // console.log(fetch_categories.
+    //   data
+    //   )
+      setCategory(fetch_categories.data)
+    // setCategory(categories.data);
+  }, [fetch_categories.status]);
 
   var settings = {
     dots: false,
@@ -61,6 +57,7 @@ export default function Categories() {
   
   return (
     <section className="Shop_by_health ">
+      <CategoriesApi/>
       <div className="container">
         <div className="feature-product-tile d-flex align-items-center justify-content-between">
           <div className="title-box">
@@ -68,7 +65,7 @@ export default function Categories() {
           </div>
         </div>
         <Slider {...settings} className="xyzg-slider">
-          {category.map((product) => (
+          {categories.map((product) => (
             <div key={product.id} className="Shop_by_health-card">
               <div className="card-img">
                 <img src={product.image_url} alt="Product" />

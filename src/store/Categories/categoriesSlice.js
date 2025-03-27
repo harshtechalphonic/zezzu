@@ -10,7 +10,6 @@ export const categoriesSlice = createSlice({
   },
   reducers: {
     getCategory: (store, action) => {
-      
       return {
         status: true,
         data: [...action.payload.categories],
