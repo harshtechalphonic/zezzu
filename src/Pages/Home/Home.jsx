@@ -13,12 +13,16 @@ import CategoryBestSellers from '../../Components/Home/CategoryBestSellers/Categ
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+
 // images 
 // import grs_certified from '../../assets/grs_certified.png'
 
 
 
 export default function Home() {
+
+
+
     useEffect(() => {
         AOS.init({ duration: 1000 });
       }, []);
