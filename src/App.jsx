@@ -6,6 +6,7 @@ import Home from './Pages/Home/Home'
 import Product from './Pages/Product/Product'
 import ProductDetail from './Pages/ProductDetail/ProductDetail'
 import Cart from './Pages/Cart/Cart'
+import Wishlist from './Pages/Wishlist/Wishlist'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -28,6 +29,10 @@ const router= createBrowserRouter([
   {
     path : '/cart',
     element : <Cart/>
+  },
+  {
+    path : '/wishlist',
+    element : <Wishlist/>
   },
   {
     path : '*',

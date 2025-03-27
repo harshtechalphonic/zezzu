@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../Components/Partials/Header/Header';
 import Footer from '../../Components/Partials/Footer/Footer';
 import Product_card from '../../Components/Product/Product_card/Product_card';
-import Product_filter from '../ProductDetail/Product_filter/Product_filter';
+import Product_filter from '../../Components/ProductDetail/Product_filter/Product_filter';
 import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 

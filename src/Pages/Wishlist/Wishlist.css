@@ -1,0 +1,35 @@
+.breadcrum_box nav {
+    background-color: #f2f4f5;
+    padding: 26px 0;
+  }
+  .breadcrum_box nav .breadcrumb .breadcrumb-item {
+    color: #5f6c72;
+    font-weight: 500;
+  }
+  .breadcrum_box nav .breadcrumb .breadcrumb-item.active {
+    color: #289262;
+    font-weight: 600;
+  }
+
+  .wishlist-box .cart-title h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #4b5966;
+}
+.wishlist-box .cart-title h2 span {
+    color: #5caf90;
+}
+.wishlistTitle_btn h3{
+    font-size: 26px;
+    font-weight: 700;
+    color: #4b5966;
+}
+.wishlistTitle_btn a{
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0072C0;
+    padding: 8px 16px;
+    border-radius: 8px;
+
+}

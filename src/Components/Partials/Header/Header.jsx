@@ -1,12 +1,12 @@
-import { faBarsStaggered, faCartShopping, faHeart, faLocationDot, faPhoneVolume, faSearch, faUser } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
-import './Header.css'
-import logo from '../../../assets/zezzu.png'
+import { faBarsStaggered, faCartShopping, faHeart, faLocationDot, faPhoneVolume, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from 'react';
+import './Header.css';
+import logo from '../../../assets/zezzu.png';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-export default function Header() {
+export default function Header({ wishlistCount }) {
   const [show, setShow] = useState(false);    
 
   const handleClose = () => setShow(false);
@@ -54,7 +54,12 @@ export default function Header() {
 
           <div className='logo-cartbox'>
             <ul className='list-unstyled d-flex gap-3 mb-0'>
-              <li><Link to="#!"><FontAwesomeIcon icon={faHeart}/></Link></li>
+              <li>
+                <Link to="/wishlist">
+                  <FontAwesomeIcon icon={faHeart} />
+                </Link>
+                  {wishlistCount > 0 && <span className="wishlist-count">{wishlistCount}</span>}
+              </li>
               <li><Link to="/cart"><FontAwesomeIcon icon={faCartShopping}/></Link></li>
             </ul>
           </div>
@@ -65,7 +70,7 @@ export default function Header() {
         <ul className='d-flex align-items-center list-unstyled justify-content-center mb-0'>
           <li><Link to="/" className='active'>Home</Link></li>
           <li><Link to="/product">Kitchen</Link></li>
-          <li><Link tp="/product">Clothing</Link></li>
+          <li><Link to="/product">Clothing</Link></li>
           <li><Link to="/product">Personal Care</Link></li>
           <li><Link to="#!">About Us</Link></li>
           <li><Link to="#!">Contact Us</Link></li>
@@ -77,25 +82,25 @@ export default function Header() {
       <Offcanvas show={show} onHide={handleClose} className="mobsideMenu">
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
-                <div className='brand-name'>
-                    <Link to="/">
-                        <img src={logo} alt="Logo" />
-                    </Link>
-                </div>
+            <div className='brand-name'>
+              <Link to="/">
+                <img src={logo} alt="Logo" />
+              </Link>
+            </div>
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-        <div className='menu-box'>
-        <ul className='d-flex flex-wrap align-items-center list-unstyled justify-content-center mb-0'>
-        <li><Link to="/" className='active'>Home</Link></li>
-          <li><Link to="/product">Kitchen</Link></li>
-          <li><Link tp="/product">Clothing</Link></li>
-          <li><Link to="/product">Personal Care</Link></li>
-          <li><Link to="#!">About Us</Link></li>
-          <li><Link to="#!">Contact Us</Link></li>
-          <li><Link to="#!">Track Order</Link></li>
-        </ul>
-      </div>
+          <div className='menu-box'>
+            <ul className='d-flex flex-wrap align-items-center list-unstyled justify-content-center mb-0'>
+              <li><Link to="/" className='active'>Home</Link></li>
+              <li><Link to="/product">Kitchen</Link></li>
+              <li><Link to="/product">Clothing</Link></li>
+              <li><Link to="/product">Personal Care</Link></li>
+              <li><Link to="#!">About Us</Link></li>
+              <li><Link to="#!">Contact Us</Link></li>
+              <li><Link to="#!">Track Order</Link></li>
+            </ul>
+          </div>
         </Offcanvas.Body>
       </Offcanvas>
     </section>

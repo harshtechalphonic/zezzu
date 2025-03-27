@@ -105,6 +105,25 @@
     font-weight: 700;
     width: 100%;
 }
+.logo-cartbox li{
+    position: relative;
+}
+.wishlist-count{
+    width: 100%;
+    max-width:16px;
+    height: 16px;
+    background-color: #0070BC;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
 @media screen and (max-width:991px) {
     .logo-serach{
         flex-wrap: wrap;
