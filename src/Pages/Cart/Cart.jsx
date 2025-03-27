@@ -148,7 +148,7 @@ export default function Cart() {
           </div>
           <div className='continueshop_btn my-5'>
             <div className='row'>
-              <div className='offset-lg-1'><Link to="/product">Continue Shopping</Link></div>
+              <div className='offset-lg-1 col-lg-11 col-md-12'><Link to="/product">Continue Shopping</Link></div>
             </div>
           </div>
         </div>
