@@ -94,3 +94,15 @@ button:hover {
     left: 2px !important;
   }
 }
+.breadcrum_box nav {
+  background-color: #f2f4f5;
+  padding: 26px 0;
+}
+.breadcrum_box nav .breadcrumb .breadcrumb-item {
+  color: #5f6c72;
+  font-weight: 500;
+}
+.breadcrum_box nav .breadcrumb .breadcrumb-item.active {
+  color: #0072C0;
+  font-weight: 600;
+}

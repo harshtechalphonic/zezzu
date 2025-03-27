@@ -35,7 +35,7 @@ export default function ProductFilter() {
       ];
   return (
                 
-                    <div class="filter-categoy my-4">
+                    <div className="filter-categoy my-4">
                     <div className="card categories-card mb-3">
                         <div className="categories-header">Categories</div>
                             <div className="list-group">
@@ -60,8 +60,8 @@ export default function ProductFilter() {
                         </div>
 
 
-                        <div class="card categories-card mb-3">
-                            <div class="categories-header">Price Range</div>
+                        <div className="card categories-card mb-3">
+                            <div className="categories-header">Price Range</div>
                             <div className='list-group'>
                                 <div className="d-flex filterrange_box">
                                     <div className="wrapper">
@@ -115,37 +115,37 @@ export default function ProductFilter() {
                             </div>
                         </div>
 
-                        <div class="card categories-card  mb-3">
-                            <div class="categories-header">Customer Ratings</div>
-                            <div class="list-group">                                
-                                <div class="rating-check-item ">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="5star" />
-                                        <label class="form-check-label" for="5star">
+                        <div className="card categories-card  mb-3">
+                            <div className="categories-header">Customer Ratings</div>
+                            <div className="list-group">                                
+                                <div className="rating-check-item ">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" value="" id="5star" />
+                                        <label className="form-check-label" htmlFor="5star">
                                         5 Star
                                         </label>
                                     </div>
                                 </div>
-                                <div class="rating-check-item ">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="4star" />
-                                        <label class="form-check-label" for="4star">
+                                <div className="rating-check-item ">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" value="" id="4star" />
+                                        <label className="form-check-label" htmlFor="4star">
                                         4 Star  & above
                                         </label>
                                     </div>
                                 </div>
-                                <div class="rating-check-item ">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="3star" />
-                                        <label class="form-check-label" for="3star">
+                                <div className="rating-check-item ">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" value="" id="3star" />
+                                        <label className="form-check-label" htmlFor="3star">
                                         3 Star & above
                                         </label>
                                     </div>
                                 </div>
-                                <div class="rating-check-item ">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="2star" />
-                                        <label class="form-check-label" for="2star">
+                                <div className="rating-check-item ">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" value="" id="2star" />
+                                        <label className="form-check-label" htmlFor="2star">
                                         2 Star & above
                                         </label>
                                     </div>

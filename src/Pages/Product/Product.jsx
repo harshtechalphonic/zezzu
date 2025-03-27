@@ -49,7 +49,7 @@ export default function Product() {
                     <Link to='/product'>Clear Filter</Link>
                   </div>
                 </div>
-                <div class= {`filter-contaienr ${isMobile ? 'filter-container' : ''} ${showFilter ? 'show' : ''}`}>
+                <div className= {`filter-contaienr ${isMobile ? 'filter-container' : ''} ${showFilter ? 'show' : ''}`}>
                 <Product_filter />
                 </div>
               </div>
