@@ -1,10 +1,6 @@
 import { faBarsStaggered, faCartShopping, faCog, faEnvelope, faHeart, faLocationDot, faPhoneVolume, faQuestionCircle, faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from 'react';
-=======
-import React, { useEffect, useState } from 'react';
->>>>>>> 6eb5e178e77a5fe8a7e2d5fab170c907c067b94a
 import './Header.css';
 import logo from '../../../assets/zezzu.png';
 import Offcanvas from 'react-bootstrap/Offcanvas';
