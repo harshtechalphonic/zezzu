@@ -6,16 +6,13 @@ import axios from "axios";
 import { categoriesAction } from "../../../store/Categories/categoriesSlice";
 import config from "../../../Config/config.json"
 import CategoriesApi from "../../../API/CategoriesAPi";
+import { Link } from "react-router-dom";
 
 export default function Categories() {
   const fetch_categories = useSelector((store) => store.categories);
-  const [categories,setCategory] = useState([])
+  const [categories, setCategory] = useState([])
   useEffect(() => {
-    // console.log(fetch_categories.
-    //   data
-    //   )
       setCategory(fetch_categories.data)
-    // setCategory(categories.data);
   }, [fetch_categories.status]);
 
   var settings = {
@@ -72,7 +69,7 @@ export default function Categories() {
               </div>
               <div className="product-detail">
                 <h3>
-                  <a href={product.link}>{product.name}</a>
+                  <Link to={product.id}>{product.name}</Link>
                 </h3>
               </div>
             </div>
