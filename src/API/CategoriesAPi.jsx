@@ -11,7 +11,6 @@ export default function CategoriesApi() {
     axios
       .get(`${config.API_URL}/category`)
       .then(function (response) {
-        console.log(response)
         dispatch(categoriesAction.getCategory(response.data));
       })
       .catch(function (error) {

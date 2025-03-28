@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Slider from "react-slick";
 import './SuperSaving.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,74 +6,26 @@ import { faArrowRightLong, faBagShopping, faStar, faStarHalfAlt } from '@fortawe
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function SuperSaving() {
-    const products = [
-        {
-          id: 1,
-          discount: "-20%",
-          image: "/SuperSaving1.png",
-          title: "Mini USB Chopper (Rechargeable)",
-          rating: 4.5,
-          reviews: 12,
-          price: 212,
-          slashPrice: 312,
-            link: "/product-detail"
-        },
-        {
-          id: 2,
-          discount: "-20%",
-          image: "/SuperSaving2.png",
-          title: " Lighting",
-          rating: 4.5,
-          reviews: 12,
-          price: 212,
-          slashPrice: 312,
-            link: "/product-detail"
-        },
-        {
-          id: 3,
-          discount: "-20%",
-          image: "SuperSaving3.png",
-          title: "Epitome Lighting",
-          rating: 4.5,
-          reviews: 12,
-          price: 212,
-          slashPrice: 312, 
-           link: "/product-detail"
-        }
-        ,
-        {
-          id: 4,
-          discount: "-20%",
-          image: "SuperSaving4.png",
-          title: "Colgate Maxfresh with Cooling Crystals.....",
-          rating: 4.5,
-          reviews: 12,
-          price: 212,
-          slashPrice: 312,
-            link: "/product-detail"
-        },
-        {
-          id: 5,
-          discount: "-20%",
-          image: "SuperSaving3.png",
-          title: "Epitome Lighting",
-          rating: 4.5,
-          reviews: 12,
-          price: 212,
-          slashPrice: 312,
-            link: "/product-detail"
-        }
-      ];
+  const fetch_products = useSelector((store) => store.products);
+  const [products, setProducts] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
 
-      const [wishlist, setWishlist] = useState({});
-            const toggleWishlist = (id) => {
-              setWishlist((prev) => ({
-                ...prev,
-                [id]: !prev[id], // Toggle the specific product's wishlist state
-              }));
-            };
+  useEffect(() => {
+      setProducts(fetch_products.data);
+      if(localStorage.getItem("wishlist")){
+        setWishlist([...JSON.parse(localStorage.getItem("wishlist"))]);
+      }
+    }, [fetch_products.status]);
+    
+    const toggleWishlist = (id) => {
+      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      wishlist = wishlist.includes(id) ? wishlist.filter(num => num !== id) : [id, ...wishlist];
+      setWishlist(wishlist);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    };
 
 
       var settings = {
@@ -126,34 +78,52 @@ export default function SuperSaving() {
 
             <div className='featureslider_one my-4'>
             <Slider {...settings} className="xyzg-slider">
-              {products.map((product) => (
-                <div key={product.id} className="feature-card">
-                  <span className="disco">{product.discount}</span>
-                  <span className="wishicon" onClick={() => toggleWishlist(product.id)} style={{ cursor: 'pointer', fontSize: '16px' }}>
-                    <FontAwesomeIcon icon={wishlist[product.id] ? faSolidHeart : faRegularHeart} color={wishlist[product.id] ? "red" : "black"} />
-                  </span>
-                  <Link to={product.link}>
-                    <div className="card-img">
-                      <img src={product.image} alt="Product" />
-                    </div>
-                  </Link>
-                  <div className="product-detail">
-                    <h3><Link to="/product-detail">{product.title}</Link></h3>
-                    <div className="rating d-flex align-items-center ">
-                      {[...Array(Math.floor(product.rating))].map((_, i) => (
-                        <FontAwesomeIcon key={i} icon={faStar} />
-                      ))}
-                      {product.rating % 1 !== 0 && <FontAwesomeIcon icon={faStarHalfAlt} />}
-                      <span>({product.reviews})</span>
-                    </div>
-                    <div className="Pricing d-flex align-items-center ">
-                      <p className="price">₹ {product.price} </p>
-                      <p className="slashPrice">₹ {product.slashPrice} </p>
-                    </div>
-                  </div>
-                  <a href="#!" className="cart-btn">Add to Cart <FontAwesomeIcon icon={faBagShopping} className="ms-2"/></a>
-                </div>
-              ))}
+              {products.filter(e => e.type == 2).map((product) => (
+                            <div key={product.prd_id} className="feature-card">
+                              <span className="disco">
+                                {Math.round(
+                                  ((product.price - product.discount_price) / product.price) *
+                                    100
+                                )}
+                                %
+                              </span>
+                              <span
+                                className="wishicon"
+                                onClick={() => toggleWishlist(product.prd_id)}
+                                style={{ cursor: "pointer", fontSize: "16px" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={
+                                    wishlist.includes(product.prd_id) ? faSolidHeart : faRegularHeart
+                                  }
+                                  color={wishlist.includes(product.prd_id) ? "red" : "black"}
+                                />
+                              </span>
+                              <div className="card-img">
+                                <img src={product.img_url} alt="Product" />
+                              </div>
+                              <div className="product-detail">
+                                <h3>
+                                  <Link to={product.url}>{product.title}</Link>
+                                </h3>
+                                <div className="rating d-flex align-items-center ">
+                                  <FontAwesomeIcon key={0} icon={faStar} />
+                                  <FontAwesomeIcon icon={faStar} />
+                                  <FontAwesomeIcon icon={faStar} />
+                                  <FontAwesomeIcon icon={faStarHalfAlt} />
+                                  <span>({product.avg_ratting})</span>
+                                </div>
+                                <div className="Pricing d-flex align-items-center ">
+                                  <p className="price">₹ {product.discount_price} </p>
+                                  <p className="slashPrice">₹ {product.price} </p>
+                                </div>
+                              </div>
+                              <a href="#!" className="cart-btn">
+                                Add to Cart{" "}
+                                <FontAwesomeIcon icon={faBagShopping} className="ms-2" />
+                              </a>
+                            </div>
+                          ))}
             </Slider>
             </div>
         </div>

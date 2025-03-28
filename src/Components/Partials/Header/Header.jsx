@@ -1,13 +1,25 @@
 import { faBarsStaggered, faCartShopping, faCog, faEnvelope, faHeart, faLocationDot, faPhoneVolume, faQuestionCircle, faSearch, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from 'react';
+=======
+import React, { useEffect, useState } from 'react';
+>>>>>>> 6eb5e178e77a5fe8a7e2d5fab170c907c067b94a
 import './Header.css';
 import logo from '../../../assets/zezzu.png';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link } from 'react-router-dom';
+import ProductsApi from "../../../API/ProductsApi";
 
-export default function Header({ wishlistCount }) {
-  const [show, setShow] = useState(false);    
+export default function Header() {
+  const [show, setShow] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(0);
+  let detactWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  useEffect(() => {
+    if(localStorage.getItem("wishlist")){
+      setWishlistCount(detactWishlist.length);
+    }
+  }, [detactWishlist]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -85,6 +97,7 @@ export default function Header({ wishlistCount }) {
   return (
     <>
     <section className='Header'>
+      <ProductsApi />
       <div className="infobox">
         <div className="container">
           <ul className="list-unstyled d-flex align-items-center justify-content-between mb-0">
