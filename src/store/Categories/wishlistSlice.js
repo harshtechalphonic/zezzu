@@ -9,6 +9,6 @@ export const wishlistSlice = createSlice({
     },
   },
 });
-
+//dsdsdskdk
 export const wishlistAction = wishlistSlice.actions;
 export default wishlistSlice;
