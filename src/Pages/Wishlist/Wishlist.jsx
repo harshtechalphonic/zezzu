@@ -68,7 +68,7 @@ export default function Wishlist() {
                     </div>
                   </Link>
                   <div className="product-detail">
-                    <h3><Link to={product.url}>{product.title}</Link></h3>
+                    <h3><Link to={`/product/${product.slug}`}>{product.title}</Link></h3>
                     <div className="rating d-flex align-items-center ">
                       <FontAwesomeIcon key={0} icon={faStar} />
                       <FontAwesomeIcon icon={faStar} />
