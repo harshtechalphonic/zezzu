@@ -10,7 +10,7 @@ export const productsSlice = createSlice({
     getProduct: (store, action) => {
       return {
         status: true,
-        data: [...action.payload],
+        data: [...action.payload.data],
       };
     }
   },

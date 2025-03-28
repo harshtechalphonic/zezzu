@@ -2,13 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const wishlistSlice = createSlice({
   name: "wishlist",
-  initialState: 0,
+  initialState: localStorage.getItem("wishlist") ? JSON.parse(localStorage.getItem("wishlist")).length : 0,
   reducers: {
     addWishlist: (store, action) => {
+      // console.log(action.payload)
       return action.payload;
     },
   },
 });
-
+//dsdsdskdk
 export const wishlistAction = wishlistSlice.actions;
 export default wishlistSlice;

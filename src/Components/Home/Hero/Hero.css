@@ -44,6 +44,16 @@
     height: 8px;
     background-color: #ffffff;
 }
+.home_hero .main-content-box .image-box{
+    /* width: 100%; */
+    /* max-width: 600px; */
+    height: 500px;
+}
+.home_hero .main-content-box .image-box img{
+    width: auto;
+    height: 100%;
+}
+
 @media screen and (max-width:1240px) {
     .home_hero .main-content-box .content-box h1 {
         font-size: 38px;

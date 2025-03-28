@@ -11,12 +11,14 @@ import {
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { wishlistAction } from "../../../store/Categories/wishlistSlice";
 
 export default function DealsOfDay() {
   const fetch_products = useSelector((store) => store.products);
   const [products, setProducts] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setProducts(fetch_products.data);
@@ -32,6 +34,7 @@ export default function DealsOfDay() {
       : [id, ...wishlist];
     setWishlist(wishlist);
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    dispatch(wishlistAction.addWishlist(wishlist.length));
   };
 
   var settings = {
@@ -121,7 +124,7 @@ export default function DealsOfDay() {
                   </div>
                   <div className="product-detail">
                     <h3>
-                      <Link to={product.url}>{product.title}</Link>
+                      <Link to={`/product/${product.slug}`}>{product.title}</Link>
                     </h3>
                     <div className="rating d-flex align-items-center ">
                       <FontAwesomeIcon key={0} icon={faStar} />

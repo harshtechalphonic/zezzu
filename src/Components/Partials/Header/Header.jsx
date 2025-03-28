@@ -6,6 +6,8 @@ import logo from '../../../assets/zezzu.png';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link } from 'react-router-dom';
 import ProductsApi from "../../../API/ProductsApi";
+import WishlistMenu from './WishlistMenu';
+import CartMenu from './CartMenu';
 
 export default function Header() {
   const [show, setShow] = useState(false);
@@ -49,7 +51,7 @@ export default function Header() {
     
       const resetTimer = () => {
         clearTimeout(timer);
-        timer = setTimeout(AdvShow, 8000);
+        timer = setTimeout(AdvShow, 800000);
       };
     
       useEffect(() => {
@@ -163,13 +165,8 @@ export default function Header() {
 
           <div className='logo-cartbox'>
             <ul className='list-unstyled d-flex gap-3 mb-0'>
-              <li>
-                <Link to="/wishlist">
-                  <FontAwesomeIcon icon={faHeart} />
-                </Link>
-                  {wishlistCount > 0 && <span className="wishlist-count">{wishlistCount}</span>}
-              </li>
-              <li><Link to="/cart"><FontAwesomeIcon icon={faCartShopping}/></Link></li>
+              <WishlistMenu/>
+              <CartMenu/>
             </ul>
           </div>
         </div>
