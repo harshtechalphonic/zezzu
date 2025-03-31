@@ -19,8 +19,6 @@ export default function ProductFilter() {
       setMaxPrice(value);
     };
 
-
-
     const [activeIndex, setActiveIndex] = useState(null);
 
     const toggleAccordion = (index) => {

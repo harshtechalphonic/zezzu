@@ -1,184 +1,107 @@
-import React, { useState } from 'react';
-import './Product_card.css';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBagShopping, faStar, faStarHalfAlt, faHeart as faSolidHeart } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
+import React, { useEffect, useState } from "react";
+import "./Product_card.css";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBagShopping,
+  faStar,
+  faStarHalfAlt,
+  faHeart as faSolidHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { wishlistAction } from "../../../store/Products/wishlistSlice";
+import { cartAction } from "../../../store/Products/cartSlice";
 
-const products = [
-  {
-    id: 1,
-    discount: "-20%",
-    image: "/Product4.png",
-    title: "Porem",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 2,
-    discount: "-20%",
-    image: "/Product2.png",
-    title: "Fab Breeze™ Personal Air Cooler & Humidifier",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 3,
-    discount: "-20%",
-    image: "/PersonalCare.png",
-    title: "Jorem",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 4,
-    discount: "-20%",
-    image: "/DealDay2.png",
-    title: "Porem",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 5,
-    discount: "-20%",
-    image: "/rec-1.png",
-    title: "Organic India Ashwagandha Ayurvedic .....",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 6,
-    discount: "-20%",
-    image: "/Sim-2.png",
-    title: "Butterfly Mini Body Massager",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 7,
-    discount: "-20%",
-    image: "/rec-3.png",
-    title: "Professionals Design Perfect Hair",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 8,
-    discount: "-20%",
-    image: "/PersonalCare.png",
-    title: "Premium Posture Corrector",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 9,
-    discount: "-20%",
-    image: "/DealDay2.png",
-    title: " Lighting",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 10,
-    discount: "-20%",
-    image: "/PersonalCare.png",
-    title: "Colgate Maxfresh with Cooling Crystals.....",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 11,
-    discount: "-20%",
-    image: "/DealDay2.png",
-    title: "Epitome Lighting",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  },
-  {
-    id: 12,
-    discount: "-20%",
-    image: "/PersonalCare.png",
-    title: "Mini USB Chopper (Rechargeable)",
-    rating: 4.5,
-    reviews: 12,
-    price: 212,
-    slashPrice: 312,
-    link: "/product-detail"
-  }
-];
+export default function Product_card({products}) {
+  const [wishlist, setWishlist] = useState([]);
+  const [addTocart, setaddTocart] = useState([]);
 
-export default function Product_card() {
-  const [wishlist, setWishlist] = useState({});
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem("wishlist")) {
+      setWishlist([...JSON.parse(localStorage.getItem("wishlist"))]);
+    }
+    if (localStorage.getItem("cart")) {
+      setaddTocart([...JSON.parse(localStorage.getItem("cart"))]);
+    }
+  }, []);
 
   const toggleWishlist = (id) => {
-    setWishlist((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    wishlist = wishlist.includes(id)
+      ? wishlist.filter((num) => num !== id)
+      : [id, ...wishlist];
+    setWishlist(wishlist);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    dispatch(wishlistAction.addWishlist(wishlist.length));
+  };
+
+  const toggleCart = (id) => {
+    let addTocart = JSON.parse(localStorage.getItem("cart")) || [];
+  
+    // Check if product is already in cart
+    const isInCart = addTocart.some((item) => item.prd_id === id);
+  
+    if (isInCart) {
+      // Remove from cart
+      addTocart = addTocart.filter((item) => item.prd_id !== id);
+      // console.log(addTocart)
+      dispatch(cartAction.removeCart(addTocart));
+    } else {
+      const newItem = { quantity: 1, prd_id: id };
+      addTocart = [newItem, ...addTocart];
+      dispatch(cartAction.addCart(newItem)); // Dispatch add action
+    }
+  
+    setaddTocart(addTocart);
   };
 
   return (
-    <div className='row Product_card'>
-      {products.map((product) => (
-        <div key={product.id} className='col-lg-3 col-md-6 col-sm-6 mb-3'>
+    <div className="row Product_card">
+      {products.map((product, index) => (
+        <div key={index} className="col-lg-3 col-md-6 col-sm-6 mb-3">
           <div className="feature-card">
-            <span className="disco">{product.discount}</span>
-            <span className="wishicon" onClick={() => toggleWishlist(product.id)} style={{ cursor: 'pointer', fontSize: '16px' }}>
-              <FontAwesomeIcon icon={wishlist[product.id] ? faSolidHeart : faRegularHeart} color={wishlist[product.id] ? "red" : "black"} />
+            <span className="disco">{Math.round(((product.price - product.discount_price) / product.price) * 100)}%</span>
+            <span
+              className="wishicon"
+              onClick={() => toggleWishlist(product.prd_id)}
+              style={{ cursor: "pointer", fontSize: "16px" }}
+            >
+              <FontAwesomeIcon
+          icon={
+            wishlist.includes(product.prd_id) ? faSolidHeart : faRegularHeart
+          }
+          color={wishlist.includes(product.prd_id) ? "red" : "black"}
+        />
             </span>
             <Link to={product.link}>
               <div className="card-img">
-                <img src={product.image} alt={product.title} />
+              <img src={product.img_url} alt={product.title} />
               </div>
             </Link>
             <div className="product-detail">
-              <h3><Link to={product.link}>{product.title}</Link></h3>
-              <div className="rating d-flex align-items-center">
-                {[...Array(Math.floor(product.rating))].map((_, i) => (
-                  <FontAwesomeIcon key={i} icon={faStar} />
-                ))}
-                {product.rating % 1 !== 0 && <FontAwesomeIcon icon={faStarHalfAlt} />}
-                <span>({product.reviews})</span>
+              <h3>
+              <Link to={`/product/${product.slug}`}>{product.title}</Link>
+              </h3>
+              <div className="rating d-flex align-items-center ">
+                <FontAwesomeIcon key={0} icon={faStar} />
+                <FontAwesomeIcon icon={faStar} />
+                <FontAwesomeIcon icon={faStar} />
+                <FontAwesomeIcon icon={faStarHalfAlt} />
+                <span>({product.avg_ratting})</span>
               </div>
               <div className="Pricing d-flex align-items-center">
-                <p className="price">₹ {product.price}</p>
-                <p className="slashPrice">₹ {product.slashPrice}</p>
+                <p className="price">₹ {product.discount_price}</p>
+                <p className="slashPrice">₹ {product.price}</p>
               </div>
             </div>
-            <a href="/cart" className="cart-btn">Add to Cart <FontAwesomeIcon icon={faBagShopping} className="ms-2" /></a>
+            <a onClick={() => toggleCart(product.prd_id)} className={`cart-btn ${addTocart.some(item => item.prd_id === product.prd_id) ? "bg-dark" : ""}`}>
+            {addTocart.some(item => item.prd_id === product.prd_id) ? "Remove to Cart" : "Add to Cart"}
+              <FontAwesomeIcon icon={faBagShopping} className="ms-2" />
+            </a>
           </div>
         </div>
       ))}

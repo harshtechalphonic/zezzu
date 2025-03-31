@@ -5,7 +5,6 @@ export const wishlistSlice = createSlice({
   initialState: localStorage.getItem("wishlist") ? JSON.parse(localStorage.getItem("wishlist")).length : 0,
   reducers: {
     addWishlist: (store, action) => {
-      // console.log(action.payload)
       return action.payload;
     },
   },
