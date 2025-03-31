@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 
 export default function SingleProductSlide({ product }) {
   const [wishlist, setWishlist] = useState([]);
+  const [addTocart, setaddTocart] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
