@@ -45,12 +45,12 @@
     background-color: #ffffff;
 }
 .home_hero .main-content-box .image-box{
-    /* width: 100%; */
-    /* max-width: 600px; */
+    width: 100%;
+    /* max-width: 500px; */
     height: 500px;
 }
 .home_hero .main-content-box .image-box img{
-    width: auto;
+    width: -webkit-fill-available;
     height: 100%;
 }
 

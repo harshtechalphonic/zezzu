@@ -29,7 +29,7 @@ export default function Wishlist() {
 
   return (
     <>
-      <Header wishlistCount={products.length} />
+      <Header />
           <div className='breadcrum_box mt-2'>
             <nav aria-label="breadcrumb">
               <div className="container">
