@@ -243,3 +243,28 @@
   .custom-dropdown2 i {
     font-size: 16px;
   }
+
+
+  .sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    animation: slide 0.3s ;
+    box-shadow: 0 2px 4px 0 #c9c9c9;
+    background-color: #ffffff;
+    z-index: 9999;
+    }
+    @keyframes slide {
+        0% {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0%);
+        }
+      }
+      .Header.sticky .infobox{
+        display: none;
+      }

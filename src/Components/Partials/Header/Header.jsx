@@ -11,7 +11,9 @@ import CartMenu from './CartMenu';
 
 export default function Header() {
   const [show, setShow] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
+
   let detactWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   useEffect(() => {
     if(localStorage.getItem("wishlist")){
@@ -91,10 +93,29 @@ export default function Header() {
       };
     }, []);
 
+    
+
        // all category code here end 
+
+
+  // Sticky header functionality
+      const handleScroll = () => {
+        if (window.scrollY > 160) {
+          setIsSticky(true);
+        } else {
+          setIsSticky(false);
+        }
+      };
+
+       useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);
   return (
     <>
-    <section className='Header'>
+    <section className={`Header ${isSticky ? 'sticky' : ''}`}>
       <ProductsApi />
       <div className="infobox">
         <div className="container">
@@ -111,7 +132,7 @@ export default function Header() {
                   <div className="dropdown-menu show position-absolute custom-dropdown ">
                     <ul className='list-unstyled'>
                       <li><Link to="/login"><FontAwesomeIcon icon={faUser}/> Login</Link></li>
-                      <li><Link to="/profile"><FontAwesomeIcon icon={faUser}/> Profile</Link></li>
+                      <li><Link to="/user-account"><FontAwesomeIcon icon={faUser}/> User Account</Link></li>
                       <li><Link to="/inbox"><FontAwesomeIcon icon={faEnvelope}/> Inbox</Link></li>
                       <li><Link to="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Link></li>
                       <li><Link to="/help"><FontAwesomeIcon icon={faQuestionCircle}/> Help</Link></li>
