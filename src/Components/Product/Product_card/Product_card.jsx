@@ -12,9 +12,12 @@ import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { wishlistAction } from "../../../store/Products/wishlistSlice";
 import { cartAction } from "../../../store/Products/cartSlice";
+import { filtersAction } from "../../../store/Products/filtersSlice";
 
 export default function Product_card({products,filters}) {
   const [all_products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+
   useEffect(()=>{
     let sorted = [...products.data]
     switch (filters.sorted) {
@@ -42,11 +45,14 @@ export default function Product_card({products,filters}) {
     setProducts(sorted)
   },[products.status,filters])
 
+  useEffect(() => {
+    if (products.status == false) return;
+    console.log('update length');
+    dispatch(filtersAction.countProduct(all_products.length));
+}, [all_products.length]);
+
   const [wishlist, setWishlist] = useState([]);
   const [addTocart, setaddTocart] = useState([]);
-
-  
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.getItem("wishlist")) {

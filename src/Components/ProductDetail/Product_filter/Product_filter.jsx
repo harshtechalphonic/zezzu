@@ -4,12 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { filtersAction } from "../../../store/Products/filtersSlice";
+import AllCategoriesAPi from "../../../API/AllCategoriesAPi";
+import { Link } from "react-router-dom";
 
 export default function ProductFilter({ products }) {
   const dispatch = useDispatch();
+  const allCategories = useSelector((store) => store.allCategories);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
-  const [stepAmount, setStepAmount] = useState(50);
+  const [stepAmount, setStepAmount] = useState(300);
 
   const [fixedMinPrice, setFixedMinPrice] = useState(0);
   const [fixedMaxPrice, setFixedMaxPrice] = useState(0);
@@ -27,7 +30,7 @@ export default function ProductFilter({ products }) {
   useEffect(()=>{
     if(minPrice == 0) return;
     const timer = setTimeout(() => {
-        console.log("Min price updated:", minPrice);
+        // console.log("Min price updated:", minPrice);
         dispatch(filtersAction.priceRangeMin(minPrice));
     }, 500);
     return () => clearTimeout(timer);
@@ -36,7 +39,7 @@ export default function ProductFilter({ products }) {
 useEffect(()=>{
     if(maxPrice == 0) return;
     const timer = setTimeout(() => {
-        console.log("Max price updated:", maxPrice);
+        // console.log("Max price updated:", maxPrice);
         dispatch(filtersAction.priceRangeMax(maxPrice));
     }, 500);
     return () => clearTimeout(timer);
@@ -58,21 +61,13 @@ useEffect(()=>{
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const categoriesData = [
-    { name: "All", subcategories: [] },
-    { name: "Kitchen", subcategories: ["Cookware", "Utensils", "Appliances"] },
-    { name: "Clothing", subcategories: ["Men", "Women", "Kids"] },
-    {
-      name: "Personal Care",
-      subcategories: ["Skincare", "Haircare", "Grooming"],
-    },
-  ];
   return (
     <div className="filter-categoy my-4">
       <div className="card categories-card mb-3">
         <div className="categories-header">Categories</div>
         <div className="list-group">
-          {categoriesData.map((category, index) => (
+          <AllCategoriesAPi/>
+          {allCategories.data.map((category, index) => (
             <div
               key={index}
               className={`flex-wrap category-item ${
@@ -88,11 +83,11 @@ useEffect(()=>{
                   icon={activeIndex === index ? faAngleDown : faAngleRight}
                 />
               </div>
-              {activeIndex === index && category.subcategories.length > 0 && (
+              {activeIndex === index && category.sub_categories.length > 0 && (
                 <div className="accordion-body mt-1">
-                  <ul className="list-unstyled mb-0">
-                    {category.subcategories.map((sub, subIndex) => (
-                      <li key={subIndex}>{sub}</li>
+                  <ul className="list-unstyled mb-0 ms-3">
+                    {category.sub_categories.map((sub, subIndex) => (
+                      <li key={subIndex}><Link to={`category/${category.slug}/${sub.slug}`}>{sub.name}</Link></li>
                     ))}
                   </ul>
                 </div>

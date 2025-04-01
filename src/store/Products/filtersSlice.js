@@ -7,6 +7,7 @@ export const filtersSlice = createSlice({
     priceRangeMin: 0,
     priceRangeMax: 0,
     ratingSorted: 0,
+    countProduct: 0,
   },
   reducers: {
     sorted: (store, action) => {
@@ -20,6 +21,9 @@ export const filtersSlice = createSlice({
     },
     priceRangeMax: (store, action) => {
       return { ...store, priceRangeMax: action.payload };
+    },
+    countProduct: (store, action) => {
+      return { ...store, countProduct: action.payload };
     },
   },
 });

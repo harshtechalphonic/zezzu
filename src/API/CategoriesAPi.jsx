@@ -6,6 +6,7 @@ import { categoriesAction } from "../store/Categories/categoriesSlice";
 export default function CategoriesApi() {
   const categories = useSelector((store) => store.categories);
   const dispatch = useDispatch();
+  
   useEffect(() => {
     if (categories.status) return;
     axios

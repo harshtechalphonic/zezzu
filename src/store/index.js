@@ -5,6 +5,7 @@ import wishlistSlice from "./Products/wishlistSlice";
 import bannersSlice from "./HomesSection/bannerSlice";
 import cartSlice from "./Products/cartSlice";
 import filtersSlice from "./Products/filtersSlice";
+import allCategoriesSlice from "./Categories/allCategoriesSlice";
 
 const ecommerceStore = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const ecommerceStore = configureStore({
     banners: bannersSlice.reducer,
     cart: cartSlice.reducer,
     filters:filtersSlice.reducer,
+    allCategories:allCategoriesSlice.reducer,
   },
 });
 
