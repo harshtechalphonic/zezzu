@@ -13,6 +13,7 @@ import ForgetPassword from './Pages/Auth/ForgetPassword/ForgetPassword'
 import ResetPassword from './Pages/Auth/ResetPassword/ResetPassword'
 import VerifyAccount from './Pages/Auth/VerifyAccount/VerifyAccount'
 import UserAccount from './Pages/UserAccount/UserAccount'
+import Contact from './Pages/Contact/Contact'
 import Test from './Pages/Test'
 
 import "slick-carousel/slick/slick.css";
@@ -66,6 +67,10 @@ const router= createBrowserRouter([
   {
     path : '/user-account',
     element : <UserAccount/>
+  },
+  {
+    path : '/contact-us',
+    element : <Contact/>
   },
   {
     path : '/test',

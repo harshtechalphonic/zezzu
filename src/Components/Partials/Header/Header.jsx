@@ -129,7 +129,7 @@ export default function Header() {
               <div className='account-dropdown position-relative ' ref={dropdownRef}>
                 <Link to="#!" onClick={toggleDropdown}><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> My account</Link>
                 {showDropdown && (
-                  <div className="dropdown-menu show position-absolute custom-dropdown ">
+                  <div className="dropdown-menu show position-absolute custom-dropdown asdcasdfasdfasdfasdf">
                     <ul className='list-unstyled'>
                       <li><Link to="/login"><FontAwesomeIcon icon={faUser}/> Login</Link></li>
                       <li><Link to="/user-account"><FontAwesomeIcon icon={faUser}/> User Account</Link></li>
@@ -200,10 +200,12 @@ export default function Header() {
           <li><Link to="/product">Clothing</Link></li>
           <li><Link to="/product">Personal Care</Link></li>
           <li><Link to="#!">About Us</Link></li>
-          <li><Link to="#!">Contact Us</Link></li>
+          <li><Link to="/contact-us">Contact Us</Link></li>
           <li><Link to="#!">Track Order</Link></li>
         </ul>
       </div>
+
+
 
       {/* Offcanvas Section */}
       <Offcanvas show={show} onHide={handleClose} className="mobsideMenu">
@@ -224,27 +226,24 @@ export default function Header() {
               <li><Link to="/product">Clothing</Link></li>
               <li><Link to="/product">Personal Care</Link></li>
               <li><Link to="#!">About Us</Link></li>
-              <li><Link to="#!">Contact Us</Link></li>
+              <li><Link to="/contact-us">Contact Us</Link></li>
               <li><Link to="#!">Track Order</Link></li>
             </ul>
           </div>
         </Offcanvas.Body>
       </Offcanvas>
     </section>
+
+
+
+
      {/* pop up  code is here  start */}
     <div className={`modal ${Advshow ? 'd-block' : 'd-none'}`} tabIndex="-1">
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Advertisement Banner</h5>
-              <button type="button" className="btn-close" onClick={AdvClose}></button>
-            </div>
-            <div className="modal-body">
-              <p>You have been inactive for 8 seconds! when we don't perform and event</p>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={AdvClose}>Close</button>
-            </div>
+              <button type="button" className="btn-close adv_btn" onClick={AdvClose}></button>
+           <img src="/advBanner.png" alt="" />
+            
           </div>
         </div>
       </div>
