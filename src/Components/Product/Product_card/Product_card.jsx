@@ -13,7 +13,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { wishlistAction } from "../../../store/Products/wishlistSlice";
 import { cartAction } from "../../../store/Products/cartSlice";
 
-export default function Product_card({products}) {
+export default function Product_card({products,filters}) {
+  const [all_products, setProducts] = useState([]);
+  useEffect(()=>{
+    let sorted = [...products.data]
+    switch (filters.sorted) {
+      case "newest":
+        sorted.sort((a, b) => b.prd_id - a.prd_id);
+      break;
+      case "a_to_z":
+        sorted.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "z_to_a":
+        sorted.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case "low_to_high":
+        sorted.sort((a, b) => a.discount_price - b.discount_price);
+        break;
+      case "high_to_low":
+        sorted.sort((a, b) => b.discount_price - a.discount_price);
+        break;
+      default:
+        break;
+    }
+    sorted = sorted.filter(product => 
+      product.discount_price >= filters.priceRangeMin && product.discount_price <= filters.priceRangeMax
+  );
+    setProducts(sorted)
+  },[products.status,filters])
+
   const [wishlist, setWishlist] = useState([]);
   const [addTocart, setaddTocart] = useState([]);
 
@@ -61,7 +89,7 @@ export default function Product_card({products}) {
 
   return (
     <div className="row Product_card">
-      {products.map((product, index) => (
+      {all_products.map((product, index) => (
         <div key={index} className="col-lg-3 col-md-6 col-sm-6 mb-3">
           <div className="feature-card">
             <span className="disco">{Math.round(((product.price - product.discount_price) / product.price) * 100)}%</span>

@@ -1,155 +1,224 @@
+import React, { useEffect, useState } from "react";
+import "./Product_filter.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { filtersAction } from "../../../store/Products/filtersSlice";
 
-import React, { useState } from 'react';
-import './Product_filter.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDown, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+export default function ProductFilter({ products }) {
+  const dispatch = useDispatch();
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [stepAmount, setStepAmount] = useState(50);
 
+  const [fixedMinPrice, setFixedMinPrice] = useState(0);
+  const [fixedMaxPrice, setFixedMaxPrice] = useState(0);
 
-export default function ProductFilter() {
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(7500);
-  
-    const handleMinChange = (e) => {
-      const value = Math.min(Number(e.target.value), maxPrice - 100);
-      setMinPrice(value);
-    };
-  
-    const handleMaxChange = (e) => {
-      const value = Math.max(Number(e.target.value), minPrice + 100);
-      setMaxPrice(value);
-    };
+  useEffect(() => {
+    if (products.status == false) return;
+    const prices = products.data.map((product) => product.discount_price);
+    setMinPrice(Math.min(...prices));
+    setMaxPrice(Math.max(...prices));
 
-    const [activeIndex, setActiveIndex] = useState(null);
+    setFixedMinPrice(Math.min(...prices));
+    setFixedMaxPrice(Math.max(...prices));
+  }, [products.status]);
 
-    const toggleAccordion = (index) => {
-      setActiveIndex(activeIndex === index ? null : index);
-    };
+  useEffect(()=>{
+    if(minPrice == 0) return;
+    const timer = setTimeout(() => {
+        console.log("Min price updated:", minPrice);
+        dispatch(filtersAction.priceRangeMin(minPrice));
+    }, 500);
+    return () => clearTimeout(timer);
+},[minPrice]);
 
-    const categoriesData = [
-        { name: 'All', subcategories: [] },
-        { name: 'Kitchen', subcategories: ['Cookware', 'Utensils', 'Appliances'] },
-        { name: 'Clothing', subcategories: ['Men', 'Women', 'Kids'] },
-        { name: 'Personal Care', subcategories: ['Skincare', 'Haircare', 'Grooming'] },
-      ];
+useEffect(()=>{
+    if(maxPrice == 0) return;
+    const timer = setTimeout(() => {
+        console.log("Max price updated:", maxPrice);
+        dispatch(filtersAction.priceRangeMax(maxPrice));
+    }, 500);
+    return () => clearTimeout(timer);
+  },[maxPrice]);
+
+  const handleMinChange = (e) => {
+    const value = Math.min(Number(e.target.value), maxPrice - stepAmount);
+    setMinPrice(value);
+  };
+
+  const handleMaxChange = (e) => {
+    const value = Math.max(Number(e.target.value), minPrice + stepAmount);
+    setMaxPrice(value);
+  };
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const categoriesData = [
+    { name: "All", subcategories: [] },
+    { name: "Kitchen", subcategories: ["Cookware", "Utensils", "Appliances"] },
+    { name: "Clothing", subcategories: ["Men", "Women", "Kids"] },
+    {
+      name: "Personal Care",
+      subcategories: ["Skincare", "Haircare", "Grooming"],
+    },
+  ];
   return (
-                
-                    <div className="filter-categoy my-4">
-                    <div className="card categories-card mb-3">
-                        <div className="categories-header">Categories</div>
-                            <div className="list-group">
-                                {categoriesData.map((category, index) => (
-                                <div key={index} className={`flex-wrap category-item ${activeIndex === index ? 'active' : ''}`}>            
-                                    <div className="accordion-header d-flex w-100 justify-content-between align-items-center" onClick={() => toggleAccordion(index)}>
-                                    <span>{category.name}</span>
-                                    <FontAwesomeIcon icon={activeIndex === index ? faAngleDown : faAngleRight} />
-                                    </div>
-                                    {activeIndex === index && category.subcategories.length > 0 && (
-                                    <div className="accordion-body mt-1">
-                                        <ul className='list-unstyled mb-0'>
-                                        {category.subcategories.map((sub, subIndex) => (
-                                            <li key={subIndex}>{sub}</li>
-                                        ))}
-                                        </ul>
-                                    </div>
-                                    )}
-                                </div>
-                                ))}
-                            </div>
-                        </div>
+    <div className="filter-categoy my-4">
+      <div className="card categories-card mb-3">
+        <div className="categories-header">Categories</div>
+        <div className="list-group">
+          {categoriesData.map((category, index) => (
+            <div
+              key={index}
+              className={`flex-wrap category-item ${
+                activeIndex === index ? "active" : ""
+              }`}
+            >
+              <div
+                className="accordion-header d-flex w-100 justify-content-between align-items-center"
+                onClick={() => toggleAccordion(index)}
+              >
+                <span>{category.name}</span>
+                <FontAwesomeIcon
+                  icon={activeIndex === index ? faAngleDown : faAngleRight}
+                />
+              </div>
+              {activeIndex === index && category.subcategories.length > 0 && (
+                <div className="accordion-body mt-1">
+                  <ul className="list-unstyled mb-0">
+                    {category.subcategories.map((sub, subIndex) => (
+                      <li key={subIndex}>{sub}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
+      <div className="card categories-card mb-3">
+        <div className="categories-header">Price Range</div>
+        <div className="list-group">
+          <div className="d-flex filterrange_box">
+            <div className="wrapper" style={{filter: `blur(${fixedMinPrice == 0 ? "5" : "0"}px)`}}>
+              <div className="price-input">
+                <div className="field">
+                  <span style={{ whiteSpace: "nowrap" }}>Min : </span>
+                  <input
+                    type="number"
+                    className="input-min"
+                    value={minPrice}
+                    onInput={handleMinChange}
+                  />
+                </div>
+                <div className="separator">-</div>
+                <div className="field">
+                  <span style={{ whiteSpace: "nowrap" }}>Max : </span>
+                  <input
+                    type="number"
+                    className="input-max"
+                    value={maxPrice}
+                    onInput={handleMaxChange}
+                  />
+                </div>
+              </div>
+              <div className="slider">
+                <div
+                  className="progress"
+                  style={{
+                    left: `${(minPrice / fixedMaxPrice) * 100}%`,
+                    right: `${100 - (maxPrice / fixedMaxPrice) * 100}%`,
+                  }}
+                ></div>
+              </div>
+              <div className="range-input">
+                <input
+                  type="range"
+                  className="range-min"
+                  min={fixedMinPrice}
+                  max={fixedMaxPrice}
+                  value={minPrice}
+                  step={stepAmount}
+                  onChange={handleMinChange}
+                />
+                <input
+                  type="range"
+                  className="range-max"
+                  min="0"
+                  max={fixedMaxPrice}
+                  value={maxPrice}
+                  step={stepAmount}
+                  onChange={handleMaxChange}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                        <div className="card categories-card mb-3">
-                            <div className="categories-header">Price Range</div>
-                            <div className='list-group'>
-                                <div className="d-flex filterrange_box">
-                                    <div className="wrapper">
-                                        <div className="price-input">
-                                        <div className="field">
-                                            <span style={{whiteSpace:"nowrap"}}>Min : </span>
-                                            <input
-                                            type="number"
-                                            className="input-min"
-                                            value={minPrice}
-                                            onChange={handleMinChange}
-                                            />
-                                        </div>
-                                        <div className="separator">-</div>
-                                        <div className="field">
-                                            <span style={{whiteSpace:"nowrap"}}>Max : </span>
-                                            <input
-                                            type="number"
-                                            className="input-max"
-                                            value={maxPrice}
-                                            onChange={handleMaxChange}
-                                            />
-                                        </div>
-                                        </div>
-                                        <div className="slider">
-                                            <div className="progress" style={{ left: `${(minPrice / 10000) * 100}%`, right: `${100 - (maxPrice / 10000) * 100}%` }}>
-                                            </div>
-                                        </div>
-                                        <div className="range-input">
-                                        <input
-                                            type="range"
-                                            className="range-min"
-                                            min="0"
-                                            max="10000"
-                                            value={minPrice}
-                                            step="100"
-                                            onChange={handleMinChange}
-                                        />
-                                        <input
-                                            type="range"
-                                            className="range-max"
-                                            min="0"
-                                            max="10000"
-                                            value={maxPrice}
-                                            step="100"
-                                            onChange={handleMaxChange}
-                                        />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="card categories-card  mb-3">
-                            <div className="categories-header">Customer Ratings</div>
-                            <div className="list-group">                                
-                                <div className="rating-check-item ">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" value="" id="5star" />
-                                        <label className="form-check-label" htmlFor="5star">
-                                        5 Star
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="rating-check-item ">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" value="" id="4star" />
-                                        <label className="form-check-label" htmlFor="4star">
-                                        4 Star  & above
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="rating-check-item ">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" value="" id="3star" />
-                                        <label className="form-check-label" htmlFor="3star">
-                                        3 Star & above
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="rating-check-item ">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" value="" id="2star" />
-                                        <label className="form-check-label" htmlFor="2star">
-                                        2 Star & above
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div className="card categories-card  mb-3">
+        <div className="categories-header">Customer Ratings</div>
+        <div className="list-group">
+          <div className="rating-check-item ">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="5star"
+              />
+              <label className="form-check-label" htmlFor="5star">
+                5 Star
+              </label>
+            </div>
+          </div>
+          <div className="rating-check-item ">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="4star"
+              />
+              <label className="form-check-label" htmlFor="4star">
+                4 Star & above
+              </label>
+            </div>
+          </div>
+          <div className="rating-check-item ">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="3star"
+              />
+              <label className="form-check-label" htmlFor="3star">
+                3 Star & above
+              </label>
+            </div>
+          </div>
+          <div className="rating-check-item ">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="2star"
+              />
+              <label className="form-check-label" htmlFor="2star">
+                2 Star & above
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

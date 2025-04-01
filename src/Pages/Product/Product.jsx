@@ -5,44 +5,17 @@ import Product_card from "../../Components/Product/Product_card/Product_card";
 import Product_filter from "../../Components/ProductDetail/Product_filter/Product_filter";
 import { Link } from "react-router-dom";
 import { Form } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { filtersAction } from "../../store/Products/filtersSlice";
 
 export default function Product() {
-  let fetch_products = useSelector((store) => store.products);
-  // console.log(fetch_products)
+  const fetch_products = useSelector((store) => store.products);
+  const fetch_filter = useSelector((store) => store.filters);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 991);
   const [showFilter, setShowFilter] = useState(false);
-  const [productFilter, setproductFilter] = useState("newest");
-  const [products,setProducts] = useState([]);
-
-  useEffect(() => {
-    setProducts(fetch_products.data);
-  },[fetch_products.status])
-
+  const dispatch = useDispatch();
   const handleSortChange = (event) => {
-    let sorted = [...products];
-
-    switch (event.target.value) {
-      case "a_to_z":
-        sorted.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case "z_to_a":
-        sorted.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case "low_to_high":
-        sorted.sort((a, b) => a.discount_price - b.discount_price);
-        break;
-      case "high_to_low":
-        sorted.sort((a, b) => b.discount_price - a.discount_price);
-        break;
-      case "newest":
-        sorted.sort((a, b) => b.prd_id - a.prd_id);
-      break;
-      default:
-        break;
-    }
-    setProducts(sorted)
-    setproductFilter(event.target.value);
+    dispatch(filtersAction.sorted(event.target.value));
   };
 
   const handleResize = () => {
@@ -89,7 +62,7 @@ export default function Product() {
                     isMobile ? "filter-container" : ""
                   } ${showFilter ? "show" : ""}`}
                 >
-                  <Product_filter />
+                  <Product_filter products={fetch_products} />
                 </div>
               </div>
             </div>
@@ -107,7 +80,7 @@ export default function Product() {
                     <Form.Select
                       className="custom-select"
                       aria-label="Sort by"
-                      value={productFilter}
+                      value={fetch_filter.sorted}
                       onChange={handleSortChange}
                     >
                       <option value="newest">Newest</option>
@@ -138,11 +111,11 @@ export default function Product() {
                     ))}
                   </div>
                   <div className="text-secondary">
-                    {products.length} Results found.
+                    {fetch_products.data.length} Results found.
                   </div>
                 </div>
 
-                <Product_card products={products} />
+                <Product_card products={fetch_products} filters={fetch_filter} />
               </div>
             </div>
           </div>
