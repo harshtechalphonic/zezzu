@@ -4,6 +4,7 @@ import productsSlice from "./Products/productsSlice";
 import wishlistSlice from "./Products/wishlistSlice";
 import bannersSlice from "./HomesSection/bannerSlice";
 import cartSlice from "./Products/cartSlice";
+import filtersSlice from "./Products/filtersSlice";
 
 const ecommerceStore = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const ecommerceStore = configureStore({
     wishlist: wishlistSlice.reducer,
     banners: bannersSlice.reducer,
     cart: cartSlice.reducer,
+    filters:filtersSlice.reducer,
   },
 });
 

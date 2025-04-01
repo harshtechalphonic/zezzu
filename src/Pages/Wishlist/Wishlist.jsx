@@ -6,13 +6,14 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBagShopping, faHouse, faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProductsApi from '../../API/ProductsApi';
+import { wishlistAction } from '../../store/Products/wishlistSlice';
 
 export default function Wishlist() {
   const fetch_products = useSelector((store) => store.products);
   const [products, setProducts] = useState([]);
-  
+  const dispatch = useDispatch();
   useEffect(() => {
     if (fetch_products.status && localStorage.getItem("wishlist")) {
       const wishlistIds = new Set(JSON.parse(localStorage.getItem("wishlist"))); // Use Set for faster lookup
@@ -24,6 +25,7 @@ export default function Wishlist() {
     let wishlist = JSON.parse(localStorage.getItem("wishlist"));
     wishlist = wishlist.filter(num => num !== id);
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    dispatch(wishlistAction.addWishlist(wishlist.length));
     setProducts(products.filter(product => product.prd_id !== id));
   };
 
@@ -52,7 +54,7 @@ export default function Wishlist() {
           </div>
           <div className="wishlistTitle_btn d-flex justify-content-between mb-3">
             <h3 className="uppercase">Wishlist</h3>
-          <a  href="product.php">Shop Now</a>
+          <Link to="/product">Shop Now</Link>
         </div>
           <div className='row Product_card'>
             {products.map((product) => (
