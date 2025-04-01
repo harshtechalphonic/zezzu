@@ -245,4 +245,11 @@
     box-shadow: none;
     outline: none;
   }
+  .fliterbox .filter-categoy .categories-card:nth-child(1) .list-group{
+    height: 100%;
+    max-height: 300px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+  }
   /* .filter-btn */

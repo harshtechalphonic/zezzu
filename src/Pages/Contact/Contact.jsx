@@ -16,7 +16,7 @@ export default function Contact() {
                 </div>
 
                 <div className='row justify-content-around mt-5 pt-4'>
-                    <div className='col-lg-5'>
+                    <div className='col-lg-5 mb-4'>
                         <div className='contact_form'>
                             <form action="">
                                 <h3>Leave us a message</h3>
@@ -38,11 +38,9 @@ export default function Contact() {
                                     </div>  
                                 </div>
                             </form>
-
-
                         </div>
                     </div>
-                    <div className='col-lg-5'>
+                    <div className='col-lg-5  mb-4'>
                         <div className='contact_content pe-5 mb-5'>
                             <h1>Contact Us</h1>
                             <p>Give us a call or drop by anytime, we endeavour to answer all enquiries within 24 hours on business days. We will be happy to answer your questions.</p>
