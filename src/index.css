@@ -41,7 +41,7 @@ button {
   transition: border-color 0.25s;
 } */
 button:hover {
-  border-color: #646cff;
+  border-color: #0070BC;
 }
 .goog-te-banner-frame {
   display: none !important;

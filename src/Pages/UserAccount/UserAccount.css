@@ -33,6 +33,11 @@
     font-weight: 600;
     background-color: #0072C0;
 }
+.User_dashboard #justify-tab-Dashboard .nav-item .nav-link.active:hover{
+    background-color: #0072C0;
+    color: #ffffff;
+
+}
 .User_dashboard #justify-tab-Dashboard .nav-item .nav-link:hover{
     color: #000000;
     background-color: #b8b8b8;
