@@ -8,12 +8,15 @@ import { Link } from 'react-router-dom';
 import ProductsApi from "../../../API/ProductsApi";
 import WishlistMenu from './WishlistMenu';
 import CartMenu from './CartMenu';
+import AllCatergory_Filter from './AllCatergory_Filter';
+
 
 export default function Header() {
   const [show, setShow] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
 
+  
   let detactWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   useEffect(() => {
     if(localStorage.getItem("wishlist")){
@@ -160,21 +163,7 @@ export default function Header() {
               <FontAwesomeIcon icon={faBarsStaggered}/>
             </button>
            <div className=' position-relative'>
-           <button className='ms-4' onClick={toggleCategoriesDropdown}>
-              <FontAwesomeIcon className='me-2' icon={faBarsStaggered}/>All Categories
-            </button>
-            {showCategoriesDropdown && (
-              <div className='dropdown-menu show position-absolute custom-dropdown' ref={dropdownCategoriesRef}>
-                <ul className='list-unstyled'>
-                  <li>Phoenix Baker</li>
-                  <li>Olivia Rhye</li>
-                  <li>Lana Steiner</li>
-                  <li>Demi Wilkinson</li>
-                  <li>Candice Wu</li>
-                  <li>Natali Craig</li>
-                </ul>
-              </div>
-            )}
+           <AllCatergory_Filter/>
            </div>
             <div className="input-group">
               <input type="text" className="form-control" placeholder="What are you looking for?" aria-label="Search" />

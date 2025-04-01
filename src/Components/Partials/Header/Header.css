@@ -166,6 +166,13 @@
     right: 0;
     z-index: 99;
   }
+  .custom-dropdown.asdkom{
+      max-height: 400px;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+    
+  }
   .custom-dropdown::before {
     content: '';
     position: absolute;

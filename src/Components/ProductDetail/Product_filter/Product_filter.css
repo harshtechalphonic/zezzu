@@ -84,7 +84,7 @@
   .fliterbox {
     position: sticky;
     top: 160px;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 140px);
     overflow-y: scroll;
     scrollbar-width: none;
   }
