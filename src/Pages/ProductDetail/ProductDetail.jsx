@@ -12,7 +12,7 @@ export default function ProductDetail() {
   return (
    <>
     <Header/>
-
+    
     <Product_detail/>
     <Product_descrtiption/>
     <SimilarProducts/>

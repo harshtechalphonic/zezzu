@@ -42,6 +42,7 @@ export default function Product_card({products,filters}) {
     sorted = sorted.filter(product => 
       product.discount_price >= filters.priceRangeMin && product.discount_price <= filters.priceRangeMax
   );
+  console.log(sorted)
     setProducts(sorted)
   },[products.status,filters])
 
