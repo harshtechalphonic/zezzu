@@ -11,7 +11,7 @@ import DashBoard from '../../Components/UserAccount/DashBoard/DashBoard'
 import Orders from '../../Components/UserAccount/Orders/Orders'
 import Addresses from '../../Components/UserAccount/Addresses/Addresses'
 import ReturnRefund from '../../Components/UserAccount/ReturnRefund/ReturnRefund'
-import Wishlist from '../../Components/UserAccount/Wishlist/Wishlist'
+// import Wishlist from '../../Components/UserAccount/Wishlist/Wishlist'
 import AccountDetails from '../../Components/UserAccount/AccountDetails/AccountDetails'
 
 
@@ -55,9 +55,9 @@ export default function UserAccount() {
             <Tab eventKey="Return_Refund" title={<><FontAwesomeIcon icon={faUndo} className='me-2' /> Return/Refund</>}>
               <ReturnRefund/>
             </Tab>
-            <Tab eventKey="Wishlist" title={<><FontAwesomeIcon icon={faHeart} className='me-2' /> Wishlist</>}>
+            {/* <Tab eventKey="Wishlist" title={<><FontAwesomeIcon icon={faHeart} className='me-2' /> Wishlist</>}>
               <Wishlist/>
-            </Tab>
+            </Tab> */}
             <Tab eventKey="Account details" title={<><FontAwesomeIcon icon={faUser} className='me-2' /> Account details</>}>
               <AccountDetails/>
             </Tab>

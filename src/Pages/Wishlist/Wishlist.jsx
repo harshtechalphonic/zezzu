@@ -52,7 +52,7 @@ export default function Wishlist() {
           </div>
           <div className="wishlistTitle_btn d-flex justify-content-between mb-3">
             <h3 className="uppercase">Wishlist</h3>
-          <a  href="product.php">Shop Now</a>
+          <a  href="/product">Shop Now</a>
         </div>
           <div className='row Product_card'>
             {products.map((product) => (
