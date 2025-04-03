@@ -15,9 +15,10 @@ import {
   faPinterest,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function Product_detail({singleProduct}) {
-
+  // console.log()
   const [quantity, setQuantity] = useState(1);
   const mainSliderRef = useRef(null);
   const navSliderRef = useRef(null);
@@ -54,7 +55,7 @@ export default function Product_detail({singleProduct}) {
                   <Slider {...sliderSettings} className="slider slider-for">
                     {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
                       <div key={index}>
-                        <img src={product1} alt="Product" />
+                        <img src={`https://demotechalphonic.site/multivendor/assets/uploads/media-uploader/${singleProduct.image.path}`} alt="Product" />
                       </div>
                     ))}
                   </Slider>
@@ -64,7 +65,7 @@ export default function Product_detail({singleProduct}) {
                   <Slider {...sliderNavSettings} className="slider slider-nav">
                     {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
                       <div key={index}>
-                        <img src={product1} alt="Thumbnail" />
+                        <img src={`https://demotechalphonic.site/multivendor/assets/uploads/media-uploader/${singleProduct.image.path}`} alt="Thumbnail" />
                       </div>
                     ))}
                   </Slider>
@@ -115,11 +116,12 @@ export default function Product_detail({singleProduct}) {
                   <b className="text-dark">Availability:</b> In Stock
                 </span>
               </div>
+              {singleProduct.category != null ?
               <div className="cate-text mt-3">
                 <span className="text-success fw-bold">
-                  <b className="text-dark">Category:</b> Electronics Devices
+                  <b className="text-dark">Category:</b> <Link className="fw-bold" to={`/category/${singleProduct.category.slug}`}>{singleProduct.category.name}</Link> / <Link className="fw-bold" to={`/category/${singleProduct.category.slug}/${singleProduct.sub_category.slug}`}>{singleProduct.sub_category.name}</Link>
                 </span>
-              </div>
+              </div> : ''}
 
               <hr className="my-5" />
               <div className="purchase-btns">

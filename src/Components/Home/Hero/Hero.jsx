@@ -5,7 +5,6 @@ import axios from "axios";
 import config from "../../../Config/config.json";
 import { useDispatch, useSelector } from "react-redux";
 import { bannersAction } from "../../../store/HomesSection/bannerSlice";
-import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
 export default function Hero() {
   const banners = useSelector((store) => store.banners);
@@ -82,7 +81,7 @@ export default function Hero() {
                 </div>
               </div>
               <div className="col-lg-5">
-                <div className="image-box placeholder w-100 rounded" style={{height:"350px"}}>
+                <div className="image-box placeholder w-100 rounded">
                 </div>
               </div>
             </div>

@@ -3,17 +3,33 @@ import Header from "../../Components/Partials/Header/Header";
 import Footer from "../../Components/Partials/Footer/Footer";
 import Product_card from "../../Components/Product/Product_card/Product_card";
 import Product_filter from "../../Components/ProductDetail/Product_filter/Product_filter";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { filtersAction } from "../../store/Products/filtersSlice";
 
-export default function Product() {
+export default function Product({category_type}) {
   const fetch_products = useSelector((store) => store.products);
 
   const fetch_filter = useSelector((store) => store.filters);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 991);
   const [showFilter, setShowFilter] = useState(false);
+  // const [catProducts,setCatProducts] = useState([]);
+  const [products, setProducts] = useState([])
+  const {category, sub_category} = useParams();
+
+  useEffect(()=>{
+    setProducts(fetch_products.data)
+    if(!category_type) return;
+    if(category_type == 'category'){
+      setProducts(fetch_products.data.filter((value) => value.category == category))
+    }else{
+      setProducts(fetch_products.data.filter((value) => value.sub_category_slug == sub_category))
+    }
+  },[category_type,fetch_products.status,sub_category,category])
+  useEffect(()=>{
+    dispatch(filtersAction.countProduct(products.length));
+  },[products])
   const dispatch = useDispatch();
   const handleSortChange = (event) => {
     dispatch(filtersAction.sorted(event.target.value));
@@ -116,7 +132,7 @@ export default function Product() {
                   </div>
                 </div>
 
-                <Product_card products={fetch_products} filters={fetch_filter} />
+                <Product_card products={products} filters={fetch_filter} />
               </div>
             </div>
           </div>

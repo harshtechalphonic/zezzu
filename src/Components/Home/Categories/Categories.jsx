@@ -51,7 +51,7 @@ export default function Categories() {
       },
     ],
   };
-  
+  // console.log(categories)
   return (
     <section className="Shop_by_health ">
       <CategoriesApi/>
@@ -62,14 +62,14 @@ export default function Categories() {
           </div>
         </div>
         <Slider {...settings} className="xyzg-slider">
-          {categories.map((product) => (
-            <div key={product.id} className="Shop_by_health-card">
+          {categories.map((cat) => (
+            <div key={cat.id} className="Shop_by_health-card">
               <div className="card-img">
-                <img src={product.image_url} alt="Product" />
+                <img src={cat.image_url} alt="Product" />
               </div>
               <div className="product-detail">
                 <h3>
-                  <Link to={product.id}>{product.name}</Link>
+                  <Link to={`/category/${cat.slug}`}>{cat.name}</Link>
                 </h3>
               </div>
             </div>

@@ -15,11 +15,12 @@ import { cartAction } from "../../../store/Products/cartSlice";
 import { filtersAction } from "../../../store/Products/filtersSlice";
 
 export default function Product_card({products,filters}) {
+  console.log(products)
   const [all_products, setProducts] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    let sorted = [...products.data]
+    let sorted = [...products]
     switch (filters.sorted) {
       case "newest":
         sorted.sort((a, b) => b.prd_id - a.prd_id);
@@ -43,12 +44,12 @@ export default function Product_card({products,filters}) {
       product.discount_price >= filters.priceRangeMin && product.discount_price <= filters.priceRangeMax
   );
     setProducts(sorted)
-  },[products.status,filters])
+  },[products,filters])
 
   useEffect(() => {
-    if (products.status == false) return;
+    if (products.length == 0) return;
     dispatch(filtersAction.countProduct(all_products.length));
-}, [all_products.length]);
+  }, [all_products.length]);
 
   const [wishlist, setWishlist] = useState([]);
   const [addTocart, setaddTocart] = useState([]);

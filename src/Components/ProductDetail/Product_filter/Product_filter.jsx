@@ -87,7 +87,7 @@ useEffect(()=>{
                 <div className="accordion-body mt-1">
                   <ul className="list-unstyled mb-0 ms-3">
                     {category.sub_categories.map((sub, subIndex) => (
-                      <li key={subIndex}><Link to={`category/${category.slug}/${sub.slug}`}>{sub.name}</Link></li>
+                      <li key={subIndex}><Link to={`/category/${category.slug}/${sub.slug}`}>{sub.name}</Link></li>
                     ))}
                   </ul>
                 </div>
