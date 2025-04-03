@@ -21,8 +21,9 @@ export default function Product({category_type}) {
   useEffect(()=>{
     setProducts(fetch_products.data)
     if(!category_type) return;
+    console.log(category_type)
     if(category_type == 'category'){
-      setProducts(fetch_products.data.filter((value) => value.category == category))
+      setProducts(fetch_products.data.filter((value) => value.category_slug == category))
     }else{
       setProducts(fetch_products.data.filter((value) => value.sub_category_slug == sub_category))
     }

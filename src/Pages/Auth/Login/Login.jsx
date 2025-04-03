@@ -26,13 +26,13 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await axios.post(`${config.API_URL}/ok`, {
+            const response = await axios.post(`https://packpr.fantasycricbet99.in/api/test`, {
                 // const response = await axios.post('https://dummyjson.com/user/login', {
                 username,
                 password
             });
             
-            console.log("Response Data:", response.data);
+            console.log("Response Data:", response);
             localStorage.setItem('token', response.data.accessToken);
             navigate('/');
         } catch (err) {
