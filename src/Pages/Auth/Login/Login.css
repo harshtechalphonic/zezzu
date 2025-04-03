@@ -20,7 +20,7 @@
     color: #344054;
     padding: 16px;
   }
-  .login-sec .login-box input[type="submit"] {
+  .login-sec .login-box button[type="submit"] {
     background-color: #0072C0;
     color: #fcfcfd;
     font-size: 18px;

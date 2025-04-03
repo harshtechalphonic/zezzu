@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import AllCategoriesAPi from '../../../API/AllCategoriesAPi';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarsStaggered } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,6 +9,7 @@ export default function AllCatergory_Filter() {
     const allCategories = useSelector((store) => store.allCategories);
     const [showCategoriesDropdown, setshowCategoriesDropdown] = useState(false);
     const dropdownCategoriesRef = useRef(null);
+    const location = useLocation(); 
 
     const toggleCategoriesDropdown = () => {
         setshowCategoriesDropdown((prev) => !prev);
@@ -20,12 +21,18 @@ export default function AllCatergory_Filter() {
         }
     };
 
+    
     useEffect(() => {
         document.addEventListener('mousedown', handleCategoriesClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleCategoriesClickOutside);
         };
     }, []);
+
+    
+    useEffect(() => {
+        setshowCategoriesDropdown(false);
+    }, [location.pathname]);
 
     return (
         <>

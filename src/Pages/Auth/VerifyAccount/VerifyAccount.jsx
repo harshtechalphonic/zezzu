@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import './VerifyAccount.css'
 import Header from '../../../Components/Partials/Header/Header';
 import Footer from '../../../Components/Partials/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 
@@ -10,6 +12,7 @@ export default function VerifyAccount() {
   const [countdown, setCountdown] = useState(60);
   const [resendDisabled, setResendDisabled] = useState(true);
   const [verificationText, setVerificationText] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (resendDisabled) {
@@ -27,17 +30,45 @@ export default function VerifyAccount() {
     }
   }, [resendDisabled]);
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // console.log('Verification Code:', code);
+  //   setVerificationText('Verification in progress...');
+    
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log('Verification Code:', code);
     setVerificationText('Verification in progress...');
     
+    try {
+      const response = await axios.post('https://api.loginradius.com/identity/v2/auth/email', {
+        otp: code 
+    });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        setVerificationText("OTP verified successfully!");
+
+        navigate('/');
+      } else {
+        setVerificationText(data.message || "OTP verification failed. Please try again.");
+      }
+    } catch (error) {
+      setVerificationText("An error occurred. Please try again later.");
+    }
   };
+  
+  
+
+
+
 
   const handleResend = () => {
     setCountdown(60);
     setResendDisabled(true);
-    // console.log('OTP Resent');
+    console.log('OTP Resent');
   };
   return (
     <>
@@ -61,18 +92,19 @@ export default function VerifyAccount() {
                       )}
                     </div>
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       id="exampleFormControlInput1"
                       placeholder="******"
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
+                      required
                     />
                   </div>
                   <input className="form-control" type="submit" value="Continue" />
                   <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
                     <p className="mb-0">
-                      <a href="login.php" className="ms-3">Back to Sign in</a>
+                      <a href="/signup" className="ms-3">Back to Sign Up</a>
                     </p>
                   </div>
                 </form>

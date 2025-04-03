@@ -56,7 +56,7 @@ export default function Header() {
     
       const resetTimer = () => {
         clearTimeout(timer);
-        timer = setTimeout(AdvShow, 800000);
+        timer = setTimeout(AdvShow, 8000000);
       };
     
       useEffect(() => {
