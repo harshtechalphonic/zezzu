@@ -15,7 +15,6 @@ import { cartAction } from "../../../store/Products/cartSlice";
 import { filtersAction } from "../../../store/Products/filtersSlice";
 
 export default function Product_card({products,filters}) {
-  console.log(products)
   const [all_products, setProducts] = useState([]);
   const dispatch = useDispatch();
 

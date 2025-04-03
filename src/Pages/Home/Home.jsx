@@ -12,6 +12,7 @@ import DealsOfDay from '../../Components/Home/DealsOfDay/DealsOfDay'
 import CategoryBestSellers from '../../Components/Home/CategoryBestSellers/CategoryBestSellers'
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Gprscertified from '../../Components/Home/Gprscertified/Gprscertified'
 
 
 // images 
@@ -62,24 +63,7 @@ export default function Home() {
 
       <Hero/>
 
-        <section className='gprscertified'>
-            <div className='container'>
-                <div className='row'>
-                    {gps.map((item) =>(
-                        <div className='col-lg-3 col-md-6 mb-lg-0 mb-3' key={item.id}>
-                            <div className="gprscertified-box d-flex align-items-center  gap-3">
-                                <div className="gprscertified-icon">
-                                    <img src={item.image} alt={item.imagesAlt}/>
-                                </div>
-                                <div className="gprscertified-content">
-                                    <h4 className='mb-0'>{item.title}</h4>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
+        <Gprscertified/>
 
       <Categories/>
 

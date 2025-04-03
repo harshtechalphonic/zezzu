@@ -25,7 +25,7 @@ export default function HotOffer() {
                         <h2>{sectionData.title}</h2>
                         <p>{sectionData.description}</p>
                         <div className='button-dark mt-4'>
-                                    <Link to="/product">{sectionData.button_text}  <FontAwesomeIcon icon={faArrowRightLong    }/></Link>
+                                    <Link to={`/product/${sectionData.slug}`}>{sectionData.button_text}  <FontAwesomeIcon icon={faArrowRightLong    }/></Link>
                         </div>
                     </div>
                 </div>

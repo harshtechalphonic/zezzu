@@ -23,11 +23,10 @@ export default function ProductDetail() {
       );
   
       if (existingProduct) {
-        console.log(existingProduct)
+        // console.log(existingProduct)
         setSingleProduct(existingProduct)
       }
     }, [fetch_singleProduct]);
-    console.log(singleProduct)
   return (
    <>
     <Header/>

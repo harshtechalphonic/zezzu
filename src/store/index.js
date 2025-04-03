@@ -7,6 +7,8 @@ import cartSlice from "./Products/cartSlice";
 import filtersSlice from "./Products/filtersSlice";
 import allCategoriesSlice from "./Categories/allCategoriesSlice";
 import singleProductSlice from "./Products/singleProductSlice";
+import basicInfoSlice from "./HomesSection/basicInfoSlice";
+import maxDicountProductSlice from "./HomesSection/maxDicountProductSlice";
 
 const ecommerceStore = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ const ecommerceStore = configureStore({
     filters: filtersSlice.reducer,
     allCategories: allCategoriesSlice.reducer,
     singleProduct: singleProductSlice.reducer,
+    basicInfo:basicInfoSlice.reducer,
+    maxDicountProduct:maxDicountProductSlice.reducer
   },
 });
 
