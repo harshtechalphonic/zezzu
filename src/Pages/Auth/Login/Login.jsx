@@ -26,7 +26,11 @@ export default function Login() {
         setLoading(true);
 
         try {
+<<<<<<< HEAD
             const response = await axios.post(`${config.API_URL}/login`, {
+=======
+            const response = await axios.post(`${config.API_URL}/ok` , {
+>>>>>>> 42dec0d614d4559383ea43cd256ad1366a0dfa4e
                 // const response = await axios.post('https://dummyjson.com/user/login', {
                 username,
                 password
