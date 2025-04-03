@@ -26,7 +26,7 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await axios.post(`${config.API_URL}/ok`, {
+            const response = await axios.post(`${config.API_URL}/ok` , {
                 // const response = await axios.post('https://dummyjson.com/user/login', {
                 username,
                 password
