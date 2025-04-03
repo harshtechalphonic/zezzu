@@ -21,9 +21,6 @@ export default function SignUp() {
         password: "",
         confirmPassword: "",
         terms_conditions: 1,
-        age:"",
-        firstName:"",
-        lastName:"",
 
     });
 
@@ -57,14 +54,11 @@ export default function SignUp() {
         }
     
         try {
-            const response = await axios.post('https://dummyjson.com/users/add', {
+            const response = await axios.post(`${config.API_URL}/register`, {
                 username: formData.username,
                 email: formData.email,
-                phone: formData.phone,
+                phone: formData.phone,  
                 password: formData.password,
-                age: formData.age,
-                firstName: formData.firstName,
-                lastName: formData.lastName,
             });
     
             console.log("Response:", response.data);
@@ -74,7 +68,7 @@ export default function SignUp() {
                 console.log("User registered:", response.data);
 
                 try {
-                    await axios.post("https://test.stytch.com/v1/otps/email/send", {}, 
+                    await axios.post(`${config.API_URL}/send-otp-in-mail`, {}, 
                         {
                             headers: {
                                 "Content-Type": "application/json",
@@ -83,7 +77,7 @@ export default function SignUp() {
                         });
 
                     console.log("OTP sent to email:", formData.email);
-                    navigate('/verify'); // Redirect to verification page
+                    navigate('/verify'); 
                 } catch (otpError) {
                     console.error("Error sending OTP:", otpError);
                     setMessage({ text: "Registration successful, but OTP could not be sent.", type: "error" });
@@ -114,7 +108,7 @@ export default function SignUp() {
                                     {message.text && (
                                         <p className={message.type === "error" ? "text-danger" : "text-success"}>{message.text}</p>
                                     )}
-                                    {/* <div className="mb-3">
+                                    <div className="mb-3">
                                         <label htmlFor="username" className="form-label">Name</label>
                                         <input
                                             type="text"
@@ -127,7 +121,7 @@ export default function SignUp() {
                                             onChange={handleChange}
                                             required
                                         />
-                                    </div> */}
+                                    </div>
                                     <div className="mb-3">
                                         <label htmlFor="email" className="form-label">Email</label>
                                         <input
@@ -138,48 +132,6 @@ export default function SignUp() {
                                             placeholder="name@example.com"
                                             autoComplete="email"
                                             value={formData.email}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="firstName" className="form-label">First Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="firstName"
-                                            name="firstName"
-                                            placeholder="Name"
-                                            autoComplete="name"
-                                            value={formData.firstName}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="lastName" className="form-label">Last Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="lastName"
-                                            name="lastName"
-                                            placeholder="Name"
-                                            autoComplete="name"
-                                            value={formData.lastName}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="age" className="form-label">age</label>
-                                        <input
-                                            type="number"
-                                            className="form-control"
-                                            id="age"
-                                            name="age"
-                                            placeholder="age"
-                                            autoComplete="age"
-                                            value={formData.age}
                                             onChange={handleChange}
                                             required
                                         />
@@ -257,9 +209,9 @@ export default function SignUp() {
                                     </div>
                                     
                                     <input className="form-control" type="submit" value="Sign Up" />
-                                <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
-                                                                        <p className="mb-0">Allready Have an Account? <Link to="/login" className="ms-3">Login</Link></p>
-                                                                    </div>
+                                    <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
+                                        <p className="mb-0">Allready Have an Account? <Link to="/login" className="ms-3">Login</Link></p>
+                                    </div>
                                 </form>
                             </div>
                         </div>
