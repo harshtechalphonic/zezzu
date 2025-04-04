@@ -116,12 +116,13 @@ export default function Product_detail({singleProduct}) {
                   <b className="text-dark">Availability:</b> In Stock
                 </span>
               </div>
-              {/* {singleProduct.category != null ?
+              {singleProduct.category != null ?
               <div className="cate-text mt-3">
+                {console.log(singleProduct.category,singleProduct.sub_category)}
                 <span className="text-success fw-bold">
-                  <b className="text-dark">Category:</b> <Link className="fw-bold" to={`/category/${singleProduct.category.slug}`}>{singleProduct.category.name}</Link> / <Link className="fw-bold" to={`/category/${singleProduct.category.slug}/${singleProduct.sub_category.slug}`}>{singleProduct.sub_category.name}</Link>
+                  <b className="text-dark">Category:</b> <Link className="fw-bold" to={`/category/${singleProduct?.category?.slug}`}>{singleProduct?.category?.name}</Link> / <Link className="fw-bold" to={`/category/${singleProduct?.category?.slug}/${singleProduct?.sub_category?.slug}`}>{singleProduct?.sub_category?.name}</Link>
                 </span>
-              </div> : ''} */}
+              </div> : ''}
 
               <hr className="my-5" />
               <div className="purchase-btns">
