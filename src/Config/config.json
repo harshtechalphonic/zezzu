@@ -1,3 +1,4 @@
 {
-    "API_URL": "https://demotechalphonic.site/multivendor/api"
+    "API_URL": "https://demotechalphonic.site/multivendor/api",
+    "API_URL_POST": "https://demotechalphonic.site/multivendor/api/v1"
 }

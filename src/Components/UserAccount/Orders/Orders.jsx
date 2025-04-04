@@ -10,7 +10,7 @@ export default function Orders() {
           <div className='col-lg-7'>
             <div className='order-titel d-flex align-items-center justify-content-between'>
               <h2>Orders</h2>
-              <select class="form-select" aria-label="Default select example">
+              <select className="form-select" aria-label="Default select example">
                 <option value="1">Today's</option>
                 <option value="2">Last Week</option>
                 <option selected>Last Month</option>

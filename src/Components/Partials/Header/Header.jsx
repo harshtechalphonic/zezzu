@@ -27,23 +27,17 @@ export default function Header() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-    const [showDropdown, setShowDropdown] = useState(false);
-    const dropdownRef = useRef(null);
-  
-    const toggleDropdown = () => setShowDropdown(!showDropdown);
-  
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowDropdown(false);
-      }
-    };
-  
-    useEffect(() => {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, []);
+
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  setIsLoggedIn(!!token); 
+}, []);
+
+
+
 
 
     // pop up  code is here  start
@@ -103,7 +97,7 @@ export default function Header() {
 
   // Sticky header functionality
       const handleScroll = () => {
-        if (window.scrollY > 160) {
+        if (window.scrollY > 0) {
           setIsSticky(true);
         } else {
           setIsSticky(false);
@@ -129,19 +123,11 @@ export default function Header() {
             </li>
             <li className='d-flex align-items-center flex-wrap gap-lg-5 gap-md-4 gap-2 text-lg-start text-end'>                            
               {/* <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> My account</Link> */}
-              <div className='account-dropdown position-relative ' ref={dropdownRef}>
-                <Link to="#!" onClick={toggleDropdown}><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> My account</Link>
-                {showDropdown && (
-                  <div className="dropdown-menu show position-absolute custom-dropdown asdcasdfasdfasdfasdf">
-                    <ul className='list-unstyled'>
-                      <li><Link to="/login"><FontAwesomeIcon icon={faUser}/> Login</Link></li>
-                      <li><Link to="/user-account"><FontAwesomeIcon icon={faUser}/> User Account</Link></li>
-                      <li><Link to="/inbox"><FontAwesomeIcon icon={faEnvelope}/> Inbox</Link></li>
-                      <li><Link to="/settings"><FontAwesomeIcon icon={faCog}/> Settings</Link></li>
-                      <li><Link to="/help"><FontAwesomeIcon icon={faQuestionCircle}/> Help</Link></li>
-                      <li><Link to="/logout"><FontAwesomeIcon icon={faSignOutAlt}/> Sign Out</Link></li>
-                    </ul>
-                  </div>
+              <div className='account-dropdown position-relative'>
+                {isLoggedIn ? (
+                  <Link to="/user-account"><i className='me-2'><FontAwesomeIcon icon={faUser} /></i> User Account</Link>
+                ) : (
+                  <Link to="/login"><i className='me-2'><FontAwesomeIcon icon={faUser} /></i> Login/Register</Link>
                 )}
               </div>
               <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> Become a seller</Link>

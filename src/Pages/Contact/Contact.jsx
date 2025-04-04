@@ -29,9 +29,9 @@ export default function Contact() {
                                         <label className='form-label' for="Phone">Phone Number</label>
                                         <input type='text' id='Phone' className='form-control'     placeholder='Phone Number' />
                                     </div>                                    
-                                    <div class="col-lg-12 mb-3">
-                                        <label for="Message" class="form-label">Message</label>
-                                        <textarea class="form-control" id="Message" rows="9" placeholder='Describe your requirement here..'></textarea>
+                                    <div className="col-lg-12 mb-3">
+                                        <label for="Message" className="form-label">Message</label>
+                                        <textarea className="form-control" id="Message" rows="9" placeholder='Describe your requirement here..'></textarea>
                                     </div>
                                     <div className='col-lg-12 mb-3'>
                                         <input type='submit' className='form-control send_message' value="Send Message" />

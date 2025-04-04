@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import './VerifyAccount.css'
+import React, { useEffect, useState, useRef } from 'react';
+import './VerifyAccount.css';
 import Header from '../../../Components/Partials/Header/Header';
 import Footer from '../../../Components/Partials/Footer/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-
-
+import config from '../../../Config/config.json';
 
 export default function VerifyAccount() {
-    const [code, setCode] = useState('');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [countdown, setCountdown] = useState(60);
   const [resendDisabled, setResendDisabled] = useState(true);
   const [verificationText, setVerificationText] = useState('');
+  const inputsRef = useRef([]);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const email = location.state?.email;
+  const backOtp = location.state?.otp;
 
   useEffect(() => {
     if (resendDisabled) {
@@ -30,78 +34,125 @@ export default function VerifyAccount() {
     }
   }, [resendDisabled]);
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // console.log('Verification Code:', code);
-  //   setVerificationText('Verification in progress...');
-    
-  // };
+  const handleOtpChange = (e, index) => {
+    const value = e.target.value.replace(/\D/, '');
+    if (!value) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (index < 5) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'Backspace') {
+      e.preventDefault();
+      const newOtp = [...otp];
+
+      if (otp[index]) {
+        newOtp[index] = '';
+        setOtp(newOtp);
+      } else if (index > 0) {
+        inputsRef.current[index - 1]?.focus();
+        newOtp[index - 1] = '';
+        setOtp(newOtp);
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const code = otp.join('');
     setVerificationText('Verification in progress...');
-    
-    try {
-      const response = await axios.post('https://api.loginradius.com/identity/v2/auth/email', {
-        otp: code 
-    });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        setVerificationText("OTP verified successfully!");
 
-        navigate('/');
+    if (code !== backOtp) {
+      setVerificationText('Incorrect OTP. Please try again.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${config.API_URL_POST}/otp-success`, {
+        email,
+        email_verified: 1,
+        code,
+      });
+
+      if (response.status === 200) {
+        setVerificationText('OTP verified successfully!');
+        setTimeout(() => navigate('/user-account'), 1500);
       } else {
-        setVerificationText(data.message || "OTP verification failed. Please try again.");
+        setVerificationText('OTP verification failed. Please try again.');
       }
     } catch (error) {
-      setVerificationText("An error occurred. Please try again later.");
+      console.error(error);
+      setVerificationText(error?.response?.data?.message || 'An error occurred. Please try again later.');
     }
   };
-  
-  
 
+  const handleResend = async () => {
+    try {
+      if (!email) {
+        setVerificationText('Missing email address for resending OTP.');
+        return;
+      }
 
+      await axios.post(`${config.API_URL_POST}/send-otp-in-mail`, { email });
 
-
-  const handleResend = () => {
-    setCountdown(60);
-    setResendDisabled(true);
-    console.log('OTP Resent');
+      setVerificationText('OTP resent successfully!');
+      setCountdown(60);
+      setResendDisabled(true);
+    } catch (error) {
+      console.error(error);
+      setVerificationText('Failed to resend OTP. Try again later.');
+    }
   };
+
   return (
     <>
-    <Header/>
-    <section className="login-sec">
+      <Header />
+      <section className="login-sec verify_sec">
         <div className="container h-100">
           <div className="row justify-content-center align-items-center h-100">
-            <div className="col-md-5 my-5">
+            <div className="col-xl-5 col-lg-6 col-md-8 col-12 my-5">
               <div className="login-box text-center">
-                <form onSubmit={handleSubmit} >
+                <form onSubmit={handleSubmit}>
                   <h2 className="my-4">Verify Your Email Address</h2>
-                  <p>Please enter the verification code sent to your email address to complete the verification process.</p>
+                  <p>Please enter the verification code sent to your email address.</p>
                   {verificationText && <p className="text-success">{verificationText}</p>}
+
                   <div className="mb-3 text-left">
-                    <div className="d-flex align-items-center justify-content-between">
-                      <label htmlFor="exampleFormControlInput1" className="form-label">Verification Code</label>
+                    <div className="d-flex align-items-center justify-content-between align-items-center mb-2">
+                      <label htmlFor="otp" className="form-label mb-0">Verification Code</label>
                       {resendDisabled ? (
                         <span>Resend Code in {countdown}s</span>
                       ) : (
                         <span className="text-primary" onClick={handleResend} style={{ cursor: 'pointer' }}>Resend Code</span>
                       )}
                     </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="exampleFormControlInput1"
-                      placeholder="******"
-                      value={code}
-                      onChange={(e) => setCode(e.target.value)}
-                      required
-                    />
+
+                    <div className="otp-input d-flex justify-content-between">
+                      {otp.map((digit, index) => (
+                        <input
+                          key={index}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength="1"
+                          className="form-control text-center mx-1"
+                          value={digit}
+                          onChange={(e) => handleOtpChange(e, index)}
+                          onKeyDown={(e) => handleKeyDown(e, index)}
+                          ref={(el) => (inputsRef.current[index] = el)}
+                          required
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <input className="form-control" type="submit" value="Continue" />
+
+                  <input className="form-control mt-4" type="submit" value="Continue" />
+
                   <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
                     <p className="mb-0">
                       <a href="/signup" className="ms-3">Back to Sign Up</a>
@@ -113,7 +164,7 @@ export default function VerifyAccount() {
           </div>
         </div>
       </section>
-    <Footer/>
+      <Footer />
     </>
-  )
+  );
 }

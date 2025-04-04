@@ -62,47 +62,47 @@ export default function Addresses() {
               </div>
               <div className='modal-body'>
                 <div className='row'>
-                  <div class="col-lg-6 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="First Name"/>
+                  <div className="col-lg-6 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">First Name</label>
+                    <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="First Name"/>
                   </div>
-                  <div class="col-lg-6 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Last Name"/>
+                  <div className="col-lg-6 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">Last Name</label>
+                    <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="Last Name"/>
                   </div>
-                  <div class="col-lg-6 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
-                    <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="+1-202-555-0118"/>
+                  <div className="col-lg-6 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">Phone Number</label>
+                    <input type="number" className="form-control" id="exampleFormControlInput1" placeholder="+1-202-555-0118"/>
                   </div>
-                  <div class="col-lg-6 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com"/>
+                  <div className="col-lg-6 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">Email address</label>
+                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"/>
                   </div>
-                  <div class="col-lg-12 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Address</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Road No. 13/x, House no. 1320/C, Flat No. 5D"/>
+                  <div className="col-lg-12 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">Address</label>
+                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Road No. 13/x, House no. 1320/C, Flat No. 5D"/>
                   </div>
-                  <div class="col-lg-6 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Country/Region</label>
-                    <select class="form-select" aria-label="Default select example">
+                  <div className="col-lg-6 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">Country/Region</label>
+                    <select className="form-select" aria-label="Default select example">
                       <option selected>Open this select menu</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
                       <option value="3">Three</option>
                     </select>
                   </div>
-                  <div class="col-lg-3 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">States</label>
-                    <select class="form-select" aria-label="Default select example">
+                  <div className="col-lg-3 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">States</label>
+                    <select className="form-select" aria-label="Default select example">
                       <option selected>Open this select menu</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
                       <option value="3">Three</option>
                     </select>
                   </div>
-                  <div class="col-lg-3 mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Zip Code</label>
-                    <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="120712"/>
+                  <div className="col-lg-3 mb-3">
+                    <label for="exampleFormControlInput1" className="form-label">Zip Code</label>
+                    <input type="number" className="form-control" id="exampleFormControlInput1" placeholder="120712"/>
                   </div>
                 </div>
               </div>

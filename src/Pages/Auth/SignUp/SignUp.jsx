@@ -21,7 +21,6 @@ export default function SignUp() {
         password: "",
         confirmPassword: "",
         terms_conditions: 1,
-
     });
 
     const handleChange = (e) => {
@@ -42,59 +41,68 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (!formData.terms_conditions) {
             setMessage({ text: "You must agree to the terms and conditions!", type: "error" });
             return;
         }
-    
+
         if (formData.password !== formData.confirmPassword) {
             setMessage({ text: "Passwords do not match!", type: "error" });
             return;
         }
-    
+
         try {
-            const response = await axios.post(`${config.API_URL}/register`, {
+            const response = await axios.post(`${config.API_URL_POST}/register`, {
                 username: formData.username,
                 email: formData.email,
-                phone: formData.phone,  
+                phone: formData.phone,
                 password: formData.password,
+                terms_conditions: 1,
             });
-    
-            console.log("Response:", response.data);
-    
+
             if (response.status === 200 || response.status === 201) {
                 setMessage({ text: "Registration successful!", type: "success" });
-                console.log("User registered:", response.data);
+
+                const userEmail = response.data.email || formData.email;
+                console.log("Trying to send OTP to:", userEmail);
 
                 try {
-                    await axios.post(`${config.API_URL}/send-otp-in-mail`, {}, 
-                        {
-                            headers: {
-                                "Content-Type": "application/json",
-                                email: response.data.email,
-                            }
-                        });
+                    const otpResponse = await axios.post(
+                        `${config.API_URL_POST}/send-otp-in-mail`,
+                        { email: userEmail }
+                    );
 
-                    console.log("OTP sent to email:", formData.email);
-                    navigate('/verify'); 
+                    const { email, otp } = otpResponse.data;
+                    console.log("OTP sent to email:", email, "OTP:", otp);
+
+                    navigate("/verify", {
+                        state: { email, otp },
+                    });
                 } catch (otpError) {
-                    console.error("Error sending OTP:", otpError);
-                    setMessage({ text: "Registration successful, but OTP could not be sent.", type: "error" });
-                }      
-                navigate('/verify');
+                    console.error("Error sending OTP:", otpError.response?.data || otpError.message);
+                    setMessage({
+                        text: "Registration successful, but OTP could not be sent.",
+                        type: "error",
+                    });
+
+                    // Optionally still navigate (for dev/testing)
+                    // navigate("/verify", {
+                    //     state: { email: userEmail, otp: null },
+                    // });
+                }
             } else {
                 throw new Error("Unexpected response from server");
             }
         } catch (err) {
             console.error("Registration Error:", err);
-            setMessage({ 
-                text: err.response?.data?.message || err.message || "Error registering", 
-                type: "error" 
+            setMessage({
+                text: err.response?.data?.message || err.message || "Error registering",
+                type: "error",
             });
         }
     };
-    
+
     return (
         <>
             <Header />
@@ -106,7 +114,9 @@ export default function SignUp() {
                                 <form onSubmit={handleSubmit}>
                                     <h2 className="my-4">Sign Up Your Account</h2>
                                     {message.text && (
-                                        <p className={message.type === "error" ? "text-danger" : "text-success"}>{message.text}</p>
+                                        <p className={message.type === "error" ? "text-danger" : "text-success"}>
+                                            {message.text}
+                                        </p>
                                     )}
                                     <div className="mb-3">
                                         <label htmlFor="username" className="form-label">Name</label>
@@ -207,10 +217,10 @@ export default function SignUp() {
                                             I agree to the <Link to="/terms">terms and conditions</Link>
                                         </label>
                                     </div>
-                                    
+
                                     <input className="form-control" type="submit" value="Sign Up" />
                                     <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
-                                        <p className="mb-0">Allready Have an Account? <Link to="/login" className="ms-3">Login</Link></p>
+                                        <p className="mb-0">Already have an account? <Link to="/login" className="ms-3">Login</Link></p>
                                     </div>
                                 </form>
                             </div>
