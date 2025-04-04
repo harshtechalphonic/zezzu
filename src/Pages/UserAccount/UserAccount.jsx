@@ -23,7 +23,7 @@ import ReturnRefund from '../../Components/UserAccount/ReturnRefund/ReturnRefund
 import AccountDetails from '../../Components/UserAccount/AccountDetails/AccountDetails';
 
 export default function UserAccount() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
