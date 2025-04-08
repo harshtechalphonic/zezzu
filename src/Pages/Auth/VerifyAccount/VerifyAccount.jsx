@@ -82,7 +82,7 @@ export default function VerifyAccount() {
 
       if (response.status === 200) {
         setVerificationText('OTP verified successfully!');
-        setTimeout(() => navigate('/user-account'), 1500);
+        setTimeout(() => navigate('/login'), 1500);
       } else {
         setVerificationText('OTP verification failed. Please try again.');
       }
