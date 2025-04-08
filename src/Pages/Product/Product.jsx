@@ -10,6 +10,7 @@ import { filtersAction } from "../../store/Products/filtersSlice";
 
 export default function Product({category_type}) {
   const fetch_products = useSelector((store) => store.products);
+  // console.log("products",fetch_products) 
 
   const fetch_filter = useSelector((store) => store.filters);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 991);

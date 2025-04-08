@@ -43,11 +43,11 @@ export default function Footer() {
                                 <div className='menu-box'>
                                     <h4>Quick Links</h4>
                                     <ul className='list-unstyled mt-4'>
-                                        <li><Link to="#!">Home</Link></li>
-                                        <li><Link to="#!">About Us</Link></li>
-                                        <li><Link to="#!">Our Products</Link></li>
+                                        <li><Link to="/">Home</Link></li>
+                                        <li><Link to="/about">About Us</Link></li>
+                                        <li><Link to="/product">Our Products</Link></li>
                                         <li><Link to="#!">Track Orders</Link></li>
-                                        <li><Link to="#!">Contact Us</Link></li>
+                                        <li><Link to="/contact-us">Contact Us</Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -80,13 +80,17 @@ export default function Footer() {
                 </div>
                 <div className='copyright'>
                     <div className="container">
-                        <div className='d-flex justify-content-evenly'>
+                        <div className='d-flex justify-content-between'>
                                 <div className='copytext'>
                                     <p className='mb-0'>Copyright © 2025 Tech Alphonic.All Rights Reserved.</p>
                                 </div>
-                                {/* <div className='Payemt-img'>
-                                   <img src={paymetOpt} alt="" />
-                                </div> */}
+                                <div className='Payemt-img'>
+                                   <ul className='d-flex list-unstyled gap-3 text-white mb-0 align-items-center'>
+                                    <li><Link to={`/term&conditons`}> Term & conditons</Link></li>
+                                    <li><Link to={`/privacy-policy`}> Privacy & Policy</Link></li>
+                                    <li><Link to={`/return-policy`}> Return & Cancellation</Link></li>
+                                   </ul>
+                                </div>
                         </div>
                     </div>
                 </div>

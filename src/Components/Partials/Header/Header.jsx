@@ -9,6 +9,7 @@ import ProductsApi from "../../../API/ProductsApi";
 import WishlistMenu from './WishlistMenu';
 import CartMenu from './CartMenu';
 import AllCatergory_Filter from './AllCatergory_Filter';
+import SearchBar from './SearchBar';
 
 
 export default function Header() {
@@ -151,12 +152,7 @@ useEffect(() => {
            <div className=' position-relative'>
            <AllCatergory_Filter/>
            </div>
-            <div className="input-group">
-              <input type="text" className="form-control" placeholder="What are you looking for?" aria-label="Search" />
-              <span className="input-group-text">
-                <FontAwesomeIcon icon={faSearch}/>
-              </span>
-            </div>
+            <SearchBar/>
           </div>
 
           <div className='logo-cartbox'>
@@ -174,7 +170,7 @@ useEffect(() => {
           <li><Link to="/product">Kitchen</Link></li>
           <li><Link to="/product">Clothing</Link></li>
           <li><Link to="/product">Personal Care</Link></li>
-          <li><Link to="#!">About Us</Link></li>
+          <li><Link to="/about">About Us</Link></li>
           <li><Link to="/contact-us">Contact Us</Link></li>
           <li><Link to="#!">Track Order</Link></li>
         </ul>

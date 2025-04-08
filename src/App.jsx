@@ -2,7 +2,7 @@ import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import Home from './Pages/Home/Home'
-// import About from './pages/About/about';
+import About from './Pages/About/About'
 import Product from './Pages/Product/Product'
 import ProductDetail from './Pages/ProductDetail/ProductDetail'
 import Cart from './Pages/Cart/Cart'
@@ -14,7 +14,10 @@ import ResetPassword from './Pages/Auth/ResetPassword/ResetPassword'
 import VerifyAccount from './Pages/Auth/VerifyAccount/VerifyAccount'
 import UserAccount from './Pages/UserAccount/UserAccount'
 import Contact from './Pages/Contact/Contact'
-import Test from './Pages/Test'
+import TermCondition from './Pages/Tcpprc/TermCondition'
+import Privacy_policy from './Pages/Tcpprc/Privacy_policy'
+import Return_policy from './Pages/Tcpprc/Return_policy'
+import Checkout_page from './Pages/Checkout/Checkout_page'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -27,6 +30,10 @@ const router= createBrowserRouter([
   {
     path : '/',
     element : <Home/>
+  },
+  {
+    path : '/about',
+    element : <About/>
   },
   {
     path : '/product',
@@ -81,8 +88,20 @@ const router= createBrowserRouter([
     element : <Contact/>
   },
   {
-    path : '/test',
-    element : <Test/>
+    path : '/term&conditons',
+    element : <TermCondition/>
+  },
+  {
+    path : '/privacy-policy',
+    element : <Privacy_policy/>
+  },
+  {
+    path : '/return-policy',
+    element : <Return_policy/>
+  },
+  {
+    path : '/checkout',
+    element : <Checkout_page/>
   },
   {
     path : '*',

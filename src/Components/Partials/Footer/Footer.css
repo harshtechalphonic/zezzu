@@ -93,8 +93,8 @@
     color: #ffffff;
 }
 .copyright .Payemt-img{
-    width: 100%;
-    max-width: 225px;
+    /* width: 100%; */
+    /* max-width: 225px; */
 }   
 .footer-brand h3{
     font-size: 24px;
