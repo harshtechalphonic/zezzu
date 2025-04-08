@@ -14,7 +14,13 @@ export default function SingleProductApi() {
     axios
       .get(`${config.API_URL}/product/${slug}`)
       .then(function (response) {
-        dispatch(singleProductAction.addProduct({...response.data.product,related_products:[...response.data.related_products]}));
+        // console.log(response)
+        dispatch(singleProductAction.addProduct({
+          ...response.data.product,
+          product_attributes:response.data.product_attributes,
+          product_inventory_details:response.data.product_inventory_details,
+          related_products:response.data.related_products
+        }));
       })
       .catch(function (error) {
         console.log(error);

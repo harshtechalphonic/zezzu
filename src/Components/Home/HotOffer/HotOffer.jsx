@@ -21,17 +21,17 @@ export default function HotOffer() {
             <div className='row justify-content-between align-items-center'>
                 <div className='col-lg-5'>
                     <div className='Hot_offer-Content'>
-                        <span>{sectionData.discount}</span>
-                        <h2>{sectionData.title}</h2>
-                        <p>{sectionData.description}</p>
+                        <span>{sectionData?.discount}</span>
+                        <h2>{sectionData?.title}</h2>
+                        <p>{sectionData?.description}</p>
                         <div className='button-dark mt-4'>
-                                    <Link to={`/product/${sectionData.slug}`}>{sectionData.button_text}  <FontAwesomeIcon icon={faArrowRightLong    }/></Link>
+                                    <Link to={`/product/${sectionData?.slug}`}>{sectionData?.button_text}  <FontAwesomeIcon icon={faArrowRightLong    }/></Link>
                         </div>
                     </div>
                 </div>
                 <div className='col-lg-5'>
                     <div className='Hot_offer-image'>
-                        <img src={sectionData.url} alt="" />
+                        <img src={sectionData?.url} alt="" />
                     </div>
                 </div>
             </div>
