@@ -12,7 +12,7 @@ export default function Return_policy() {
     useEffect(() => {
       const fetchPrivacy = async () => {
         try {
-          const response = await axios.get('http://demotechalphonic.site/multivendor/api/static-page');
+          const response = await axios.get(`${config.API_URL}/static-page`);
           const pagesObject = response.data;
           console.log(response);
   

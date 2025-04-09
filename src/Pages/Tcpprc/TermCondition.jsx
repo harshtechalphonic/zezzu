@@ -12,7 +12,7 @@ export default function TermCondition() {
   useEffect(() => {
     const fetchTerms = async () => {
       try {
-        const response = await axios.get('http://demotechalphonic.site/multivendor/api/static-page');
+        const response = await axios.get(`${config.API_URL}/static-page`);
         const pagesObject = response.data;
         console.log(response)
 
