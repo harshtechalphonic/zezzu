@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../../Components/Partials/Header/Header'
 import Footer from '../../Components/Partials/Footer/Footer'
-import './about.css'
+import './About.css'
 
 export default function About() {
   return (
