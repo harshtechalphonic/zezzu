@@ -86,9 +86,9 @@ export default function Footer() {
                                 </div>
                                 <div className='Payemt-img'>
                                    <ul className='d-flex list-unstyled gap-3 text-white mb-0 align-items-center'>
-                                    <li><Link to={`/term&conditons`}> Term & conditons</Link></li>
-                                    <li><Link to={`/privacy-policy`}> Privacy & Policy</Link></li>
-                                    <li><Link to={`/return-policy`}> Return & Cancellation</Link></li>
+                                    <li><Link to={`/term&conditons`}> Term & conditons</Link> </li>
+                                    <li><Link to={`/privacy-policy`}> Privacy & Policy</Link> </li>
+                                    <li><Link to={`/return-policy`}> Return & Cancellation</Link> </li>
                                    </ul>
                                 </div>
                         </div>
