@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Partials/Header/Header';
 import Footer from '../../Components/Partials/Footer/Footer';
 import axios from 'axios';
+import config from '../../Config/config.json'
 
 export default function Privacy_policy() {
   const [privacyContent, setPrivacyContent] = useState('');
@@ -11,7 +12,7 @@ export default function Privacy_policy() {
   useEffect(() => {
     const fetchPrivacy = async () => {
       try {
-        const response = await axios.get('http://demotechalphonic.site/multivendor/api/static-page');
+        const response = await axios.get(`${config.API_URL}/static-page`);
         const pagesObject = response.data;
         console.log(response);
 
