@@ -1,6 +1,8 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Home from './Pages/Home/Home'
 import About from './Pages/About/About'
 import Product from './Pages/Product/Product'
@@ -129,6 +131,7 @@ const router= createBrowserRouter([
 function App() {
   return (
     <main>
+      <ToastContainer />
       <Provider store={ecommerceStore}>
         <RouterProvider router={router}></RouterProvider>
       </Provider>

@@ -5,18 +5,23 @@ import Footer from '../../../Components/Partials/Footer/Footer';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../../Config/config.json';
+import { toast } from 'react-toastify';
 
 export default function VerifyAccount() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [countdown, setCountdown] = useState(60);
   const [resendDisabled, setResendDisabled] = useState(true);
-  const [verificationText, setVerificationText] = useState('');
+  const [loading, setLoading] = useState(false);
   const inputsRef = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const from = location.state?.from;
   const email = location.state?.email;
   const backOtp = location.state?.otp;
+
+  useEffect(() => {
+    inputsRef.current[0]?.focus();
+  }, []);
 
   useEffect(() => {
     if (resendDisabled) {
@@ -65,11 +70,20 @@ export default function VerifyAccount() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const code = otp.join('');
-    setVerificationText('Verification in progress...');
+    toast.info('Verification in progress...');
+
+    if (otp.includes('')) {
+      toast.error('Please enter the full 6-digit code.');
+      setLoading(false);
+      return;
+    }
 
     if (code !== backOtp) {
-      setVerificationText('Incorrect OTP. Please try again.');
+      toast.error('Incorrect OTP. Please try again.');
+      setLoading(false);
       return;
     }
 
@@ -81,32 +95,42 @@ export default function VerifyAccount() {
       });
 
       if (response.status === 200) {
-        setVerificationText('OTP verified successfully!');
-        setTimeout(() => navigate('/login'), 1500);
+        toast.success('OTP verified successfully!');
+        setTimeout(() => {
+          if (from === 'forget-password') {
+            navigate('/reset-password', { state: { email } });
+          } else {
+            navigate('/login');
+          }
+        }, 1500);
       } else {
-        setVerificationText('OTP verification failed. Please try again.');
+        toast.error('OTP verification failed. Please try again.');
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
-      setVerificationText(error?.response?.data?.message || 'An error occurred. Please try again later.');
+      toast.error(error?.response?.data?.message || 'An error occurred. Please try again later.');
+      setLoading(false);
     }
   };
 
   const handleResend = async () => {
     try {
       if (!email) {
-        setVerificationText('Missing email address for resending OTP.');
+        toast.error('Missing email address for resending OTP.');
         return;
       }
 
       await axios.post(`${config.API_URL_POST}/send-otp-in-mail`, { email });
 
-      setVerificationText('OTP resent successfully!');
+      toast.info('OTP resent successfully!');
+      setOtp(['', '', '', '', '', '']);
       setCountdown(60);
       setResendDisabled(true);
+      inputsRef.current[0]?.focus();
     } catch (error) {
       console.error(error);
-      setVerificationText('Failed to resend OTP. Try again later.');
+      toast.error('Failed to resend OTP. Try again later.');
     }
   };
 
@@ -121,15 +145,16 @@ export default function VerifyAccount() {
                 <form onSubmit={handleSubmit}>
                   <h2 className="my-4">Verify Your Email Address</h2>
                   <p>Please enter the verification code sent to your email address.</p>
-                  {verificationText && <p className="text-success">{verificationText}</p>}
 
                   <div className="mb-3 text-left">
-                    <div className="d-flex align-items-center justify-content-between align-items-center mb-2">
+                    <div className="d-flex align-items-center justify-content-between mb-2">
                       <label htmlFor="otp" className="form-label mb-0">Verification Code</label>
                       {resendDisabled ? (
                         <span>Resend Code in {countdown}s</span>
                       ) : (
-                        <span className="text-primary" onClick={handleResend} style={{ cursor: 'pointer' }}>Resend Code</span>
+                        <span className="text-primary" onClick={handleResend} style={{ cursor: 'pointer' }}>
+                          Resend Code
+                        </span>
                       )}
                     </div>
 
@@ -151,7 +176,9 @@ export default function VerifyAccount() {
                     </div>
                   </div>
 
-                  <input className="form-control mt-4" type="submit" value="Continue" />
+                  <button className="form-control btn" type="submit" disabled={loading}>
+                    {loading ? 'Verifying...' : 'Continue'}
+                  </button>
 
                   <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
                     <p className="mb-0">

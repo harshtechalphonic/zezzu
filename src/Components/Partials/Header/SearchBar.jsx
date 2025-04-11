@@ -16,7 +16,7 @@ export default function SearchBar() {
   const filteredProducts = productList.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  console.log("seacrhbar", filteredProducts)
+  // console.log("seacrhbar", filteredProducts)
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
