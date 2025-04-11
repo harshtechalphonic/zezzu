@@ -7,8 +7,10 @@ import axios from 'axios';
 import config from '../../../Config/config.json';
 import { toast } from 'react-toastify';
 
+const OTP_LENGTH = 6;
+
 export default function VerifyAccount() {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''));
   const [countdown, setCountdown] = useState(60);
   const [resendDisabled, setResendDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,13 @@ export default function VerifyAccount() {
   const from = location.state?.from;
   const email = location.state?.email;
   const backOtp = location.state?.otp;
+
+  useEffect(() => {
+    if (!email || !backOtp) {
+      toast.error('Invalid access. Redirecting...');
+      navigate('/login');
+    }
+  }, [email, backOtp, navigate]);
 
   useEffect(() => {
     inputsRef.current[0]?.focus();
@@ -40,15 +49,24 @@ export default function VerifyAccount() {
   }, [resendDisabled]);
 
   const handleOtpChange = (e, index) => {
-    const value = e.target.value.replace(/\D/, '');
+    const value = e.target.value.replace(/\D/g, '');
     if (!value) return;
 
     const newOtp = [...otp];
-    newOtp[index] = value;
+    newOtp[index] = value[0];
     setOtp(newOtp);
 
-    if (index < 5) {
+    if (index < OTP_LENGTH - 1) {
       inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    const pasteData = e.clipboardData.getData('Text').replace(/\D/g, '');
+    if (pasteData.length === OTP_LENGTH) {
+      const newOtp = pasteData.split('').slice(0, OTP_LENGTH);
+      setOtp(newOtp);
+      inputsRef.current[OTP_LENGTH - 1]?.focus();
     }
   };
 
@@ -71,8 +89,8 @@ export default function VerifyAccount() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     const code = otp.join('');
+
     toast.info('Verification in progress...');
 
     if (otp.includes('')) {
@@ -124,7 +142,7 @@ export default function VerifyAccount() {
       await axios.post(`${config.API_URL_POST}/send-otp-in-mail`, { email });
 
       toast.info('OTP resent successfully!');
-      setOtp(['', '', '', '', '', '']);
+      setOtp(Array(OTP_LENGTH).fill(''));
       setCountdown(60);
       setResendDisabled(true);
       inputsRef.current[0]?.focus();
@@ -152,7 +170,11 @@ export default function VerifyAccount() {
                       {resendDisabled ? (
                         <span>Resend Code in {countdown}s</span>
                       ) : (
-                        <span className="text-primary" onClick={handleResend} style={{ cursor: 'pointer' }}>
+                        <span
+                          className="text-primary"
+                          onClick={handleResend}
+                          style={{ cursor: 'pointer' }}
+                        >
                           Resend Code
                         </span>
                       )}
@@ -169,7 +191,10 @@ export default function VerifyAccount() {
                           value={digit}
                           onChange={(e) => handleOtpChange(e, index)}
                           onKeyDown={(e) => handleKeyDown(e, index)}
+                          onPaste={index === 0 ? handlePaste : undefined}
                           ref={(el) => (inputsRef.current[index] = el)}
+                          disabled={loading}
+                          aria-label={`OTP digit ${index + 1}`}
                           required
                         />
                       ))}

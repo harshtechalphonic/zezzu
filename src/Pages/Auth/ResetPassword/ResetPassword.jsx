@@ -39,7 +39,7 @@ export default function ResetPassword() {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
   
     if (!passwordRegex.test(password)) {
-      toast.error('Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 symbol, and be at least 6 characters long.');
+      toast.error('Your password should have at least 6 characters, including a capital letter, a lowercase letter, a number, and a special symbol.');
       return;
     }
   

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Categories.css";
 import Slider from "react-slick";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { categoriesAction } from "../../../store/Categories/categoriesSlice";
-import config from "../../../Config/config.json"
+import { useSelector } from "react-redux";
 import CategoriesApi from "../../../API/CategoriesAPi";
 import { Link } from "react-router-dom";
 
@@ -23,7 +20,7 @@ export default function Categories() {
     arrows: true,
     autoplay: true,
     autoplaySpeed: 3000,
-    centerMode: false, // Set to true if you want a centered slide effect
+    centerMode: false,
     responsive: [
       {
         breakpoint: 1200,
@@ -51,7 +48,6 @@ export default function Categories() {
       },
     ],
   };
-  // console.log(categories)
   return (
     <section className="Shop_by_health ">
       <CategoriesApi/>

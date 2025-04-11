@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import config from "../../../Config/config.json";
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -41,7 +42,7 @@ export default function Login() {
             const user = response.data.users;
 
             if (user.email_verified === "1") {
-                setVerificationText('OTP verified successfully!');
+                toast.success('Login successfully!');
                 setTimeout(() => navigate('/user-account'), 1500);
             } else {
                 try {
@@ -57,15 +58,15 @@ export default function Login() {
                         state: { email, otp },
                     });
                 } catch (otpError) {
-                    console.error("Error sending OTP:", otpError.response?.data || otpError.message);
-                    setMessage({
+                    toast.error("Error sending OTP:", otpError.response?.data || otpError.message);
+                    toast.info({
                         text: "Login successful, but OTP could not be sent.",
                         type: "error",
                     });
                 }
             }
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            toast.error(err.response?.data?.message || 'Login failed');
         } finally {
             setLoading(false);
         }

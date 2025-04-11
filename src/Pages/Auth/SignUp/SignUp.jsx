@@ -7,11 +7,14 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import config from "../../../Config/config.json";
+import { toast } from 'react-toastify';
 
 export default function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [message, setMessage] = useState({ text: "", type: "" });
+    const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -41,17 +44,26 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+    
         if (!formData.terms_conditions) {
-            setMessage({ text: "You must agree to the terms and conditions!", type: "error" });
+            toast.error("You must agree to the terms and conditions!");
             return;
         }
-
+    
+        if (!passwordPattern.test(formData.password)) {
+            toast.error("Password must be at least 6 characters long and include uppercase, lowercase, number, and special character.");
+            return;
+        }
+    
         if (formData.password !== formData.confirmPassword) {
-            setMessage({ text: "Passwords do not match!", type: "error" });
+            toast.error("Passwords do not match!");
             return;
         }
-
+    
+        setLoading(true);
+    
         try {
             const response = await axios.post(`${config.API_URL_POST}/register`, {
                 username: formData.username,
@@ -60,22 +72,21 @@ export default function SignUp() {
                 password: formData.password,
                 terms_conditions: 1,
             });
-
+    
             if (response.status === 200 || response.status === 201) {
-                setMessage({ text: "Registration successful!", type: "success" });
-
+                toast.success("Registration successful!");
+    
                 const userEmail = response.data.email || formData.email;
-                console.log("Trying to send OTP to:", userEmail);
-
+    
                 try {
                     const otpResponse = await axios.post(
                         `${config.API_URL_POST}/send-otp-in-mail`,
                         { email: userEmail }
                     );
-
+    
                     const { email, otp } = otpResponse.data;
                     console.log("OTP sent to email:", email, "OTP:", otp);
-
+    
                     navigate("/verify", {
                         state: { email, otp },
                     });
@@ -85,23 +96,18 @@ export default function SignUp() {
                         text: "Registration successful, but OTP could not be sent.",
                         type: "error",
                     });
-
-                    // Optionally still navigate (for dev/testing)
-                    // navigate("/verify", {
-                    //     state: { email: userEmail, otp: null },
-                    // });
                 }
             } else {
-                throw new Error("Unexpected response from server");
+                toast.error("Unexpected response from server.");
             }
         } catch (err) {
             console.error("Registration Error:", err);
-            setMessage({
-                text: err.response?.data?.message || err.message || "Error registering",
-                type: "error",
-            });
+            toast.error(err.response?.data?.message || err.message || "Error registering");
+        } finally {
+            setLoading(false);
         }
     };
+    
 
     return (
         <>
@@ -218,7 +224,10 @@ export default function SignUp() {
                                         </label>
                                     </div>
 
-                                    <input className="form-control" type="submit" value="Sign Up" />
+                                    <button className="form-control" type="submit" disabled={loading}>
+                                        {loading ? 'Registering...' : 'Sign Up'}
+                                    </button>
+
                                     <div className="d-flex align-items-center justify-content-center text-center mt-3 dont-accnt">
                                         <p className="mb-0">Already have an account? <Link to="/login" className="ms-3">Login</Link></p>
                                     </div>

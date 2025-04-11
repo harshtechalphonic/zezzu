@@ -13,6 +13,7 @@ import CategoryBestSellers from '../../Components/Home/CategoryBestSellers/Categ
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Gprscertified from '../../Components/Home/Gprscertified/Gprscertified'
+import Brands from '../../Components/Home/Brands/Brands'
 
 
 
@@ -34,6 +35,7 @@ export default function Home() {
       <Hero/>
 
         <Gprscertified/>
+        <Brands/>
 
       <Categories/>
 
