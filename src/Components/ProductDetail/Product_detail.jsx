@@ -16,6 +16,8 @@ import {
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
+import { cartAction } from "../../store/Products/cartSlice";
+import { useDispatch } from "react-redux";
 
 export default function Product_detail({ singleProduct }) {
   // console.log(singleProduct);
@@ -25,9 +27,20 @@ export default function Product_detail({ singleProduct }) {
   const [productAmount, setProductAmount] = useState(false);
   const mainSliderRef = useRef(null);
   const navSliderRef = useRef(null);
-  // console.log(productVar)
+  const [wishlist, setWishlist] = useState([]);
+  const [addTocart, setaddTocart] = useState([]);
+  const dispatch = useDispatch();
   const increaseQuantity = () => setQuantity(quantity + 1);
   const decreaseQuantity = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+  
+  useEffect(() => {
+    if (localStorage.getItem("wishlist")) {
+      setWishlist([...JSON.parse(localStorage.getItem("wishlist"))]);
+    }
+    if (localStorage.getItem("cart")) {
+      setaddTocart([...JSON.parse(localStorage.getItem("cart"))]);
+    }
+  }, []);
 
   useEffect(()=>{
     if(singleProduct.product_inventory_details.length == 0) return;
@@ -104,6 +117,7 @@ export default function Product_detail({ singleProduct }) {
 
     setProductVar({...productVar,...createAttr});
   };
+
   const sliderSettings = {
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -122,6 +136,28 @@ export default function Product_detail({ singleProduct }) {
     ref: navSliderRef,
   };
 
+  const toggleCart = (id) => {
+      let addTocart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+      // Check if product is already in cart
+      const isInCart = addTocart.some((item) => item.prd_id === id);
+      if (isInCart) {
+        addTocart = addTocart.filter((item) => item.prd_id !== id);
+        dispatch(cartAction.removeCart(addTocart));
+      } else {
+        const newItem = { quantity: quantity, prd_id: id };
+        // console.log(newItem);
+        addTocart = [newItem, ...addTocart];
+        dispatch(cartAction.addCart(newItem));
+      }
+      setaddTocart(addTocart);
+    };
+
+    async function submitAction(formData){
+    'use server'
+    const productId = formData.get('quantity')
+    await console.log(productId);
+  }
   return (
     <div className="product-detail-slider-content my-5">
       <div className="container">
@@ -131,10 +167,10 @@ export default function Product_detail({ singleProduct }) {
               <div className="main">
                 <div className="mainSliderRef">
                   <Slider {...sliderSettings} className="slider slider-for">
-                    {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
+                    {singleProduct.gallery_images.map((item, index) => (
                       <div key={index}>
                         <img
-                          src={`https://demotechalphonic.site/multivendor/assets/uploads/media-uploader/${singleProduct.image.path}`}
+                          src={`${singleProduct.gallertImageUrl}/${item.path}`}
                           alt="Product"
                         />
                       </div>
@@ -144,10 +180,10 @@ export default function Product_detail({ singleProduct }) {
 
                 <div className="navSliderRef">
                   <Slider {...sliderNavSettings} className="slider slider-nav">
-                    {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
+                    {singleProduct.gallery_images.map((item, index) => (
                       <div key={index}>
                         <img
-                          src={`https://demotechalphonic.site/multivendor/assets/uploads/media-uploader/${singleProduct.image.path}`}
+                          src={`${singleProduct.gallertImageUrl}/${item.path}`}
                           alt="Thumbnail"
                         />
                       </div>
@@ -159,7 +195,7 @@ export default function Product_detail({ singleProduct }) {
           </div>
 
           <div className="col-lg-5">
-            <div className="product-description">
+            <form action={submitAction} className="product-description">
               <h5>{singleProduct.name}</h5>
               {/* <div className="d-flex align-items-center">
                   <span className="rating-stars"><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStarHalf}/></span>
@@ -229,6 +265,7 @@ export default function Product_detail({ singleProduct }) {
                     aria-label={`Product ${key}`}
                     defaultValue=""
                     onChange={(event) => handleVariation(key, event)}
+                    name={`variation[][${key}]`}  
                   >
                     <option value="" disabled>
                       Choose a {key}
@@ -285,6 +322,7 @@ export default function Product_detail({ singleProduct }) {
                     <button
                       className="btn btn-outline-secondary"
                       onClick={decreaseQuantity}
+                      type="button"
                     >
                       -
                     </button>
@@ -293,21 +331,25 @@ export default function Product_detail({ singleProduct }) {
                       className="form-control text-center mx-2"
                       style={{ width: "50px" }}
                       value={quantity}
+                      name="quantity"
                       readOnly
                     />
                     <button
                       className="btn btn-outline-secondary"
                       onClick={increaseQuantity}
+                      type="button"
                     >
                       +
                     </button>
                   </div>
-                  <button className="btn btn-success w-50">
-                    ADD TO CART{" "}
+                  <button type="submit"
+                  // onClick={() => toggleCart(singleProduct.id)} 
+                  className={`btn btn-success w-50 ${addTocart.some(item => item.prd_id === singleProduct.id) ? "bg-dark" : ""}`}>
+                  {addTocart.some(item => item.prd_id === singleProduct.id) ? "Remove to Cart" : "Add to Cart"}
                     <FontAwesomeIcon icon={faCartShopping} className="ms-2" />
                   </button>
-                  {/* <button className="btn btn-outline-dark w-50">BUY NOW</button> */}
-                  <Link to="/checkout" className="btn btn-outline-dark w-50">BUY NOW</Link>
+                  <button type="submit" className="btn btn-outline-dark w-50">BUY NOW</button>
+                  {/* <Link to="/checkout" className="btn btn-outline-dark w-50">BUY NOW</Link> */}
                 </div>
               </div>
 
@@ -345,7 +387,7 @@ export default function Product_detail({ singleProduct }) {
                   <img src="/Payment Method.png" alt="" />
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
