@@ -29,8 +29,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { Provider } from 'react-redux'
 import ecommerceStore from './store'
 
-
-
 const router= createBrowserRouter([
   {
     path : '/',
