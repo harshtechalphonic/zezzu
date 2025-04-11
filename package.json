@@ -25,7 +25,10 @@
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.3.0",
+    "react-select2": "^4.0.3",
     "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.5",
+    "select2": "^4.1.0-rc.0",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {

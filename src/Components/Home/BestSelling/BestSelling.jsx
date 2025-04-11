@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./BestSelling.css";
 import Slider from "react-slick";
 
-import {faArrowRightLong} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightLong, faL} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import {useSelector } from "react-redux";

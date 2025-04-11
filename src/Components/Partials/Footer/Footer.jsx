@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPaperPlane, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookF, faInstagram, faLinkedin, faTwitter, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import { Link } from 'react-router-dom'
+import TcpprcApi from '../../../API/TcpprcApi'
+import ContactApi from '../../../API/ContactApi'
+import AboutApi from '../../../API/AboutApi'
 
 
 export default function Footer() {
@@ -94,6 +97,7 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
+                <TcpprcApi/><ContactApi/><AboutApi/>
         </section>
   )
 }

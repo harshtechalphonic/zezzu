@@ -32,7 +32,7 @@ export default function AllCatergory_Filter() {
     
     useEffect(() => {
         setshowCategoriesDropdown(false);
-    }, [location.pathname]);
+    }, [location.pathname]); 
 
     return (
         <>

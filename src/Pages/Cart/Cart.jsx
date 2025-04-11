@@ -219,9 +219,12 @@ export default function Cart() {
                       <h5>Total</h5>
                       <h5>₹{total.toFixed(2)}</h5>
                     </div>
-                    <button className="btn btn-primary w-100 rounded-0 py-2">
+                    {/* <button className="btn btn-primary w-100 rounded-0 py-2">
                       PROCEED TO CHECKOUT →
-                    </button>
+                    </button> */}
+                    <Link to="/checkout" className="btn btn-primary w-100 rounded-0 py-2">
+                      PROCEED TO CHECKOUT →
+                    </Link>
                   </div>
                   <div className="discount_box">
                     <h5>Have a Coupon?</h5>

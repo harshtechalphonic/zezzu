@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import config from "../Config/config.json";
 import { basicInfoAction } from "../store/HomesSection/basicInfoSlice";
+
 export default function BasicInfoApi() {
   const basicInfo = useSelector((store) => store.basicInfo);
   const dispatch = useDispatch();

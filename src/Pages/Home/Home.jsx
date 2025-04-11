@@ -15,8 +15,6 @@ import "aos/dist/aos.css";
 import Gprscertified from '../../Components/Home/Gprscertified/Gprscertified'
 
 
-// images 
-// import grs_certified from '../../assets/grs_certified.png'
 
 
 
@@ -28,34 +26,6 @@ export default function Home() {
         AOS.init({ duration: 1000 });
       }, []);
 
-      const gps = [
-        {
-          id: 1,
-          image: "/grs_certified.png",
-          imagesAlt:"GRS Certified",
-          title: "GRS Certified.",
-        },
-        {
-            id: 2,
-            image: "/sustainable-materials.png",
-            imagesAlt:"Sustainable Materials",
-            title: "Sustainable Materials.",
-          },
-          {
-            id: 3,
-            image: "/pan_india_free_delivery.png",
-            imagesAlt:"PAN India Free Delivery",
-            title: "PAN India Free Delivery.",
-          },
-          {
-            id: 4,
-            image: "/easy_secure_payment_mode.png",
-            imagesAlt:"Easy & Secured Payment modes",
-            title: "Easy & Secured Payment modes.",
-          },
-      ]
-    
-     
 
   return (
     <>

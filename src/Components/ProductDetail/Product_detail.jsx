@@ -18,7 +18,7 @@ import {
 import { Link } from "react-router-dom";
 
 export default function Product_detail({ singleProduct }) {
-  console.log(singleProduct);
+  // console.log(singleProduct);
   const [quantity, setQuantity] = useState(1);
   const [productVar, setProductVar] = useState({});
   const [productVarSelected, setProductVarSelected] = useState({});
@@ -306,7 +306,8 @@ export default function Product_detail({ singleProduct }) {
                     ADD TO CART{" "}
                     <FontAwesomeIcon icon={faCartShopping} className="ms-2" />
                   </button>
-                  <button className="btn btn-outline-dark w-50">BUY NOW</button>
+                  {/* <button className="btn btn-outline-dark w-50">BUY NOW</button> */}
+                  <Link to="/checkout" className="btn btn-outline-dark w-50">BUY NOW</Link>
                 </div>
               </div>
 

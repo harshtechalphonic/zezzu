@@ -131,7 +131,7 @@ useEffect(() => {
                   <Link to="/login"><i className='me-2'><FontAwesomeIcon icon={faUser} /></i> Login/Register</Link>
                 )}
               </div>
-              <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> Become a seller</Link>
+              <Link to="/become-a-seller"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> Become a seller</Link>
             </li>
           </ul>
         </div>

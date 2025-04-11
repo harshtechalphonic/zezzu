@@ -1,50 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Header from '../../Components/Partials/Header/Header';
 import Footer from '../../Components/Partials/Footer/Footer';
-import axios from 'axios';
-import config from '../../Config/config.json'
 
-export default function Privacy_policy() {
-  const [privacyContent, setPrivacyContent] = useState('');
-  const [privacyTitle, setPrivacyTitle] = useState('');
-  const [loading, setLoading] = useState(true);
+import { useSelector } from 'react-redux';
+import TcpprcApi from '../../API/TcpprcApi';
 
-  useEffect(() => {
-    const fetchPrivacy = async () => {
-      try {
-        const response = await axios.get(`${config.API_URL}/static-page`);
-        const pagesObject = response.data;
-        console.log(response);
-
-        const pages = Object.values(pagesObject).filter(item => typeof item === 'object' && item.title);
-
-        const privacyPage = pages.find(page => page.title === 'Privacy Policy');
-        if (privacyPage) {
-          setPrivacyTitle(privacyPage.title);
-          setPrivacyContent(privacyPage.content);
-        }
-      } catch (error) {
-        console.error('Error fetching privacy policy:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrivacy();
-  }, []);
-
+export default function PrivacyPolicy() {
+  const tcpprc = useSelector((store) => store.Tcpprc); 
   return (
     <>
       <Header />
-      <div className='term-Conditons_sec my-5'>
-        <div className='container'>
-          <div className='term_tiles'>
-            <h1>{privacyTitle || 'Privacy Policy'}</h1>
-            {loading ? (
-              <p>Loading...</p>
+      <TcpprcApi/>
+      <div className="term-Conditons_sec my-5">
+        <div className="container">
+          <div className="term_tiles">
+          <h1>{ tcpprc.data.privacy_policy.title || 'Privacy Policy'}</h1>
+            {!tcpprc.status ? (
+              <div>
+                <div className="placeholder-glow">
+                  <span className="placeholder col-6"></span>
+                  <span className="placeholder col-4"></span>
+                  <span className="placeholder col-8"></span>
+                  <span className="placeholder col-5"></span>
+                </div>
+              </div>
             ) : (
-              <div dangerouslySetInnerHTML={{ __html: privacyContent }} />
-            )}
+            <div dangerouslySetInnerHTML={{ __html: tcpprc.data.privacy_policy.content }} />
+          )}
           </div>
         </div>
       </div>

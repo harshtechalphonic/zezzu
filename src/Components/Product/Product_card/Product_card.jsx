@@ -110,7 +110,7 @@ export default function Product_card({products,filters}) {
           color={wishlist.includes(product.prd_id) ? "red" : "black"}
         />
             </span>
-            <Link to={product.link}>
+            <Link to={`/product/${product.slug}`}>
               <div className="card-img">
               <img src={product.img_url} alt={product.title} />
               </div>
@@ -131,10 +131,10 @@ export default function Product_card({products,filters}) {
                 <p className="slashPrice">₹ {product.price}</p>
               </div>
             </div>
-            <a onClick={() => toggleCart(product.prd_id)} className={`cart-btn ${addTocart.some(item => item.prd_id === product.prd_id) ? "bg-dark" : ""}`}>
+            <Link onClick={() => toggleCart(product.prd_id)} className={`cart-btn ${addTocart.some(item => item.prd_id === product.prd_id) ? "bg-dark" : ""}`}>
             {addTocart.some(item => item.prd_id === product.prd_id) ? "Remove to Cart" : "Add to Cart"}
               <FontAwesomeIcon icon={faBagShopping} className="ms-2" />
-            </a>
+            </Link>
           </div>
         </div>
       ))}

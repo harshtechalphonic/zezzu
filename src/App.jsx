@@ -16,8 +16,11 @@ import UserAccount from './Pages/UserAccount/UserAccount'
 import Contact from './Pages/Contact/Contact'
 import TermCondition from './Pages/Tcpprc/TermCondition'
 import Privacy_policy from './Pages/Tcpprc/Privacy_policy'
+import Privacy_policy_vendor from './Pages/Tcpprc/Privacy_policy_vendor'
+import TermCondition_vendor from './Pages/Tcpprc/TermCondition_vendor'
 import Return_policy from './Pages/Tcpprc/Return_policy'
 import Checkout_page from './Pages/Checkout/Checkout_page'
+import BecomeSeller from './Pages/Auth/BecomeSeller/BecomeSeller'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -100,8 +103,20 @@ const router= createBrowserRouter([
     element : <Return_policy/>
   },
   {
+    path : '/vendor-privacy-policy',
+    element : <Privacy_policy_vendor/>
+  },
+  {
+    path : '/vendor-terms-conditions',
+    element : <TermCondition_vendor/>
+  },
+  {
     path : '/checkout',
     element : <Checkout_page/>
+  },
+  {
+    path : '/become-a-seller',
+    element : <BecomeSeller/>
   },
   {
     path : '*',
