@@ -32,7 +32,7 @@ export default function Product_detail({ singleProduct }) {
   const dispatch = useDispatch();
   const increaseQuantity = () => setQuantity(quantity + 1);
   const decreaseQuantity = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
-  
+
   useEffect(() => {
     if (localStorage.getItem("wishlist")) {
       setWishlist([...JSON.parse(localStorage.getItem("wishlist"))]);
@@ -42,21 +42,25 @@ export default function Product_detail({ singleProduct }) {
     }
   }, []);
 
-  useEffect(()=>{
-    if(singleProduct.product_inventory_details.length == 0) return;
+  useEffect(() => {
+    if (singleProduct.product_inventory_details.length == 0) return;
 
     const variations = JSON.parse(
       singleProduct.product_inventory_details[0].variation_json
     );
-    if(Object.keys(productVarSelected).length == 0 || Object.keys(productVar).length != Object.keys(productVarSelected).length) return;
-    const match = variations.find(v =>
+    if (
+      Object.keys(productVarSelected).length == 0 ||
+      Object.keys(productVar).length != Object.keys(productVarSelected).length
+    )
+      return;
+    const match = variations.find((v) =>
       Object.entries(productVarSelected).every(([key, val]) => v[key] === val)
     );
-    setProductAmount(match)
-  },[productVarSelected])
+    setProductAmount(match);
+  }, [productVarSelected]);
 
   useEffect(() => {
-    if(singleProduct.product_inventory_details.length == 0) return;
+    if (singleProduct.product_inventory_details.length == 0) return;
     const varrr = JSON.parse(
       singleProduct.product_inventory_details[0].variation_json
     );
@@ -85,7 +89,10 @@ export default function Product_detail({ singleProduct }) {
   }, []);
 
   const handleVariation = (type, event) => {
-    setProductVarSelected({...productVarSelected, [type]: event.target.value })
+    setProductVarSelected({
+      ...productVarSelected,
+      [type]: event.target.value,
+    });
     const product_variation = JSON.parse(
       singleProduct.product_inventory_details[0].variation_json
     );
@@ -95,7 +102,12 @@ export default function Product_detail({ singleProduct }) {
     );
     const variations = varrr || null;
 
-    const removeKeys = ["sale_price", "stock_status", "reguler_price",`${type}`];
+    const removeKeys = [
+      "sale_price",
+      "stock_status",
+      "reguler_price",
+      `${type}`,
+    ];
     const createAttr = {};
 
     varrr.forEach((item) => {
@@ -115,7 +127,7 @@ export default function Product_detail({ singleProduct }) {
       createAttr[key] = [...new Set(createAttr[key])];
     }
 
-    setProductVar({...productVar,...createAttr});
+    setProductVar({ ...productVar, ...createAttr });
   };
 
   const sliderSettings = {
@@ -136,27 +148,47 @@ export default function Product_detail({ singleProduct }) {
     ref: navSliderRef,
   };
 
-  const toggleCart = (id) => {
-      let addTocart = JSON.parse(localStorage.getItem("cart")) || [];
-    
-      // Check if product is already in cart
-      const isInCart = addTocart.some((item) => item.prd_id === id);
-      if (isInCart) {
-        addTocart = addTocart.filter((item) => item.prd_id !== id);
-        dispatch(cartAction.removeCart(addTocart));
-      } else {
-        const newItem = { quantity: quantity, prd_id: id };
-        // console.log(newItem);
-        addTocart = [newItem, ...addTocart];
-        dispatch(cartAction.addCart(newItem));
-      }
-      setaddTocart(addTocart);
-    };
+  const toggleCart = (id, variation) => {
+    let addTocart = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log('addTocart', addTocart);
+    // Check if product is already in cart
+    const isInCart = addTocart.some((item) => item.prd_id === id);
+    if (isInCart) {
+      addTocart = addTocart.filter((item) => item.prd_id !== id);
+      dispatch(cartAction.removeCart(addTocart));
+    } else {
+      const newItem = { quantity: quantity, prd_id: id, variation: variation };
+      addTocart = [newItem, ...addTocart];
+      console.log('newItem', newItem, addTocart);
+      dispatch(cartAction.addCart(newItem));
+    }
+    setaddTocart(addTocart);
+  };
 
-    async function submitAction(formData){
-    'use server'
-    const productId = formData.get('quantity')
-    await console.log(productId);
+  function submitAction(formData) {
+    "use server";
+
+    const variation = {};
+    let quantity = null;
+    let action_type = null;
+
+    for (let [key, value] of formData.entries()) {
+      if (key.startsWith("variation")) {
+        const match = key.match(/\[\](\[(.*?)\])/);
+        if (match && match[2]) {
+          variation[match[2]] = value;
+        }
+      }
+
+      if (key === "quantity") {
+        quantity = value;
+      }
+      if (key === "action_type") {
+        action_type = value;
+      }
+    }
+    toggleCart(singleProduct.id, variation);
+    // console.log(variation,quantity,action_type);
   }
   return (
     <div className="product-detail-slider-content my-5">
@@ -221,51 +253,70 @@ export default function Product_detail({ singleProduct }) {
                   </span>
                 </div>
               </div>
-              {productAmount ?
-              <div className="mt-2">
-              <span className="fw-bold fs-4 Pricing">
-                {" "}
-                ₹{productAmount.sale_price}
-              </span>
-              <span className="text-decoration-line-through text-muted ms-2">
-                ₹{productAmount.reguler_price}
-              </span>
-              <span className="discount ms-2">
-                {(
-                  ((productAmount.reguler_price - productAmount.sale_price) /
-                  productAmount.reguler_price) *
-                  100
-                ).toFixed(0)}
-                % OFF
-              </span>
-            </div>
-              : <div className="mt-2">
-              <span className="fw-bold fs-4 Pricing">
-                ₹{singleProduct.sale_price}
-              </span>
-              <span className="text-decoration-line-through text-muted ms-2">
-                ₹{singleProduct.price}
-              </span>
-              <span className="discount ms-2">
-                {(
-                  ((singleProduct.price - singleProduct.sale_price) /
-                    singleProduct.price) *
-                  100
-                ).toFixed(0)}
-                % OFF
-              </span>
-            </div>}
-              
+              {productAmount ? (
+                <div className="mt-2">
+                  <span className="fw-bold fs-4 Pricing">
+                    {" "}
+                    ₹{productAmount.sale_price}
+                  </span>
+                  <span className="text-decoration-line-through text-muted ms-2">
+                    ₹{productAmount.reguler_price}
+                  </span>
+                  <span className="discount ms-2">
+                    {(
+                      ((productAmount.reguler_price -
+                        productAmount.sale_price) /
+                        productAmount.reguler_price) *
+                      100
+                    ).toFixed(0)}
+                    % OFF
+                  </span>
+                </div>
+              ) : (
+                <div className="mt-2">
+                  <span className="fw-bold fs-4 Pricing">
+                    ₹{singleProduct.sale_price}
+                  </span>
+                  <span className="text-decoration-line-through text-muted ms-2">
+                    ₹{singleProduct.price}
+                  </span>
+                  <span className="discount ms-2">
+                    {(
+                      ((singleProduct.price - singleProduct.sale_price) /
+                        singleProduct.price) *
+                      100
+                    ).toFixed(0)}
+                    % OFF
+                  </span>
+                </div>
+              )}
+
               {Object.entries(productVar).map(([key, values]) => (
                 <div key={key}>
-                  <label htmlFor={`${key}_${key}`} className="form-label text-capitalize">Select {key}</label>
+                  <label
+                    htmlFor={`${key}_${key}`}
+                    className="form-label text-capitalize"
+                  >
+                    Select {key}
+                  </label>
                   <select
                     id={`${key}_${key}`}
                     className="form-select"
                     aria-label={`Product ${key}`}
                     defaultValue=""
-                    onChange={(event) => handleVariation(key, event)}
-                    name={`variation[][${key}]`}  
+                    // onChange={(event) => handleVariation(key, event)}
+                    name={`variation[][${key}]`}
+                    onInvalid={(e) =>
+                      e.target.setCustomValidity(
+                        `Please select a ${key.toUpperCase()}`
+                      )
+                    }
+                    onInput={(e) => e.target.setCustomValidity("")} // Reset message when user starts typing
+                    onChange={(event) => {
+                      event.target.setCustomValidity(""); // clear only when user selects a valid option
+                      handleVariation(key, event);
+                    }}
+                    required
                   >
                     <option value="" disabled>
                       Choose a {key}
@@ -278,18 +329,19 @@ export default function Product_detail({ singleProduct }) {
                   </select>
                 </div>
               ))}
-              {productAmount ?
-              <div className="cate-text mt-3">
-                <span className="text-success fw-bold">
-                  <b className="text-dark">Availability:</b> In Stock
-                </span>
-              </div>
-              :
-              <div className="cate-text mt-3">
-                <span className="text-success fw-bold">
-                  <b className="text-dark">Availability:</b> In Stock
-                </span>
-              </div>}
+              {productAmount ? (
+                <div className="cate-text mt-3">
+                  <span className="text-success fw-bold">
+                    <b className="text-dark">Availability:</b> In Stock
+                  </span>
+                </div>
+              ) : (
+                <div className="cate-text mt-3">
+                  <span className="text-success fw-bold">
+                    <b className="text-dark">Availability:</b> In Stock
+                  </span>
+                </div>
+              )}
 
               {singleProduct.category != null ? (
                 <div className="cate-text mt-3">
@@ -342,13 +394,38 @@ export default function Product_detail({ singleProduct }) {
                       +
                     </button>
                   </div>
-                  <button type="submit"
-                  // onClick={() => toggleCart(singleProduct.id)} 
-                  className={`btn btn-success w-50 ${addTocart.some(item => item.prd_id === singleProduct.id) ? "bg-dark" : ""}`}>
-                  {addTocart.some(item => item.prd_id === singleProduct.id) ? "Remove to Cart" : "Add to Cart"}
+                  <button
+                    type={
+                      addTocart.some((item) => item.prd_id === singleProduct.id)
+                        ? "button"
+                        : "submit"
+                    }
+                    name="action_type"
+                    value="add_to_cart"
+                    onClick={() =>
+                      addTocart.some((item) => item.prd_id === singleProduct.id)
+                        ? toggleCart(singleProduct.id)
+                        : ""
+                    }
+                    className={`btn btn-success w-50 ${
+                      addTocart.some((item) => item.prd_id === singleProduct.id)
+                        ? "bg-dark"
+                        : ""
+                    }`}
+                  >
+                    {addTocart.some((item) => item.prd_id === singleProduct.id)
+                      ? "Remove to Cart"
+                      : "Add to Cart"}
                     <FontAwesomeIcon icon={faCartShopping} className="ms-2" />
                   </button>
-                  <button type="submit" className="btn btn-outline-dark w-50">BUY NOW</button>
+                  <button
+                    type="submit"
+                    name="action_type"
+                    value="buy_now"
+                    className="btn btn-outline-dark w-50"
+                  >
+                    BUY NOW
+                  </button>
                   {/* <Link to="/checkout" className="btn btn-outline-dark w-50">BUY NOW</Link> */}
                 </div>
               </div>

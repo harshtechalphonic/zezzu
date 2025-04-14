@@ -85,6 +85,7 @@ export default function Product_card({products,filters}) {
       dispatch(cartAction.removeCart(addTocart));
     } else {
       const newItem = { quantity: 1, prd_id: id };
+      console.log(newItem)
       addTocart = [newItem, ...addTocart];
       dispatch(cartAction.addCart(newItem)); // Dispatch add action
     }

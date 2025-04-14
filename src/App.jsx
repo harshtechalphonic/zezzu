@@ -111,7 +111,7 @@ const router= createBrowserRouter([
     element : <TermCondition_vendor/>
   },
   {
-    path : '/checkout',
+    path : '/checkout/:data',
     element : <Checkout_page/>
   },
   {

@@ -1,7 +1,58 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import './Checkout.css'
-
+import { useSelector } from "react-redux";
 export default function Checkout() {
+  const navigate = useNavigate();
+  const fetch_products = useSelector((store) => store.products);
+  const [products, setProducts] = useState([]);
+  const [checkCheckout, setCheckCheckout] = useState(false);
+  const [checkoutDetail,setCheckoutDetail] = useState({subtotal:0,discount:0,total:0,tax:0})
+  const { data } = useParams();
+  let urlData = [];
+  try {
+    urlData = atob(data);
+  } catch (e) {
+    navigate("/product");
+  }
+  useEffect(() => {
+    if (fetch_products.status && urlData) {
+      const cartIds = JSON.parse(urlData);
+
+      setProducts(
+        fetch_products.data
+          .filter((product) =>
+            cartIds.some((cartItem) => cartItem.prd_id === product.prd_id)
+          )
+          .map((product) => {
+            const cartItem = cartIds.find(
+              (cartItem) => cartItem.prd_id === product.prd_id
+            );
+            // console.log('cartItem',cartItem)
+            let variation = cartItem.variation ? {variation:cartItem.variation} : {};
+            return { ...product, quantity: (cartItem ? cartItem.quantity : 1),...variation};
+          })
+          
+      );
+      setCheckCheckout(true);
+    }else{
+      setCheckCheckout(false);
+    }
+  }, [fetch_products.status, urlData]);
+
+  useEffect(()=>{
+    let total_amount = 0
+    let discount_amount = 0
+    products.forEach((a) => {
+      // console.log('loop',a.price, a.discount_price)
+      total_amount = (total_amount + a.price) * a.quantity;
+      discount_amount = discount_amount + a.discount_price * a.quantity;
+    })
+    if(total_amount == 0) return;
+    setCheckoutDetail({...checkoutDetail,subtotal:total_amount,discount:(total_amount - discount_amount),total:discount_amount})
+  },[products,urlData]);
+
+  console.log(products)
   return (
     <div className="container checkout-container my-5">
       <form action="https://packpr.fantasycricbet99.in/order-processing" method="POST">
@@ -81,7 +132,7 @@ export default function Checkout() {
                       <input type="radio" name="payment_method" id="cod" value="cod" defaultChecked />
                     </div>
                   </li>
-                  <li>
+                  {/* <li>
                     <div className="form-check d-flex flex-column">
                       <label htmlFor="cod" className="form-label">
                         <img src="/paypal.png" alt="COD Icon" />
@@ -98,7 +149,7 @@ export default function Checkout() {
                       </label>
                       <input type="radio" name="payment_method" id="cod" value="cod" defaultChecked />
                     </div>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
@@ -109,36 +160,28 @@ export default function Checkout() {
               <h5>Order Summary</h5>
               <div className="summery-product">
                 <ul className="list-unstyled">
-                  <li className="d-flex gap-3 my-3">
-                    <img src="https://demotechalphonic.site/multivendor/assets/uploads/media-uploader/category-4-3-6558b255b81901700311871.webp" alt="Product" />
-                    <input type="hidden" name="order_image" value="q1toyNR1ieo6jN7IP8Oz.jpeg" />
-                    <input type="hidden" name="order_quantity" value="1" />
-                    <input type="hidden" name="product_id" value="8" />
-                    <input type="hidden" name="order_amount" value="45000" />
-                    <div>
-                      <h6>Logistic and courier delivery bag</h6>
-                      <p>1 x <span>₹45000</span></p>
-                    </div>
-                  </li>
-                  <li className="d-flex gap-3 my-3">
-                    <img src="https://demotechalphonic.site/multivendor/assets/uploads/media-uploader/maroon-ruffled-gown-653e0d9b2045c1698845437.webp" alt="Product" />
-                    <input type="hidden" name="order_image" value="q1toyNR1ieo6jN7IP8Oz.jpeg" />
-                    <input type="hidden" name="order_quantity" value="1" />
-                    <input type="hidden" name="product_id" value="8" />
-                    <input type="hidden" name="order_amount" value="45000" />
-                    <div>
-                      <h6>Logistic and courier delivery bag</h6>
-                      <p>1 x <span>₹45000</span></p>
-                    </div>
-                  </li>
+                {products.map((value, index) => 
+                <li key={index} className="d-flex gap-3 my-3">
+                <img src={value.img_url} alt={value.title} />
+                {/* <input type="hidden" name="order_image" value="q1toyNR1ieo6jN7IP8Oz.jpeg" />
+                <input type="hidden" name="order_quantity" value="1" />
+                <input type="hidden" name="product_id" value="8" />
+                <input type="hidden" name="order_amount" value="45000" /> */}
+                <div>
+                  <h6>{value.title}</h6>
+                  <p>{value.quantity} x <span>₹{value.price}</span></p>
+                </div>
+              </li>
+                )}
+                  
                 </ul>
               </div>
-              <p>Subtotal: <strong>₹45,000</strong></p>
+              <p>Subtotal: <strong>₹{checkoutDetail.subtotal}</strong></p>
               <p>Shipping: <strong>Free</strong></p>
-              <p>Discount: <strong>₹909.00</strong></p>
-              <p>Tax: <strong>₹909.00</strong></p>
+              <p>Discount: <strong>₹{checkoutDetail.discount}</strong></p>
+              <p>Tax: <strong>₹{checkoutDetail.tax}</strong></p>
               <hr />
-              <p>Total: <strong>₹45,000</strong></p>
+              <p>Total: <strong>₹{checkoutDetail.total}</strong></p>
               <button type="submit" className="btn btn-success w-100">PLACE ORDER</button>
             </div>
           </div>

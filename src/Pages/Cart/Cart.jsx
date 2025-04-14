@@ -9,6 +9,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartAction } from "../../store/Products/cartSlice";
 
 const CartItem = ({ item, onRemove, onQuantityChange }) => {
+  const [productAmount, setProductAmount] = useState(false);
+  useEffect(() => {
+    if (item.product_inventory_details.length == 0) return;
+
+    const variations = JSON.parse(
+      item.product_inventory_details[0].variation_json
+    );
+
+    const match = variations.find((v) =>
+      Object.entries(item.variation).every(([key, val]) => v[key] === val)
+    );
+    setProductAmount(match);
+  }, [item]);
+
   const handleIncrement = () =>
     onQuantityChange(item.prd_id, item.quantity + 1);
   const handleDecrement = () =>
@@ -22,9 +36,30 @@ const CartItem = ({ item, onRemove, onQuantityChange }) => {
         </div>
         <div className="cartitem_content">
           <h5>{item.title}</h5>
+          <div>
+            {item.variation
+              ? Object.entries(item.variation).map(([key, value]) => (
+                  <span key={key} className="badge text-bg-dark m-1">
+                    {key} : {value}
+                  </span>
+                ))
+              : ""}
+          </div>
           <div className="price_ing d-flex align-items-center">
-            <h5>₹{(item.discount_price * item.quantity).toFixed(2)}</h5>
-            <p className="slashPrice">₹ {item.price} </p>
+            {/* {item.product_inventory_details.length != 0 ? :''} */}
+            {productAmount ? (
+              <>
+                <h5>
+                  ₹{(productAmount.sale_price * item.quantity).toFixed(2)}
+                </h5>
+                <p className="slashPrice">₹ {productAmount.reguler_price} </p>
+              </>
+            ) : (
+              <>
+                <h5>₹{(item.discount_price * item.quantity).toFixed(2)}</h5>
+                <p className="slashPrice">₹ {item.price} </p>
+              </>
+            )}
           </div>
           <div className="d-flex align-items-center">
             <button
@@ -62,12 +97,17 @@ export default function Cart() {
   const fetch_products = useSelector((store) => store.products);
   const [products, setProducts] = useState([]);
   const [checkCart, setCheckCart] = useState(false);
-
+  const [checkoutDetail, setCheckoutDetail] = useState({
+    subTotal: 0,
+    discount: 0,
+    total: 0,
+  });
+  console.log(checkoutDetail);
   const dispatch = useDispatch();
   useEffect(() => {
     if (fetch_products.status && localStorage.getItem("cart")) {
       const cartIds = JSON.parse(localStorage.getItem("cart"));
-      
+
       setProducts(
         fetch_products.data
           .filter((product) =>
@@ -77,16 +117,69 @@ export default function Cart() {
             const cartItem = cartIds.find(
               (cartItem) => cartItem.prd_id === product.prd_id
             );
-            return { ...product, quantity: cartItem ? cartItem.quantity : 1 };
+            let variation = cartItem.variation
+              ? { variation: cartItem.variation }
+              : {};
+            return {
+              ...product,
+              quantity: cartItem ? cartItem.quantity : 1,
+              ...variation,
+            };
           })
       );
-      if(cartIds.length == 0){
+
+      if (cartIds.length == 0) {
         setCheckCart(true);
       }
-    }else{
+    } else {
       setCheckCart(true);
     }
   }, [fetch_products.status]);
+
+  useEffect(() => {
+    if (products.length === 0) return;
+
+    const processAllProducts = async () => {
+      let subTotal = 0;
+      let discount = 0;
+      let total = 0;
+
+      for (const item of products) {
+        if (item.product_inventory_details.length === 0) {
+          subTotal += item.price;
+          discount += item.price - item.discount_price;
+          total += item.discount_price;
+        } else {
+          const variations = JSON.parse(
+            item.product_inventory_details[0].variation_json
+          );
+          const match = variations.find((v) =>
+            Object.entries(item.variation).every(([key, val]) => v[key] === val)
+          );
+          if (match) {
+            console.log("match", match);
+            subTotal += match.reguler_price;
+            discount += match.reguler_price - match.sale_price;
+            total += match.sale_price;
+          }
+        }
+
+        // Simulate item done
+        console.log("Processed one item");
+      }
+
+      // All done
+      console.log("All done");
+
+      setCheckoutDetail({
+        subTotal,
+        discount,
+        total,
+      });
+    };
+
+    processAllProducts();
+  }, [products]);
 
   const [coupon, setCoupon] = useState("");
   const [isCouponApplied, setIsCouponApplied] = useState(false);
@@ -104,7 +197,8 @@ export default function Cart() {
 
   const handleRemove = (id) => {
     let cartIds = JSON.parse(localStorage.getItem("cart")) || [];
-    cartIds = cartIds.filter((item) => item.product_id !== id);
+    cartIds = cartIds.filter((item) => item.prd_id !== id);
+    // console.log(cartIds)
     localStorage.setItem("cart", JSON.stringify(cartIds));
     setProducts(products.filter((item) => item.prd_id !== id));
     dispatch(
@@ -222,7 +316,10 @@ export default function Cart() {
                     {/* <button className="btn btn-primary w-100 rounded-0 py-2">
                       PROCEED TO CHECKOUT →
                     </button> */}
-                    <Link to="/checkout" className="btn btn-primary w-100 rounded-0 py-2">
+                    <Link
+                      to={`/checkout/${btoa(localStorage.getItem("cart"))}`}
+                      className="btn btn-primary w-100 rounded-0 py-2"
+                    >
                       PROCEED TO CHECKOUT →
                     </Link>
                   </div>
