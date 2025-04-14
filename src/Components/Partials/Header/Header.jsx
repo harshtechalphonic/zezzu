@@ -196,7 +196,7 @@ useEffect(() => {
               <li><Link to="/product">Kitchen</Link></li>
               <li><Link to="/product">Clothing</Link></li>
               <li><Link to="/product">Personal Care</Link></li>
-              <li><Link to="#!">About Us</Link></li>
+              <li><Link to="/about">About Us</Link></li>
               <li><Link to="/contact-us">Contact Us</Link></li>
               <li><Link to="#!">Track Order</Link></li>
             </ul>

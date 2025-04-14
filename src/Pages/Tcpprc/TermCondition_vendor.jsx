@@ -3,11 +3,13 @@ import Header from '../../Components/Partials/Header/Header'
 import Footer from '../../Components/Partials/Footer/Footer'
 import TcpprcApi from '../../API/TcpprcApi'
 import { useSelector } from 'react-redux';
+import ScrollToTop from '../ScrollToTop';
 
 export default function TermCondition_vendor() {
     const tcpprc = useSelector((store) => store.Tcpprc); 
   return (
     <>
+    <ScrollToTop/>
         <Header/>
         <TcpprcApi/>
 

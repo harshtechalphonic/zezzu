@@ -10,6 +10,8 @@ import $ from 'jquery';
 import 'select2/dist/css/select2.min.css';
 import 'select2';
 import { ToastContainer, toast } from 'react-toastify';
+import ScrollToTop from '../../ScrollToTop';
+
 
 export default function BecomeSeller() {
     const [formData, setFormData] = useState({
@@ -137,6 +139,7 @@ export default function BecomeSeller() {
 
     return (
         <>
+            <ScrollToTop/>
             <Header />
             <section className="login-sec">
                 <div className="container h-100">

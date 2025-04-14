@@ -47,13 +47,12 @@ export default function SearchBar() {
   }, []);
 
   useEffect(() => {
-    // Close the dropdown and clear search on route change
     setSearchTerm("");
     setshowsearchTerm(false);
   }, [location.pathname]);
 
   return (
-    <div className="position-relative sraechbar-we my-3" ref={wrapperRef} style={{ margin: "0 20px" }}>
+    <div className="position-relative sraechbar-we" ref={wrapperRef} style={{ margin: "0 20px" }}>
       <div className="input-group">
         <input
           type="text"

@@ -7,6 +7,7 @@ import { Link, useParams } from "react-router-dom";
 import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { filtersAction } from "../../store/Products/filtersSlice";
+import ScrollToTop from "../ScrollToTop";
 
 export default function Product({category_type}) {
   const fetch_products = useSelector((store) => store.products);
@@ -54,6 +55,7 @@ export default function Product({category_type}) {
 
   return (
     <>
+    <ScrollToTop/>
       <Header />
 
       <section className="All_Products">

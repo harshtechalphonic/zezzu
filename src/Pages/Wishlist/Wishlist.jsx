@@ -9,6 +9,7 @@ import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import ProductsApi from '../../API/ProductsApi';
 import { wishlistAction } from '../../store/Products/wishlistSlice';
+import ScrollToTop from '../ScrollToTop';
 
 export default function Wishlist() {
   const fetch_products = useSelector((store) => store.products);
@@ -31,6 +32,7 @@ export default function Wishlist() {
 
   return (
     <>
+    <ScrollToTop/>
       <Header />
           <div className='breadcrum_box mt-2'>
             <nav aria-label="breadcrumb">

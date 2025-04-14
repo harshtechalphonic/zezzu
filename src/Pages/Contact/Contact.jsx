@@ -8,6 +8,7 @@ import config from '../../Config/config.json'
 
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import ScrollToTop from '../ScrollToTop';
 
 export default function Contact() {
     const Contact = useSelector((store) => store.Contact);
@@ -44,6 +45,7 @@ export default function Contact() {
 
     return (
         <>
+        <ScrollToTop/>
             <Header />
             <ContactApi />
             <section className='contact_sec my-5'>

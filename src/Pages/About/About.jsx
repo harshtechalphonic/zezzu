@@ -4,11 +4,13 @@ import Footer from '../../Components/Partials/Footer/Footer'
 import './About.css'
 import { useSelector } from 'react-redux';
 import AboutApi from '../../API/AboutApi';
+import ScrollToTop from '../ScrollToTop';
 
 export default function About() {
     const About = useSelector((store) => store.About); 
   return (
     <>
+        <ScrollToTop/>
         <Header/>
         <AboutApi/>
             <section className='about_banner'>

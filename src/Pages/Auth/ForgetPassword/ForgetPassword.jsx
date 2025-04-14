@@ -5,7 +5,8 @@ import Footer from '../../../Components/Partials/Footer/Footer';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../../Config/config.json';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import ScrollToTop from '../../ScrollToTop';
 
 export default function ForgetPassword() {
   const [email, setEmail] = useState('');
@@ -84,6 +85,8 @@ export default function ForgetPassword() {
 
   return (
     <>
+    <ScrollToTop/>
+    <ToastContainer />
       <Header />
       <section className="forget_sec">
         <div className="container h-100">

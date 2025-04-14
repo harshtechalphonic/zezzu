@@ -7,7 +7,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import config from '../../../Config/config.json';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import ScrollToTop from '../../ScrollToTop';
 
 export default function ResetPassword() {
   const location = useLocation();
@@ -78,6 +79,8 @@ export default function ResetPassword() {
 
   return (
     <>
+    <ScrollToTop/>
+    <ToastContainer />
       <Header />
       <section className="reset_pass-sec">
         <div className="container h-100">

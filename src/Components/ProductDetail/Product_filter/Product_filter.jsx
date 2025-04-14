@@ -6,10 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { filtersAction } from "../../../store/Products/filtersSlice";
 import AllCategoriesAPi from "../../../API/AllCategoriesAPi";
 import { Link } from "react-router-dom";
+import BrandApi from "../../../API/BrandApi";
 
 export default function ProductFilter({ products }) {
   const dispatch = useDispatch();
   const allCategories = useSelector((store) => store.allCategories);
+  const { data } = useSelector((store) => store.brands);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [stepAmount, setStepAmount] = useState(300);
@@ -22,7 +24,7 @@ export default function ProductFilter({ products }) {
     const prices = products.data.map((product) => product.discount_price);
     setMinPrice(Math.min(...prices));
     setMaxPrice(Math.max(...prices));
-
+    
     setFixedMinPrice(Math.min(...prices));
     setFixedMaxPrice(Math.max(...prices));
   }, [products.status]);
@@ -94,6 +96,18 @@ useEffect(()=>{
               )}
             </div>
           ))}
+        </div>
+      </div>
+          
+      <div className="card categories-card brnads mb-3">
+        <div className="categories-header">Brands</div>
+        <div className="list-group">
+          <BrandApi/>
+          <ul className="list-unstyled mb-0">
+            {data.map((item, index) => (
+              <li key={index}><Link to={`/product/brands/${item.image.slug}`}>{item.name}</Link></li>
+            ))}
+          </ul>
         </div>
       </div>
 

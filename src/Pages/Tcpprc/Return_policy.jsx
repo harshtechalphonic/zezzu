@@ -3,6 +3,7 @@ import Header from '../../Components/Partials/Header/Header';
 import Footer from '../../Components/Partials/Footer/Footer';
 import { useSelector } from 'react-redux';
 import TcpprcApi from '../../API/TcpprcApi';
+import ScrollToTop from '../ScrollToTop';
 
 
 export default function Return_policy() {
@@ -11,6 +12,7 @@ export default function Return_policy() {
 
   return (
     <>
+    <ScrollToTop/>
           <Header />
           <TcpprcApi/>
           <div className='term-Conditons_sec my-5'>
