@@ -7,7 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from 'react-router-dom';
 import config from "../../../Config/config.json";
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import ScrollToTop from '../../ScrollToTop';
 
 export default function Login() {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -74,6 +75,8 @@ export default function Login() {
 
     return (
         <>
+        <ScrollToTop/>
+        <ToastContainer />
             <Header />
             <section className="login-sec">
                 <div className="container h-100">

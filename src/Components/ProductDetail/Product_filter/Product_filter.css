@@ -62,7 +62,10 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: 0.2s ease;
+  }
+  .filter-contaienr .category-item.active .accordion-body ul li a{
+    width: 100%;
   }
   .filter-contaienr .category-item.active .accordion-body ul li:not(:last-child) {
     border-bottom: 1px solid #f0f0f0;
@@ -80,6 +83,32 @@
     color: #0071BC;
   }
 
+  .categories-card.brnads .list-group{
+    height: 100%;
+    max-height: 200px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+  }
+  .categories-card.brnads .list-group ul li{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+  .categories-card.brnads .list-group ul li:hover{
+    background-color: #ececec;
+  }
+  .categories-card.brnads .list-group ul li a{
+    width: 100%;
+  }
+  .categories-card.brnads .list-group ul li:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
 
   .fliterbox {
     position: sticky;

@@ -2,22 +2,19 @@ import React, { useEffect, useState } from "react";
 import "./Brands.css";
 import Slider from "react-slick";
 import { useSelector } from "react-redux";
-import CategoriesApi from "../../../API/CategoriesAPi";
+import BrandApi from "../../../API/BrandApi";
 import { Link } from "react-router-dom";
 
 export default function Brands() {
-    const fetch_categories = useSelector((store) => store.categories);
-    const [categories, setCategory] = useState([])
-    useEffect(() => {
-        setCategory(fetch_categories.data)
-    }, [fetch_categories.status]);
+  const { data, brandImageUrl } = useSelector((store) => store.brands);
+  // console.log(data)
   
     var settings = {
       dots: false,
       speed: 500,
       slidesToShow: 6,
       slidesToScroll: 1,
-      arrows: true,
+      arrows: false,
       autoplay: true,
       autoplaySpeed: 3000,
       centerMode: false, 
@@ -50,7 +47,7 @@ export default function Brands() {
     };
     return (
       <section className="Shop_by_health brands">
-        <CategoriesApi/>
+        <BrandApi/>
         <div className="container">
           <div className="feature-product-tile d-flex align-items-center justify-content-between">
             <div className="title-box">
@@ -58,11 +55,11 @@ export default function Brands() {
             </div>
           </div>
           <Slider {...settings} className="xyzg-slider">
-            {categories.map((cat) => (
-              <div key={cat.id} className="Shop_by_health-card">
-                <Link to={`/category/${cat.slug}`}>
+            {data.map((item) => (
+              <div key={item.id} className="Shop_by_health-card">
+                <Link to={`/product/brand/${item.slug}`}>
                 <div className="card-img">
-                  <img src={cat.image_url} alt="Product" />
+                  <img src={`${brandImageUrl}/${item.image.path}`} alt={item.image.alt} />
                 </div>
                 </Link>
               </div>

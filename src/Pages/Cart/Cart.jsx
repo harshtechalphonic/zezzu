@@ -7,6 +7,7 @@ import { faHouse, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cartAction } from "../../store/Products/cartSlice";
+import ScrollToTop from "../ScrollToTop";
 
 const CartItem = ({ item, onRemove, onQuantityChange }) => {
   const [productAmount, setProductAmount] = useState(false);
@@ -231,6 +232,7 @@ export default function Cart() {
 
   return (
     <>
+    <ScrollToTop/>
       <Header />
       <div className="breadcrum_box mt-2">
         <nav aria-label="breadcrumb">

@@ -5,7 +5,8 @@ import Footer from '../../../Components/Partials/Footer/Footer';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import config from '../../../Config/config.json';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import ScrollToTop from '../../ScrollToTop';
 
 const OTP_LENGTH = 6;
 
@@ -154,6 +155,8 @@ export default function VerifyAccount() {
 
   return (
     <>
+    <ScrollToTop/>
+    <ToastContainer />
       <Header />
       <section className="login-sec verify_sec">
         <div className="container h-100">

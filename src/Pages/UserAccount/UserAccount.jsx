@@ -21,6 +21,7 @@ import Addresses from '../../Components/UserAccount/Addresses/Addresses';
 import ReturnRefund from '../../Components/UserAccount/ReturnRefund/ReturnRefund';
 // import Wishlist from '../../Components/UserAccount/Wishlist/Wishlist';
 import AccountDetails from '../../Components/UserAccount/AccountDetails/AccountDetails';
+import ScrollToTop from '../ScrollToTop';
 
 export default function UserAccount() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -39,6 +40,7 @@ export default function UserAccount() {
 
   return (
     <>
+    <ScrollToTop/>
       <Header />
       <div className='breadcrum_box mt-2'>
         <nav aria-label="breadcrumb">

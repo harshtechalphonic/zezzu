@@ -12,6 +12,7 @@ import maxDicountProductSlice from "./HomesSection/maxDicountProductSlice";
 import TcpprcSlice from "./Tcpprc/TcpprcSlice";
 import ContactSlice from "./Contact/ContactSlice";
 import AboutSlice from "./About/AboutSlice";
+import brandsSlice from "./Brands/BrandSlice";
 
 const ecommerceStore = configureStore({
   reducer: {
@@ -27,7 +28,8 @@ const ecommerceStore = configureStore({
     maxDicountProduct:maxDicountProductSlice.reducer,
     Tcpprc:TcpprcSlice.reducer,
     Contact: ContactSlice.reducer,
-    About: AboutSlice.reducer
+    About: AboutSlice.reducer,
+    brands: brandsSlice.reducer
   },
 });
 

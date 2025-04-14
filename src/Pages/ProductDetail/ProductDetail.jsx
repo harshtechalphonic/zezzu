@@ -9,6 +9,7 @@ import RecentlyViewed from '../../Components/ProductDetail/RecentlyViewed';
 import SingleProductApi from '../../API/SingleProductApi';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import ScrollToTop from '../ScrollToTop';
 
 
 export default function ProductDetail() {
@@ -29,6 +30,7 @@ export default function ProductDetail() {
     }, [fetch_singleProduct]);
   return (
    <>
+   <ScrollToTop/>
     <Header/>
     <SingleProductApi/>
     {singleProduct ? <>

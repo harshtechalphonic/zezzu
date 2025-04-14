@@ -23,7 +23,7 @@
   .signup-sec .login-box input[type="submit"] {
     background-color: #0072C0;
     color: #fcfcfd;
-    font-size: 18px;
+    font-size: 18px;  
     font-weight: 600;
   }
   .signup-sec .login-box button[type="submit"] {
