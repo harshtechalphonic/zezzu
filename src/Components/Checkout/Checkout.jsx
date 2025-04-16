@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import './Checkout.css'
 import { useSelector } from "react-redux";
@@ -18,14 +18,15 @@ export default function Checkout() {
   useEffect(() => {
     if (fetch_products.status && urlData) {
       const cartIds = JSON.parse(urlData);
-
+      console.log(cartIds)
+      setCheckoutDetail({...checkoutDetail, subtotal:cartIds.subTotal,discount:cartIds.discount,total:cartIds.total})
       setProducts(
         fetch_products.data
           .filter((product) =>
-            cartIds.some((cartItem) => cartItem.prd_id === product.prd_id)
+            cartIds.data.some((cartItem) => cartItem.prd_id === product.prd_id)
           )
           .map((product) => {
-            const cartItem = cartIds.find(
+            const cartItem = cartIds.data.find(
               (cartItem) => cartItem.prd_id === product.prd_id
             );
             // console.log('cartItem',cartItem)
@@ -40,38 +41,27 @@ export default function Checkout() {
     }
   }, [fetch_products.status, urlData]);
 
-  useEffect(()=>{
-    let total_amount = 0
-    let discount_amount = 0
-    products.forEach((a) => {
-      // console.log('loop',a.price, a.discount_price)
-      total_amount = (total_amount + a.price) * a.quantity;
-      discount_amount = discount_amount + a.discount_price * a.quantity;
-    })
-    if(total_amount == 0) return;
-    setCheckoutDetail({...checkoutDetail,subtotal:total_amount,discount:(total_amount - discount_amount),total:discount_amount})
-  },[products,urlData]);
-
-  console.log(products)
+  const submitCheckOut = (formData)=>{
+    console.log(formData);
+  }
   return (
     <div className="container checkout-container my-5">
-      <form action="https://packpr.fantasycricbet99.in/order-processing" method="POST">
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        submitCheckOut(e);
+      }} method="POST">
         {/* <input type="hidden" name="_token" value="sgBHpivzebFjK7qMRMNrCqBurDh5NZuu71U2Fwwp" autoComplete="off" /> */}
         <div className="row justify-content-between">
           <div className="col-md-7">
             <div className="bolling-box">
               <h4>Billing Information</h4>
               <div className="row mb-3">
-                <div className="col-md-6 mb-3">
+                <div className="col-md-12 mb-3">
                   <label htmlFor="firstName" className="form-label">User name</label>
                   <div className="d-flex gap-3">
                     <input type="text" className="form-control" id="firstName" name="first_name" placeholder="First Name" required />
                     <input type="text" className="form-control" id="lastName" name="last_name" placeholder="Last Name" required />
                   </div>
-                </div>
-                <div className="col-md-6 mb-3">
-                  <label htmlFor="companyName" className="form-label">Company Name (Optional)</label>
-                  <input type="text" className="form-control" name="company_name" id="companyName" />
                 </div>
                 <div className="col-md-12 mb-3">
                   <label htmlFor="address1" className="form-label">Street Address</label>

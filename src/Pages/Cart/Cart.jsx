@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./Cart.css";
 import Header from "../../Components/Partials/Header/Header";
 import Footer from "../../Components/Partials/Footer/Footer";
@@ -7,7 +7,6 @@ import { faHouse, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cartAction } from "../../store/Products/cartSlice";
-import ScrollToTop from "../ScrollToTop";
 
 const CartItem = ({ item, onRemove, onQuantityChange }) => {
   const [productAmount, setProductAmount] = useState(false);
@@ -53,7 +52,7 @@ const CartItem = ({ item, onRemove, onQuantityChange }) => {
                 <h5>
                   ₹{(productAmount.sale_price * item.quantity).toFixed(2)}
                 </h5>
-                <p className="slashPrice">₹ {productAmount.reguler_price} </p>
+                <p className="slashPrice">₹ {productAmount.reguler_price * item.quantity} </p>
               </>
             ) : (
               <>
@@ -98,12 +97,9 @@ export default function Cart() {
   const fetch_products = useSelector((store) => store.products);
   const [products, setProducts] = useState([]);
   const [checkCart, setCheckCart] = useState(false);
-  const [checkoutDetail, setCheckoutDetail] = useState({
-    subTotal: 0,
-    discount: 0,
-    total: 0,
-  });
-  console.log(checkoutDetail);
+  const [checkoutDetail, setCheckoutDetail] = useState({subTotal:0,discount:0,total:0});
+  const [checkoutUrl,setCheckoutUrl] = useState('');
+  // console.log(checkoutDetail)
   const dispatch = useDispatch();
   useEffect(() => {
     if (fetch_products.status && localStorage.getItem("cart")) {
@@ -137,50 +133,55 @@ export default function Cart() {
     }
   }, [fetch_products.status]);
 
+  useEffect(()=>{
+    const cartIds = JSON.parse(localStorage.getItem("cart")) || [];
+    const url = JSON.stringify({...checkoutDetail,data:cartIds});
+    console.log(btoa(url), {...checkoutDetail,data:cartIds})
+    setCheckoutUrl(btoa(url))
+  },[checkoutDetail]);
+
+  let test = [];
+
+  const manager = useCallback((obj)=>{
+    test.push(obj);
+    if(products.length != test.length) return;
+    const totals = test.reduce((acc, item) => {
+      acc.subTotal += item.subTotal;
+      acc.discount += item.discount;
+      acc.total += item.total;
+      return acc;
+    }, { subTotal: 0, discount: 0, total: 0 });
+    
+    setCheckoutDetail(totals);
+  }, [products])
   useEffect(() => {
-    if (products.length === 0) return;
-
-    const processAllProducts = async () => {
-      let subTotal = 0;
-      let discount = 0;
-      let total = 0;
-
-      for (const item of products) {
-        if (item.product_inventory_details.length === 0) {
-          subTotal += item.price;
-          discount += item.price - item.discount_price;
-          total += item.discount_price;
-        } else {
-          const variations = JSON.parse(
-            item.product_inventory_details[0].variation_json
-          );
-          const match = variations.find((v) =>
-            Object.entries(item.variation).every(([key, val]) => v[key] === val)
-          );
-          if (match) {
-            console.log("match", match);
-            subTotal += match.reguler_price;
-            discount += match.reguler_price - match.sale_price;
-            total += match.sale_price;
-          }
-        }
-
-        // Simulate item done
-        console.log("Processed one item");
+    if (products.length == 0) return;
+    products.map((item, index) => {
+      if (item.product_inventory_details.length == 0) {
+        manager({
+          subTotal: Number(item.price) * item.quantity,
+          discount: Number(item.price * item.quantity) - Number(item.discount_price * item.quantity),
+          total: Number(item.discount_price * item.quantity),
+        });
+        // localStorage.setItem(`tempsss`, JSON.stringify({subTotal : item.price,discount :(item.price - item.discount_price),total:item.discount_price}))
+      } else {
+        const variations = JSON.parse(
+          item.product_inventory_details[0].variation_json
+        );
+        const match = variations.find((v) =>
+          Object.entries(item.variation).every(([key, val]) => v[key] === val)
+        );
+        manager({
+            subTotal: Number(match.reguler_price * item.quantity),
+            discount: Number(match.reguler_price * item.quantity) - Number(match.sale_price * item.quantity),
+            total: Number(match.sale_price * item.quantity),
+          });
+        // localStorage.setItem(`tempsss${index}`, JSON.stringify())
       }
-
-      // All done
-      console.log("All done");
-
-      setCheckoutDetail({
-        subTotal,
-        discount,
-        total,
-      });
-    };
-
-    processAllProducts();
+    });
   }, [products]);
+
+  useEffect(() => {}, []);
 
   const [coupon, setCoupon] = useState("");
   const [isCouponApplied, setIsCouponApplied] = useState(false);
@@ -232,7 +233,6 @@ export default function Cart() {
 
   return (
     <>
-    <ScrollToTop/>
       <Header />
       <div className="breadcrum_box mt-2">
         <nav aria-label="breadcrumb">
@@ -296,30 +296,30 @@ export default function Cart() {
                     <h5 className="mb-4">The total amount of</h5>
                     <div className="list-box d-flex justify-content-between mb-2">
                       <span>Sub-total</span>
-                      <span>₹{subTotal.toFixed(2)}</span>
+                      <span>₹{checkoutDetail.subTotal}</span>
                     </div>
                     <div className="list-box d-flex justify-content-between mb-2">
                       <span>Shipping</span>
-                      <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
+                      <span>Free</span>
                     </div>
                     <div className="list-box d-flex justify-content-between mb-2">
                       <span>Discount</span>
-                      <span>- ₹{discount.toFixed(2)}</span>
+                      <span>- ₹{checkoutDetail.discount}</span>
                     </div>
                     <div className="list-box d-flex justify-content-between mb-3">
                       <span>Tax (18%)</span>
-                      <span>₹{tax.toFixed(2)}</span>
+                      <span>₹0</span>
                     </div>
                     <hr />
                     <div className="list-box d-flex justify-content-between mb-4">
                       <h5>Total</h5>
-                      <h5>₹{total.toFixed(2)}</h5>
+                      <h5>₹{checkoutDetail.total}</h5>
                     </div>
                     {/* <button className="btn btn-primary w-100 rounded-0 py-2">
                       PROCEED TO CHECKOUT →
                     </button> */}
                     <Link
-                      to={`/checkout/${btoa(localStorage.getItem("cart"))}`}
+                      to={`/checkout/${checkoutUrl}`}
                       className="btn btn-primary w-100 rounded-0 py-2"
                     >
                       PROCEED TO CHECKOUT →
