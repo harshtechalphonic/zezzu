@@ -10,6 +10,7 @@ import SingleProductSlide from "../../Product/SingleProductSlide";
 
 export default function BestSelling() {
   const fetch_products = useSelector((store) => store.products);
+  console.log("fetch_products",fetch_products)
   // const [products, setProducts] = useState([]);
   // useEffect(() => {
   //   console.log('cccccc',fetch_products.data)

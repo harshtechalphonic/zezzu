@@ -4,23 +4,15 @@ import "./ProductDetail.css";
 
 import product1 from "/ProductOne.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCartShopping,
-  faStar,
-  faStarHalfAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping,faStar,faStarHalfAlt,} from "@fortawesome/free-solid-svg-icons";
 import { faCopy, faHeart } from "@fortawesome/free-regular-svg-icons";
-import {
-  faFacebook,
-  faPinterest,
-  faXTwitter,
-} from "@fortawesome/free-brands-svg-icons";
+import {faFacebook,faPinterest,faXTwitter,} from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import { cartAction } from "../../store/Products/cartSlice";
 import { useDispatch } from "react-redux";
 
 export default function Product_detail({ singleProduct }) {
-  // console.log(singleProduct);
+  // console.log("asdasdcasdf",singleProduct);
   const [quantity, setQuantity] = useState(1);
   const [productVar, setProductVar] = useState({});
   const [productVarSelected, setProductVarSelected] = useState({});

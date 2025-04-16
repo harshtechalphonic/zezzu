@@ -36,9 +36,9 @@ export default function ProductDetail() {
     {singleProduct ? <>
       <Product_detail singleProduct={singleProduct}/>
     <Product_descrtiption singleProduct={singleProduct}/>
-    <SimilarProducts singleProduct={singleProduct}/>
     <ReviewRating singleProduct={singleProduct}/>
-    <RecentlyViewed singleProduct={singleProduct}/>
+    <SimilarProducts singleProduct={singleProduct}/>
+    {/* <RecentlyViewed singleProduct={singleProduct}/> */}
     </> : <>Hello</>}
     <Footer/>
     </>
