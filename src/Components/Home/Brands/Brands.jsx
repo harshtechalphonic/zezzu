@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function Brands() {
   const { data, brandImageUrl } = useSelector((store) => store.brands);
-  // console.log(data)
+  console.log("brands", data[0]?.image?.path)
   
     var settings = {
       dots: false,
@@ -59,7 +59,7 @@ export default function Brands() {
               <div key={item.id} className="Shop_by_health-card">
                 <Link to={`/product/brand/${item.slug}`}>
                 <div className="card-img">
-                  <img src={`${brandImageUrl}/${item.image.path}`} alt={item.image.alt} />
+                  <img src={`${brandImageUrl}/${item?.image?.path}`} alt={item?.image?.alt} />
                 </div>
                 </Link>
               </div>

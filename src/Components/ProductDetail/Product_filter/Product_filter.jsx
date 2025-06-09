@@ -105,7 +105,7 @@ useEffect(()=>{
           <BrandApi/>
           <ul className="list-unstyled mb-0">
             {data.map((item, index) => (
-              <li key={index}><Link to={`/product/brands/${item.image.slug}`}>{item.name}</Link></li>
+              <li key={index}><Link to={`/product/brands/${item?.image?.slug}`}>{item.name}</Link></li>
             ))}
           </ul>
         </div>
