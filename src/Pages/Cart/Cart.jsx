@@ -36,7 +36,7 @@ const CartItem = ({ item, onRemove, onQuantityChange }) => {
         </div>
         <div className="cartitem_content">
           <h5>{item.title}</h5>
-          <div>
+          <div className="text-capitalize">
             {item.variation
               ? Object.entries(item.variation).map(([key, value]) => (
                   <span key={key} className="badge text-bg-dark m-1">
