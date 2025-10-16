@@ -440,7 +440,7 @@ export default function Checkout() {
               </p>
               {couponData && (
                 <p>
-                  Coupon Discount: <strong>₹{checkoutDetail.discount}</strong>
+                  Coupon Discount: <strong>₹{couponData.discount}</strong>
                 </p>
               )}
 
