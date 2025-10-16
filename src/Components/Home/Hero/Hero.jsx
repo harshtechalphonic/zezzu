@@ -14,6 +14,7 @@ export default function Hero() {
     axios
       .get(`${config.API_URL}/mobile-slider`)
       .then(function (response) {
+        console.log("mobile-slider", response);
         dispatch(bannersAction.getCategory(response.data));
       })
       .catch(function (error) {
@@ -67,22 +68,28 @@ export default function Hero() {
         <div className="main-content-box py-4">
           <div className="container placeholder-glow">
             <div className="row justify-content-between align-items-center">
-              <div className="col-lg-5">  
+              <div className="col-lg-5">
                 <div className="content-box">
-                  <h1><span className="placeholder col-4"></span></h1>
+                  <h1>
+                    <span className="placeholder col-4"></span>
+                  </h1>
                   <p className="my-4">
-                  <span className="placeholder col-12"></span><br/>
-                  <span className="placeholder col-8"></span><br/>
-                  <span className="placeholder col-4"></span><br/>
+                    <span className="placeholder col-12"></span>
+                    <br />
+                    <span className="placeholder col-8"></span>
+                    <br />
+                    <span className="placeholder col-4"></span>
+                    <br />
                   </p>
                   <div className="button-light mt-5">
-                    <a className="disabled placeholder"><span className=" px-4 py-2"></span></a>
+                    <a className="disabled placeholder">
+                      <span className=" px-4 py-2"></span>
+                    </a>
                   </div>
                 </div>
               </div>
               <div className="col-lg-5">
-                <div className="image-box placeholder w-100 rounded">
-                </div>
+                <div className="image-box placeholder w-100 rounded"></div>
               </div>
             </div>
           </div>
@@ -108,7 +115,7 @@ export default function Hero() {
                   </div>
                   <div className="col-lg-5">
                     <div className="image-box">
-                      <img src={item.url} alt={item.title} />
+                      <img src={item.sliderImage} alt={item.title} />
                     </div>
                   </div>
                 </div>

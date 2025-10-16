@@ -117,7 +117,7 @@ export default function ReviewRating({ singleProduct }) {
                     {review.img ? (
                       <img src={review.img} alt={`${review.user.name}'s review`} />
                     ) : (
-                      <span>{review.user.name.slice(0, 2).toUpperCase()}</span>
+                      <span>{review.user.name?.slice(0, 2).toUpperCase()}</span>
                     )}
                   </div>
                   <div className='reviewer-content'>
