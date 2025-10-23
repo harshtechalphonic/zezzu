@@ -15,12 +15,12 @@ import {
   faPinterest,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cartAction } from "../../store/Products/cartSlice";
 import { useDispatch } from "react-redux";
 
 export default function Product_detail({ singleProduct }) {
-  // console.log("asdasdcasdf",singleProduct);
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [productVar, setProductVar] = useState({});
   const [productVarSelected, setProductVarSelected] = useState({});
@@ -206,8 +206,11 @@ export default function Product_detail({ singleProduct }) {
     const variation = {};
     let quantity = null;
     let action_type = null;
+    const jsonData = Object.fromEntries(formData.entries());
+    console.log("jsonData", jsonData);
 
     for (let [key, value] of formData.entries()) {
+      // form_entries = {...form_entries}
       if (key.startsWith("variation")) {
         const match = key.match(/\[\](\[(.*?)\])/);
         if (match && match[2]) {
@@ -222,8 +225,61 @@ export default function Product_detail({ singleProduct }) {
         action_type = value;
       }
     }
+    if (action_type == "buy_now") {
+      // Calculate prices based on variation or product base prices
+      let salePrice, regularPrice;
+
+      if (Object.keys(variation).length > 0) {
+        // Find matching variation with price info
+        let variationData = null;
+        if (singleProduct.product_inventory_details.length > 0) {
+          const variations = JSON.parse(
+            singleProduct.product_inventory_details[0].variation_json
+          );
+          variationData = variations.find((v) =>
+            Object.entries(variation).every(([key, val]) => v[key] === val)
+          );
+        }
+
+        salePrice = variationData
+          ? parseFloat(variationData.sale_price)
+          : parseFloat(singleProduct.sale_price);
+        regularPrice = variationData
+          ? parseFloat(variationData.reguler_price)
+          : parseFloat(singleProduct.price);
+      } else {
+        // Use base product prices if no variation
+        salePrice = parseFloat(singleProduct.sale_price);
+        regularPrice = parseFloat(singleProduct.price);
+      }
+
+      const quantityNum = parseInt(quantity);
+      const subTotal = regularPrice * quantityNum;
+      const total = salePrice * quantityNum;
+      const discount = subTotal - total;
+
+      // Create the cart item
+      const cartItem = {
+        quantity: quantityNum,
+        prd_id: singleProduct.id,
+        vendor_id: singleProduct.vendor_id,
+        variation: {
+          ...variation,
+          sale_price: salePrice.toString(),
+          reguler_price: regularPrice.toString(),
+        },
+      };
+
+      const checkoutJson = {
+        subTotal: subTotal,
+        discount: discount,
+        total: total,
+        data: [cartItem],
+      };
+      const url = JSON.stringify({ ...checkoutJson });
+      return navigate(`/checkout/${btoa(url)}`);
+    }
     toggleCart(singleProduct.id, variation);
-    // console.log(variation,quantity,action_type);
   }
   return (
     <div className="product-detail-slider-content my-5">

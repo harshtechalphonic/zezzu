@@ -245,11 +245,6 @@ export default function Cart() {
     calculateTotals();
   }, [calculateTotals]);
 
-  const [coupon, setCoupon] = useState("");
-  const [isCouponApplied, setIsCouponApplied] = useState(false);
-  const [couponMessage, setCouponMessage] = useState("");
-  const [couponMessageColor, setCouponMessageColor] = useState("");
-
   const handleQuantityChange = (id, newQuantity) => {
     setProducts((prevItems) =>
       prevItems.map((item) =>
@@ -270,17 +265,6 @@ export default function Cart() {
     }
   };
 
-  const applyCoupon = () => {
-    if (coupon === "DISCOUNT180") {
-      setIsCouponApplied(true);
-      setCouponMessage("Coupon Applied! ₹180 discount added.");
-      setCouponMessageColor("green");
-      // Apply discount logic here
-    } else {
-      setCouponMessage("Invalid Coupon Code!");
-      setCouponMessageColor("red");
-    }
-  };
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");

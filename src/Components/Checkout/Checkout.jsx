@@ -223,7 +223,7 @@ export default function Checkout() {
             razorpay_payment_id: response.razorpay_payment_id,
             payment_status: "success",
           };
-          console.log("orderPayload", JSON.stringify(orderPayload));
+
           const res = await axiosInstance.post("/add-order", orderPayload);
 
           if (res.data.status) {
@@ -590,9 +590,6 @@ export default function Checkout() {
                   Coupon Discount: <strong>₹{couponData.discount}</strong>
                 </p>
               )}
-              <p>
-                Tax: <strong>₹{checkoutDetail.tax}</strong>
-              </p>
               <hr />
               <p>
                 Total: <strong>₹{checkoutDetail.total}</strong>
