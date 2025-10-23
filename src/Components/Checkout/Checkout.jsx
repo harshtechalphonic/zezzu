@@ -211,6 +211,7 @@ export default function Checkout() {
 
     const options = {
       key: config.RAZORPAY_KEY_ID, // Razorpay key config se
+
       amount: checkoutDetail.total * 100, // Amount in paise
       currency: "INR",
       name: "Your Store Name",
@@ -220,11 +221,9 @@ export default function Checkout() {
           const orderPayload = {
             ...orderData,
             razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_signature: response.razorpay_signature,
             payment_status: "success",
           };
-
+          console.log("orderPayload", JSON.stringify(orderPayload));
           const res = await axiosInstance.post("/add-order", orderPayload);
 
           if (res.data.status) {
