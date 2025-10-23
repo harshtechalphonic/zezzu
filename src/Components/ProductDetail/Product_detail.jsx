@@ -4,9 +4,17 @@ import "./ProductDetail.css";
 
 import product1 from "/ProductOne.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCartShopping,faStar,faStarHalfAlt,} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartShopping,
+  faStar,
+  faStarHalfAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { faCopy, faHeart } from "@fortawesome/free-regular-svg-icons";
-import {faFacebook,faPinterest,faXTwitter,} from "@fortawesome/free-brands-svg-icons";
+import {
+  faFacebook,
+  faPinterest,
+  faXTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import { cartAction } from "../../store/Products/cartSlice";
 import { useDispatch } from "react-redux";
@@ -142,18 +150,53 @@ export default function Product_detail({ singleProduct }) {
 
   const toggleCart = (id, variation) => {
     let addTocart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log('addTocart', addTocart);
+    console.log("addTocart", addTocart);
+
     // Check if product is already in cart
     const isInCart = addTocart.some((item) => item.prd_id === id);
+
     if (isInCart) {
+      // Remove product if already in cart
       addTocart = addTocart.filter((item) => item.prd_id !== id);
+      localStorage.setItem("cart", JSON.stringify(addTocart));
       dispatch(cartAction.removeCart(addTocart));
     } else {
-      const newItem = { quantity: quantity, prd_id: id, variation: variation };
+      // Find matching variation with price info
+      let variationData = null;
+      if (singleProduct.product_inventory_details.length > 0) {
+        const variations = JSON.parse(
+          singleProduct.product_inventory_details[0].variation_json
+        );
+        variationData = variations.find((v) =>
+          Object.entries(variation).every(([key, val]) => v[key] === val)
+        );
+      }
+
+      // Merge prices into variation object
+      const variationWithPrice = {
+        ...variation,
+        sale_price: variationData
+          ? variationData.sale_price
+          : singleProduct.sale_price,
+        reguler_price: variationData
+          ? variationData.reguler_price
+          : singleProduct.price,
+      };
+
+      // Final item for cart
+      const newItem = {
+        quantity: quantity,
+        prd_id: id,
+        variation: variationWithPrice,
+      };
+
       addTocart = [newItem, ...addTocart];
-      console.log('newItem', newItem, addTocart);
+      console.log("newItem", newItem, addTocart);
+
+      localStorage.setItem("cart", JSON.stringify(addTocart));
       dispatch(cartAction.addCart(newItem));
     }
+
     setaddTocart(addTocart);
   };
 

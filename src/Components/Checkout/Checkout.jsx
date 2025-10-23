@@ -22,17 +22,20 @@ export default function Checkout() {
   const [products, setProducts] = useState([]);
   const [checkCheckout, setCheckCheckout] = useState(false);
   const [addresses, setAddresses] = useState([]);
-  const [selectAddress, selectedAddresses] = useState(0);
+  const [selectAddress, setSelectAddress] = useState(0);
   const [loading, setLoading] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponData, setCouponData] = useState(null);
   const [couponError, setCouponError] = useState("");
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [orderError, setOrderError] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [userData, setUserData] = useState(null);
   const [checkoutDetail, setCheckoutDetail] = useState({
     subtotal: 0,
     discount: 0,
     total: 0,
-    tax: 0,
   });
   const { data } = useParams();
   let urlData = [];
@@ -44,6 +47,7 @@ export default function Checkout() {
 
   useEffect(() => {
     fetchAddresses();
+    fetchUserData();
   }, []);
 
   const fetchAddresses = async () => {
@@ -58,15 +62,26 @@ export default function Checkout() {
     }
   };
 
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const response = await axiosInstance.get("/user-profile");
+        setUserData(response.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
   useEffect(() => {
     if (addresses.length == 0) return;
-    selectedAddresses(addresses.filter((e) => e.status == "active")[0].id);
+    setSelectAddress(addresses.filter((e) => e.status == "active")[0].id);
   }, [addresses]);
 
   useEffect(() => {
     if (fetch_products.status && urlData) {
       const cartIds = JSON.parse(urlData);
-      console.log(cartIds);
       setCheckoutDetail({
         ...checkoutDetail,
         subtotal: cartIds.subTotal,
@@ -110,7 +125,7 @@ export default function Checkout() {
       setCouponError("");
 
       const productIds = products.map((product) => product.prd_id);
-      const cartAmount = checkoutDetail.total; // Using total amount as mentioned
+      const cartAmount = checkoutDetail.total;
 
       const response = await axios.post(`${config.API_URL_POST}/coupen`, {
         coupon_code: couponCode,
@@ -154,62 +169,181 @@ export default function Checkout() {
         subtotal: cartIds.subTotal,
         discount: cartIds.discount,
         total: cartIds.total,
-        tax: 0,
       });
     }
   };
 
-  function parseFormDataToNestedObject(formData) {
-    const result = {};
+  // Prepare order data for API
+  const prepareOrderData = () => {
+    const orderItems = products.map((product, index) => ({
+      product_id: product.prd_id,
+      order_amount: product.variation
+        ? product.variation.sale_price
+        : product.discount_price,
+      order_quantity: product.quantity,
+      vendor_id: product.vendor_id,
+      variation: product.variation || {},
+    }));
 
-    for (const [key, value] of formData.entries()) {
-      const keys = key
-        .replace(/\]/g, "") // remove ]
-        .split("["); // split at [
+    const orderData = {
+      address_id: selectAddress,
+      payment_method: paymentMethod,
+      subtotal: checkoutDetail.subtotal,
+      discount: checkoutDetail.discount,
+      tax: checkoutDetail.tax,
+      total: checkoutDetail.total,
+      order: orderItems,
+    };
 
-      let current = result;
+    // Add coupon data if applied
+    if (couponData) {
+      orderData.coupon_code = couponData.coupon_code;
+      orderData.coupon_discount = couponData.discount;
+      orderData.coupon_id = couponData.id;
+    }
 
-      keys.forEach((k, index) => {
-        if (index === keys.length - 1) {
-          // Final key, assign value
-          current[k] = value;
-        } else {
-          // Not final, prepare object or array
-          if (!current[k]) {
-            // Check if next key is a number -> array
-            current[k] = /^\d+$/.test(keys[index + 1]) ? [] : {};
+    return orderData;
+  };
+
+  // Razorpay Payment Function - Aapka original function
+  const openRazorpay = (orderData) => {
+    const selectedAddress = addresses.find((addr) => addr.id === selectAddress);
+
+    const options = {
+      key: config.RAZORPAY_KEY_ID, // Razorpay key config se
+      amount: checkoutDetail.total * 100, // Amount in paise
+      currency: "INR",
+      name: "Your Store Name",
+      handler: async (response) => {
+        try {
+          // Payment successful - order create karo with payment details
+          const orderPayload = {
+            ...orderData,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+            payment_status: "success",
+          };
+
+          const res = await axiosInstance.post("/add-order", orderPayload);
+
+          if (res.data.status) {
+            console.log("Order placed successfully:", res.data);
+            alert("Payment successful! Order placed.");
+            navigate("/order-success", {
+              state: {
+                orderId: res.data.data.order_id,
+                orderDetails: res.data.data,
+              },
+            });
+          } else {
+            alert(
+              "Order creation failed after payment. Please contact support."
+            );
           }
-          current = current[k];
+        } catch (error) {
+          console.error("Error creating order after payment:", error);
+          alert(
+            "Payment successful but order creation failed. Please contact support."
+          );
         }
-      });
+      },
+      prefill: {
+        name: selectedAddress?.name || userData?.name || "",
+        email: userData?.email || "",
+        contact: selectedAddress?.phone || userData?.phone || "",
+      },
+      modal: {
+        ondismiss: function () {
+          console.log("Payment modal closed");
+          setOrderLoading(false);
+        },
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selectAddress) {
+      alert("Please select an address");
+      return;
     }
 
-    return result;
-  }
+    if (products.length === 0) {
+      alert("No products in cart");
+      return;
+    }
 
-  async function submitCheckOut(formData) {
-    "use server";
     try {
-      // Add coupon data to form data if applied
-      const formDataObj = parseFormDataToNestedObject(formData);
-      if (couponData) {
-        formDataObj.coupon_code = couponData.coupon_code;
-        formDataObj.coupon_discount = couponData.discount;
-      }
+      setOrderLoading(true);
+      setOrderError("");
 
-      const response = await axios.post(
-        `https://packpr.fantasycricbet99.in/api/test`,
-        formDataObj
-      );
-      console.log(response);
+      const orderData = prepareOrderData();
+
+      console.log("Submitting order data:", orderData);
+
+      if (paymentMethod === "razor_pay") {
+        // Razorpay payment flow
+        await openRazorpay(orderData);
+      } else {
+        // COD flow - directly place order
+        const response = await axiosInstance.post("/add-order", orderData);
+
+        if (response.data.status) {
+          // Order successful
+          console.log("Order placed successfully:", response.data);
+          alert("Order placed successfully!");
+          navigate("/order-success", {
+            state: {
+              orderId: response.data.data.order_id,
+              orderDetails: response.data.data,
+            },
+          });
+        } else {
+          setOrderError(response.data.message || "Failed to place order");
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error placing order:", error);
+      setOrderError(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Failed to place order. Please try again."
+      );
+    } finally {
+      setOrderLoading(false);
     }
-  }
+  };
+
+  // Load Razorpay script
+  useEffect(() => {
+    const loadRazorpay = () => {
+      return new Promise((resolve) => {
+        if (window.Razorpay) {
+          resolve(true);
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    };
+
+    loadRazorpay();
+  }, []);
+
+  console.log("products", products);
 
   return (
     <div className="container checkout-container my-5">
-      <form action={submitCheckOut}>
+      <form onSubmit={handleSubmit}>
         <div className="row justify-content-between">
           <div className="col-md-7">
             <div className="bolling-box">
@@ -221,7 +355,7 @@ export default function Checkout() {
                     className={`address-card 
                       ${selectAddress == address.id ? "default" : "active"}`}
                     key={address.id}
-                    onClick={(e) => selectedAddresses(address.id)}
+                    onClick={(e) => setSelectAddress(address.id)}
                   >
                     <div className="card-header">
                       <div className="address-type">
@@ -316,7 +450,24 @@ export default function Checkout() {
                         name="payment_method"
                         id="cod"
                         value="cod"
-                        defaultChecked
+                        checked={paymentMethod === "cod"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                      />
+                    </div>
+                  </li>
+                  <li>
+                    <div className="form-check d-flex flex-column">
+                      <label htmlFor="razor_pay" className="form-label">
+                        <img src="/paypal.png" alt="RazorPay Icon" />
+                        <p>RazorPay</p>
+                      </label>
+                      <input
+                        type="radio"
+                        name="payment_method"
+                        id="razor_pay"
+                        value="razor_pay"
+                        checked={paymentMethod === "razor_pay"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
                       />
                     </div>
                   </li>
@@ -384,46 +535,43 @@ export default function Checkout() {
                 <ul className="list-unstyled">
                   {products.map((value, index) => (
                     <li key={index} className="d-flex gap-3 my-3">
-                      <input
-                        type="hidden"
-                        name={`order[${index}][product_id]`}
-                        value={value.prd_id}
-                      />
-                      <input
-                        type="hidden"
-                        name={`order[${index}][order_amount]`}
-                        value={value.price}
-                      />
-                      <input
-                        type="hidden"
-                        name={`order[${index}][order_quantity]`}
-                        value={value.quantity}
-                      />
                       <img src={value.img_url} alt={value.title} />
                       <div>
                         <h6>{value.title}</h6>
                         <div className="text-capitalize">
                           {value.variation
-                            ? Object.entries(value.variation).map(
-                                ([key, vl]) => (
+                            ? Object.entries(value.variation).map(([key, vl]) =>
+                                key != "sale_price" &&
+                                key != "reguler_price" ? (
                                   <span
                                     key={key}
                                     className="badge text-bg-dark m-1"
                                   >
                                     {key} : {vl}
-                                    <input
-                                      type="hidden"
-                                      name={`order[${index}][variation][${key}]`}
-                                      value={vl}
-                                    />
                                   </span>
+                                ) : (
+                                  ""
                                 )
                               )
                             : ""}
                         </div>
-                        <p>
-                          {value.quantity} x <span>₹{value.price}</span>
-                        </p>
+                        {value.variation ? (
+                          <p>
+                            {value.quantity} x{" "}
+                            <span>₹{value.variation.sale_price}</span>{" "}
+                            <span className="text-dark text-decoration-line-through">
+                              ₹{value.variation.reguler_price}
+                            </span>
+                          </p>
+                        ) : (
+                          <p>
+                            {value.quantity} x{" "}
+                            <span>₹{value.discount_price}</span>{" "}
+                            <span className="text-dark text-decoration-line-through">
+                              ₹{value.price}
+                            </span>
+                          </p>
+                        )}
                       </div>
                     </li>
                   ))}
@@ -443,7 +591,6 @@ export default function Checkout() {
                   Coupon Discount: <strong>₹{couponData.discount}</strong>
                 </p>
               )}
-
               <p>
                 Tax: <strong>₹{checkoutDetail.tax}</strong>
               </p>
@@ -451,8 +598,24 @@ export default function Checkout() {
               <p>
                 Total: <strong>₹{checkoutDetail.total}</strong>
               </p>
-              <button type="submit" className="btn btn-success w-100">
-                PLACE ORDER
+
+              {/* Order Error Message */}
+              {orderError && (
+                <div className="alert alert-danger py-2 mb-3" role="alert">
+                  {orderError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-success w-100"
+                disabled={orderLoading || products.length === 0}
+              >
+                {orderLoading
+                  ? "PROCESSING..."
+                  : paymentMethod === "razor_pay"
+                  ? "PAY NOW"
+                  : "PLACE ORDER"}
               </button>
             </div>
           </div>

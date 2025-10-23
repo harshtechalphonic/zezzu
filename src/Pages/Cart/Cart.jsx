@@ -54,18 +54,22 @@ const CartItem = ({ item, onRemove, onQuantityChange }) => {
           <h5>{item.title}</h5>
           <div className="text-capitalize">
             {item.variation && typeof item.variation === "object"
-              ? Object.entries(item.variation).map(([key, value]) => (
-                  <span key={key} className="badge text-bg-dark m-1">
-                    {key} : {value}
-                  </span>
-                ))
+              ? Object.entries(item.variation).map(([key, value]) =>
+                  key != "sale_price" && key != "reguler_price" ? (
+                    <span key={key} className="badge text-bg-dark m-1">
+                      {key} : {value}
+                    </span>
+                  ) : (
+                    ""
+                  )
+                )
               : ""}
           </div>
           <div className="price_ing d-flex align-items-center">
             {productAmount ? (
               <>
                 <h5>
-                  ₹{(productAmount.sale_price * item.quantity).toFixed(2)}
+                  ₹ {(productAmount.sale_price * item.quantity).toFixed(2)}
                 </h5>
                 <p className="slashPrice">
                   ₹ {(productAmount.reguler_price * item.quantity).toFixed(2)}
@@ -77,7 +81,7 @@ const CartItem = ({ item, onRemove, onQuantityChange }) => {
                   ₹{((item.discount_price || 0) * item.quantity).toFixed(2)}
                 </h5>
                 <p className="slashPrice">
-                  ₹ {((item.price || 0) * item.quantity).toFixed(2)}{" "}
+                  ₹ {((item.price || 0) * item.quantity).toFixed(2)}
                 </p>
               </>
             )}
@@ -259,9 +263,8 @@ export default function Cart() {
     try {
       let cartIds = JSON.parse(localStorage.getItem("cart")) || [];
       cartIds = cartIds.filter((item) => item.prd_id !== id);
-      localStorage.setItem("cart", JSON.stringify(cartIds));
       setProducts(products.filter((item) => item.prd_id !== id));
-      dispatch(cartAction.removeCart(id));
+      dispatch(cartAction.removeCart(cartIds));
     } catch (error) {
       console.error("Error removing item from cart:", error);
     }
@@ -356,16 +359,12 @@ export default function Cart() {
                     </div>
                     <div className="list-box d-flex justify-content-between mb-2">
                       <span>Discount</span>
-                      <span>- ₹{checkoutDetail.discount.toFixed(2)}</span>
-                    </div>
-                    <div className="list-box d-flex justify-content-between mb-3">
-                      <span>Tax (18%)</span>
-                      <span>₹{(checkoutDetail.total * 0.18).toFixed(2)}</span>
+                      <span>₹{checkoutDetail.discount.toFixed(2)}</span>
                     </div>
                     <hr />
                     <div className="list-box d-flex justify-content-between mb-4">
                       <h5>Total</h5>
-                      <h5>₹{(checkoutDetail.total * 1.18).toFixed(2)}</h5>
+                      <h5>₹{(checkoutDetail.total).toFixed(2)}</h5>
                     </div>
                     {isLoggedIn ? (
                       <Link

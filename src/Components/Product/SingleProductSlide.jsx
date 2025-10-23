@@ -39,10 +39,10 @@ export default function SingleProductSlide({ product }) {
 
   const toggleCart = (id) => {
     let addTocart = JSON.parse(localStorage.getItem("cart")) || [];
-  
+
     // Check if product is already in cart
     const isInCart = addTocart.some((item) => item.prd_id === id);
-  
+
     if (isInCart) {
       // Remove from cart
       addTocart = addTocart.filter((item) => item.prd_id !== id);
@@ -53,11 +53,11 @@ export default function SingleProductSlide({ product }) {
       addTocart = [newItem, ...addTocart];
       dispatch(cartAction.addCart(newItem)); // Dispatch add action
     }
-  
+
     setaddTocart(addTocart);
   };
-  
 
+  console.log("roduct.product_inventory_details", product);
   return (
     <div key={product.prd_id} className="feature-card">
       <span className="disco">
@@ -79,9 +79,9 @@ export default function SingleProductSlide({ product }) {
         />
       </span>
       <Link to={`/product/${product.slug}`}>
-      <div className="card-img">
-        <img src={product.img_url} alt={product.title} />
-      </div>
+        <div className="card-img">
+          <img src={product.img_url} alt={product.title} />
+        </div>
       </Link>
       <div className="product-detail">
         <h3>
@@ -99,10 +99,25 @@ export default function SingleProductSlide({ product }) {
           <p className="slashPrice">₹ {product.price} </p>
         </div>
       </div>
-      <a onClick={() => toggleCart(product.prd_id)} className={`cart-btn ${addTocart.some(item => item.prd_id === product.prd_id) ? "bg-dark" : ""}`}>
-        {addTocart.some(item => item.prd_id === product.prd_id) ? "Remove to Cart" : "Add to Cart"}
-        <FontAwesomeIcon icon={faBagShopping} className="ms-2" />
-      </a>
+      {Object.hasOwn(product, "product_inventory_details") && !Object.hasOwn(product.product_inventory_details, 0) ? (
+        <a
+          onClick={() => toggleCart(product.prd_id)}
+          className={`cart-btn ${
+            addTocart.some((item) => item.prd_id === product.prd_id)
+              ? "bg-dark"
+              : ""
+          }`}
+        >
+          {addTocart.some((item) => item.prd_id === product.prd_id)
+            ? "Remove to Cart"
+            : "Add to Cart"}
+          <FontAwesomeIcon icon={faBagShopping} className="ms-2" />
+        </a>
+      ) : (
+        <Link to={`/product/${product.slug}`} className={`cart-btn`}>
+          Select Variant
+        </Link>
+      )}
     </div>
   );
 }
