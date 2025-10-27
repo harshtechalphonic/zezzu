@@ -12,48 +12,87 @@ export default function ProductFilter({ products }) {
   const dispatch = useDispatch();
   const allCategories = useSelector((store) => store.allCategories);
   const { data } = useSelector((store) => store.brands);
+  
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
-  const [stepAmount, setStepAmount] = useState(300);
+  const [stepAmount, setStepAmount] = useState(100);
 
   const [fixedMinPrice, setFixedMinPrice] = useState(0);
   const [fixedMaxPrice, setFixedMaxPrice] = useState(0);
 
+  // Calculate price range from products
   useEffect(() => {
-    if (products.status == false) return;
-    const prices = products.data.map((product) => product.discount_price);
-    setMinPrice(Math.min(...prices));
-    setMaxPrice(Math.max(...prices));
+    if (!products.status || !products.data || products.data.length === 0) return;
     
-    setFixedMinPrice(Math.min(...prices));
-    setFixedMaxPrice(Math.max(...prices));
-  }, [products.status]);
+    const prices = products.data.map((product) => 
+      parseFloat(product.discount_price) || parseFloat(product.sale_price) || 0
+    ).filter(price => price > 0);
+    
+    if (prices.length > 0) {
+      const calculatedMin = Math.min(...prices);
+      const calculatedMax = Math.max(...prices);
+      
+      setMinPrice(calculatedMin);
+      setMaxPrice(calculatedMax);
+      setFixedMinPrice(calculatedMin);
+      setFixedMaxPrice(calculatedMax);
+      
+      // Calculate step amount based on price range
+      const range = calculatedMax - calculatedMin;
+      setStepAmount(Math.max(10, Math.floor(range / 20))); // Dynamic step amount
+    }
+  }, [products.status, products.data]);
 
-  useEffect(()=>{
-    if(minPrice == 0) return;
+  // Debounced price range updates
+  useEffect(() => {
+    if (minPrice === 0 && maxPrice === 0) return;
+    
     const timer = setTimeout(() => {
-        // console.log("Min price updated:", minPrice);
-        dispatch(filtersAction.priceRangeMin(minPrice));
+      dispatch(filtersAction.priceRangeMin(minPrice));
     }, 500);
+    
     return () => clearTimeout(timer);
-},[minPrice]);
+  }, [minPrice, dispatch]);
 
-useEffect(()=>{
-    if(maxPrice == 0) return;
+  useEffect(() => {
+    if (minPrice === 0 && maxPrice === 0) return;
+    
     const timer = setTimeout(() => {
-        // console.log("Max price updated:", maxPrice);
-        dispatch(filtersAction.priceRangeMax(maxPrice));
+      dispatch(filtersAction.priceRangeMax(maxPrice));
     }, 500);
+    
     return () => clearTimeout(timer);
-  },[maxPrice]);
+  }, [maxPrice, dispatch]);
 
   const handleMinChange = (e) => {
-    const value = Math.min(Number(e.target.value), maxPrice - stepAmount);
+    let value = parseFloat(e.target.value) || 0;
+    
+    // Validate min price
+    value = Math.max(fixedMinPrice, value); // Can't go below absolute min
+    value = Math.min(value, maxPrice - stepAmount); // Can't go above max - step
+    
     setMinPrice(value);
   };
 
   const handleMaxChange = (e) => {
-    const value = Math.max(Number(e.target.value), minPrice + stepAmount);
+    let value = parseFloat(e.target.value) || 0;
+    
+    // Validate max price
+    value = Math.min(fixedMaxPrice, value); // Can't go above absolute max
+    value = Math.max(value, minPrice + stepAmount); // Can't go below min + step
+    
+    setMaxPrice(value);
+  };
+
+  const handleMinSliderChange = (e) => {
+    let value = parseFloat(e.target.value);
+    value = Math.min(value, maxPrice - stepAmount);
+    setMinPrice(value);
+  };
+
+  const handleMaxSliderChange = (e) => {
+    let value = parseFloat(e.target.value);
+    value = Math.max(value, minPrice + stepAmount);
     setMaxPrice(value);
   };
 
@@ -61,6 +100,19 @@ useEffect(()=>{
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  // Calculate slider progress position
+  const getProgressStyle = () => {
+    if (fixedMaxPrice === 0) return {};
+    
+    const left = ((minPrice - fixedMinPrice) / (fixedMaxPrice - fixedMinPrice)) * 100;
+    const right = 100 - ((maxPrice - fixedMinPrice) / (fixedMaxPrice - fixedMinPrice)) * 100;
+    
+    return {
+      left: `${left}%`,
+      right: `${right}%`
+    };
   };
 
   return (
@@ -115,115 +167,75 @@ useEffect(()=>{
         <div className="categories-header">Price Range</div>
         <div className="list-group">
           <div className="d-flex filterrange_box">
-            <div className="wrapper" style={{filter: `blur(${fixedMinPrice == 0 ? "5" : "0"}px)`}}>
-              <div className="price-input">
-                <div className="field">
-                  <span style={{ whiteSpace: "nowrap" }}>Min : </span>
-                  <input
-                    type="number"
-                    className="input-min"
-                    value={minPrice}
-                    onInput={handleMinChange}
-                  />
+            <div className="wrapper" style={{filter: `blur(${fixedMinPrice === 0 ? "3" : "0"}px)`}}>
+              {fixedMinPrice === 0 ? (
+                <div className="text-center py-3">
+                  <div className="spinner-border spinner-border-sm me-2" role="status"></div>
+                  Loading prices...
                 </div>
-                <div className="separator">-</div>
-                <div className="field">
-                  <span style={{ whiteSpace: "nowrap" }}>Max : </span>
-                  <input
-                    type="number"
-                    className="input-max"
-                    value={maxPrice}
-                    onInput={handleMaxChange}
-                  />
-                </div>
-              </div>
-              <div className="slider">
-                <div
-                  className="progress"
-                  style={{
-                    left: `${(minPrice / fixedMaxPrice) * 100}%`,
-                    right: `${100 - (maxPrice / fixedMaxPrice) * 100}%`,
-                  }}
-                ></div>
-              </div>
-              <div className="range-input">
-                <input
-                  type="range"
-                  className="range-min"
-                  min={fixedMinPrice}
-                  max={fixedMaxPrice}
-                  value={minPrice}
-                  step={stepAmount}
-                  onChange={handleMinChange}
-                />
-                <input
-                  type="range"
-                  className="range-max"
-                  min="0"
-                  max={fixedMaxPrice}
-                  value={maxPrice}
-                  step={stepAmount}
-                  onChange={handleMaxChange}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="card categories-card  mb-3">
-        <div className="categories-header">Customer Ratings</div>
-        <div className="list-group">
-          <div className="rating-check-item ">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="5star"
-              />
-              <label className="form-check-label" htmlFor="5star">
-                5 Star
-              </label>
-            </div>
-          </div>
-          <div className="rating-check-item ">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="4star"
-              />
-              <label className="form-check-label" htmlFor="4star">
-                4 Star & above
-              </label>
-            </div>
-          </div>
-          <div className="rating-check-item ">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="3star"
-              />
-              <label className="form-check-label" htmlFor="3star">
-                3 Star & above
-              </label>
-            </div>
-          </div>
-          <div className="rating-check-item ">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="2star"
-              />
-              <label className="form-check-label" htmlFor="2star">
-                2 Star & above
-              </label>
+              ) : (
+                <>
+                  <div className="price-input">
+                    <div className="field">
+                      <span style={{ whiteSpace: "nowrap" }}>Min : </span>
+                      <input
+                        type="number"
+                        className="input-min"
+                        value={Math.round(minPrice)}
+                        onChange={handleMinChange}
+                        min={fixedMinPrice}
+                        max={fixedMaxPrice - stepAmount}
+                      />
+                    </div>
+                    <div className="separator">-</div>
+                    <div className="field">
+                      <span style={{ whiteSpace: "nowrap" }}>Max : </span>
+                      <input
+                        type="number"
+                        className="input-max"
+                        value={Math.round(maxPrice)}
+                        onChange={handleMaxChange}
+                        min={fixedMinPrice + stepAmount}
+                        max={fixedMaxPrice}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="slider">
+                    <div
+                      className="progress"
+                      style={getProgressStyle()}
+                    ></div>
+                  </div>
+                  
+                  <div className="range-input">
+                    <input
+                      type="range"
+                      className="range-min"
+                      min={fixedMinPrice}
+                      max={fixedMaxPrice}
+                      value={minPrice}
+                      step={stepAmount}
+                      onChange={handleMinSliderChange}
+                    />
+                    <input
+                      type="range"
+                      className="range-max"
+                      min={fixedMinPrice}
+                      max={fixedMaxPrice}
+                      value={maxPrice}
+                      step={stepAmount}
+                      onChange={handleMaxSliderChange}
+                    />
+                  </div>
+                  
+                  <div className="price-display text-center mt-2">
+                    <small className="text-muted">
+                      Range: ₹{Math.round(minPrice)} - ₹{Math.round(maxPrice)}
+                    </small>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

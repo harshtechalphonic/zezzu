@@ -9,30 +9,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { filtersAction } from "../../store/Products/filtersSlice";
 import ScrollToTop from "../ScrollToTop";
 
-export default function Product({category_type}) {
+export default function Product({ category_type }) {
   const fetch_products = useSelector((store) => store.products);
-  // console.log("products",fetch_products) 
+  // console.log("products",fetch_products)
 
   const fetch_filter = useSelector((store) => store.filters);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 991);
   const [showFilter, setShowFilter] = useState(false);
   // const [catProducts,setCatProducts] = useState([]);
-  const [products, setProducts] = useState([])
-  const {category, sub_category} = useParams();
+  const [products, setProducts] = useState([]);
+  const { category, sub_category } = useParams();
 
-  useEffect(()=>{
-    setProducts(fetch_products.data)
-    if(!category_type) return;
-    console.log(category_type)
-    if(category_type == 'category'){
-      setProducts(fetch_products.data.filter((value) => value.category_slug == category))
-    }else{
-      setProducts(fetch_products.data.filter((value) => value.sub_category_slug == sub_category))
+  useEffect(() => {
+    setProducts(fetch_products.data);
+    if (!category_type) return;
+    console.log(category_type);
+    if (category_type == "category") {
+      setProducts(
+        fetch_products.data.filter((value) => value.category_slug == category)
+      );
+    } else {
+      setProducts(
+        fetch_products.data.filter(
+          (value) => value.sub_category_slug == sub_category
+        )
+      );
     }
-  },[category_type,fetch_products.status,sub_category,category])
-  useEffect(()=>{
+  }, [category_type, fetch_products.status, sub_category, category]);
+  useEffect(() => {
     dispatch(filtersAction.countProduct(products.length));
-  },[products])
+  }, [products]);
   const dispatch = useDispatch();
   const handleSortChange = (event) => {
     dispatch(filtersAction.sorted(event.target.value));
@@ -55,7 +61,7 @@ export default function Product({category_type}) {
 
   return (
     <>
-    <ScrollToTop/>
+      <ScrollToTop />
       <Header />
 
       <section className="All_Products">

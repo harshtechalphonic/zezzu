@@ -14,7 +14,7 @@ export default function Orders() {
     orderId: null,
     productId: null,
     requestType: "",
-    productName: ""
+    productName: "",
   });
   const [selectedReason, setSelectedReason] = useState("");
   const [customReason, setCustomReason] = useState("");
@@ -55,7 +55,7 @@ export default function Orders() {
       orderId,
       productId,
       requestType,
-      productName
+      productName,
     });
     setSelectedReason("");
     setCustomReason("");
@@ -68,7 +68,7 @@ export default function Orders() {
       orderId: null,
       productId: null,
       requestType: "",
-      productName: ""
+      productName: "",
     });
     setSelectedReason("");
     setCustomReason("");
@@ -85,7 +85,7 @@ export default function Orders() {
   const submitRequest = async () => {
     try {
       const { orderId, productId, requestType } = modalData;
-      
+
       if (!selectedReason) {
         alert("Please select a reason");
         return;
@@ -98,9 +98,10 @@ export default function Orders() {
 
       const requestKey = `${orderId}-${productId}-${requestType}`;
       setProcessingRequest(requestKey);
-      
+
       const token = localStorage.getItem("token");
-      const finalReason = selectedReason === "other" ? customReason : selectedReason;
+      const finalReason =
+        selectedReason === "other" ? customReason : selectedReason;
 
       const response = await axios.post(
         `${config.API_URL_POST}/return-replace`,
@@ -108,7 +109,7 @@ export default function Orders() {
           order_id: orderId,
           product_id: productId,
           request_type: requestType,
-          reason: finalReason
+          reason: finalReason,
         },
         {
           headers: {
@@ -123,7 +124,9 @@ export default function Orders() {
         closeModal();
         fetchOrders();
       } else {
-        alert(response.data.message || `Failed to submit ${requestType} request`);
+        alert(
+          response.data.message || `Failed to submit ${requestType} request`
+        );
       }
     } catch (err) {
       console.error(`Error submitting request:`, err);
@@ -185,7 +188,7 @@ export default function Orders() {
     const orderDateObj = new Date(orderDate);
     const currentDate = new Date();
     const daysDifference = (currentDate - orderDateObj) / (1000 * 60 * 60 * 24);
-    
+
     return orderStatus === "delivered" && daysDifference <= 30;
   };
 
@@ -197,7 +200,7 @@ export default function Orders() {
     "Quality issues",
     "Size/fit issues",
     "Changed my mind",
-    "other"
+    "other",
   ];
 
   if (loading) {
@@ -281,10 +284,13 @@ export default function Orders() {
 
                         <div className="order-items">
                           {order.items.map((item, itemIndex) => {
-                            const isAllowed = isReturnReplaceAllowed(order.created_at, order.order_status);
+                            const isAllowed = isReturnReplaceAllowed(
+                              order.created_at,
+                              order.order_status
+                            );
                             const returnRequestKey = `${order.id}-${item.product_id}-return`;
                             const replaceRequestKey = `${order.id}-${item.product_id}-replace`;
-                            
+
                             return (
                               <div
                                 key={itemIndex}
@@ -310,7 +316,8 @@ export default function Orders() {
                                     <p className="price">
                                       ₹
                                       {(
-                                        parseFloat(item.sale_price) * item.quantity
+                                        parseFloat(item.sale_price) *
+                                        item.quantity
                                       ).toLocaleString()}
                                     </p>
                                   </div>
@@ -319,13 +326,16 @@ export default function Orders() {
                                       {Object.entries(
                                         JSON.parse(item.product_attributes)
                                       ).map(([key, value]) => (
-                                        <span key={key} className="attribute-tag">
+                                        <span
+                                          key={key}
+                                          className="attribute-tag"
+                                        >
                                           {key}: {value}
                                         </span>
                                       ))}
                                     </div>
                                   )}
-                                  
+
                                   {/* Return and Replace Buttons */}
                                   <div className="product-actions mt-3">
                                     {isAllowed ? (
@@ -333,12 +343,26 @@ export default function Orders() {
                                         <button
                                           type="button"
                                           className="btn btn-outline-danger btn-sm"
-                                          onClick={() => handleReturnRequest(order.id, item.product_id, item.product_name)}
-                                          disabled={processingRequest === returnRequestKey}
+                                          onClick={() =>
+                                            handleReturnRequest(
+                                              order.id,
+                                              item.product_id,
+                                              item.product_name
+                                            )
+                                          }
+                                          disabled={
+                                            processingRequest ===
+                                            returnRequestKey
+                                          }
                                         >
-                                          {processingRequest === returnRequestKey ? (
+                                          {processingRequest ===
+                                          returnRequestKey ? (
                                             <>
-                                              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                              <span
+                                                className="spinner-border spinner-border-sm me-2"
+                                                role="status"
+                                                aria-hidden="true"
+                                              ></span>
                                               Processing...
                                             </>
                                           ) : (
@@ -348,12 +372,26 @@ export default function Orders() {
                                         <button
                                           type="button"
                                           className="btn btn-outline-warning btn-sm"
-                                          onClick={() => handleReplaceRequest(order.id, item.product_id, item.product_name)}
-                                          disabled={processingRequest === replaceRequestKey}
+                                          onClick={() =>
+                                            handleReplaceRequest(
+                                              order.id,
+                                              item.product_id,
+                                              item.product_name
+                                            )
+                                          }
+                                          disabled={
+                                            processingRequest ===
+                                            replaceRequestKey
+                                          }
                                         >
-                                          {processingRequest === replaceRequestKey ? (
+                                          {processingRequest ===
+                                          replaceRequestKey ? (
                                             <>
-                                              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                              <span
+                                                className="spinner-border spinner-border-sm me-2"
+                                                role="status"
+                                                aria-hidden="true"
+                                              ></span>
                                               Processing...
                                             </>
                                           ) : (
@@ -382,7 +420,9 @@ export default function Orders() {
                             {order.coupon && (
                               <p className="coupon-info">
                                 Coupon Applied: {order.coupon} (₹
-                                {parseFloat(order.coupon_amount).toLocaleString()}
+                                {parseFloat(
+                                  order.coupon_amount
+                                ).toLocaleString()}
                                 )
                               </p>
                             )}
@@ -406,16 +446,21 @@ export default function Orders() {
 
       {/* Return/Replace Modal */}
       {showModal && (
-        <div className="modal fade show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <div
+          className="modal fade show"
+          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
-                  Request {modalData.requestType === "return" ? "Return" : "Replace"} - {modalData.productName}
+                  Request{" "}
+                  {modalData.requestType === "return" ? "Return" : "Replace"} -{" "}
+                  {modalData.productName}
                 </h5>
-                <button 
-                  type="button" 
-                  className="btn-close" 
+                <button
+                  type="button"
+                  className="btn-close"
                   onClick={closeModal}
                   disabled={processingRequest}
                 ></button>
@@ -435,7 +480,10 @@ export default function Orders() {
                         onChange={(e) => setSelectedReason(e.target.value)}
                         disabled={processingRequest}
                       />
-                      <label className="form-check-label" htmlFor={`reason-${index}`}>
+                      <label
+                        className="form-check-label"
+                        htmlFor={`reason-${index}`}
+                      >
                         {reason === "other" ? "Other" : reason}
                       </label>
                     </div>
@@ -444,7 +492,9 @@ export default function Orders() {
 
                 {selectedReason === "other" && (
                   <div className="mb-3">
-                    <label className="form-label fw-bold">Please specify reason:</label>
+                    <label className="form-label fw-bold">
+                      Please specify reason:
+                    </label>
                     <textarea
                       className="form-control"
                       rows="3"
@@ -457,27 +507,37 @@ export default function Orders() {
                 )}
               </div>
               <div className="modal-footer">
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
+                <button
+                  type="button"
+                  className="btn btn-secondary"
                   onClick={closeModal}
                   disabled={processingRequest}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="button" 
-                  className="btn btn-primary" 
+                <button
+                  type="button"
+                  className="btn btn-primary"
                   onClick={submitRequest}
-                  disabled={processingRequest || !selectedReason || (selectedReason === "other" && !customReason.trim())}
+                  disabled={
+                    processingRequest ||
+                    !selectedReason ||
+                    (selectedReason === "other" && !customReason.trim())
+                  }
                 >
                   {processingRequest ? (
                     <>
-                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
                       Submitting...
                     </>
                   ) : (
-                    `Submit ${modalData.requestType === "return" ? "Return" : "Replace"} Request`
+                    `Submit ${
+                      modalData.requestType === "return" ? "Return" : "Replace"
+                    } Request`
                   )}
                 </button>
               </div>
