@@ -1,42 +1,63 @@
-import React, { useState } from 'react';
-import './AccountDetails.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect } from "react";
+import "./AccountDetails.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import config from "../../../Config/config.json";
-import axios from 'axios';
+import axios from "axios";
 
-export default function AccountDetails() {
+export default function AccountDetails({ user_details }) {
+  console.log("user_details", JSON.stringify(user_details));
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  const [preview, setPreview] = useState('http://i.pravatar.cc/500?img=7');
+  const [preview, setPreview] = useState("http://i.pravatar.cc/500?img=7");
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    address: '',
-    country: '',
-    state: '',
-    zip: ''
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
   });
+
+  // Populate form with user data when component loads or user_details changes
+  useEffect(() => {
+    if (user_details) {
+      // Split name into first and last name if available
+      const nameParts = user_details.name
+        ? user_details.name.split(" ")
+        : ["", ""];
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      setFormData({
+        firstName: firstName,
+        lastName: lastName,
+        phone: user_details.phone || "",
+        email: user_details.email || "",
+      });
+
+      // Set profile image if available
+      if (user_details.image) {
+        setPreview(user_details.image);
+      }
+    }
+  }, [user_details]);
 
   const togglePasswordVisibility = (field) => {
     switch (field) {
-      case 'password':
+      case "password":
         setShowPassword((prev) => !prev);
         break;
-      case 'newPassword':
+      case "newPassword":
         setShowNewPassword((prev) => !prev);
         break;
-      case 'confirmPassword':
+      case "confirmPassword":
         setShowConfirmPassword((prev) => !prev);
         break;
       default:
@@ -47,18 +68,18 @@ export default function AccountDetails() {
   const handlePasswordChange = (e) => {
     setNewPassword(e.target.value);
     if (confirmPassword && e.target.value !== confirmPassword) {
-      setPasswordError('Passwords do not match');
+      setPasswordError("Passwords do not match");
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     if (newPassword && e.target.value !== newPassword) {
-      setPasswordError('Passwords do not match');
+      setPasswordError("Passwords do not match");
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
   };
 
@@ -77,191 +98,253 @@ export default function AccountDetails() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const updateAccountAPI = async () => {
-    const payload = {
-      currentPassword: currentPassword || undefined,
-      newPassword: (newPassword && confirmPassword && !passwordError) ? newPassword : undefined,
-      profile: formData
-    };
+    try {
+      // Prepare the name by combining first and last name
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
-    const token = localStorage.getItem('token'); 
+      // Prepare payload according to API requirements
+      const payload = {
+        user_id: user_details.id, // Required field
+        name: fullName || user_details.name, // Use existing name if no change
+        phone: formData.phone,
+        email: formData.email,
+        ...(currentPassword && {
+          current_password: currentPassword,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        }),
+      };
 
-        axios.post(`${config.API_URL}/update-profile`, payload, {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        `${config.API_URL_POST}/profile`,
+        payload,
+        {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("API Error:", error);
+      throw error;
+    }
   };
 
   const handleSave = async () => {
     try {
-      const hasProfileChanges = Object.values(formData).some(val => val.trim() !== '');
-      const hasPasswordChange = newPassword && confirmPassword && !passwordError;
+      // Check if there are any profile changes
+      const hasProfileChanges =
+        formData.firstName !==
+          (user_details.name ? user_details.name.split(" ")[0] : "") ||
+        formData.lastName !==
+          (user_details.name
+            ? user_details.name.split(" ").slice(1).join(" ")
+            : "") ||
+        formData.phone !== (user_details.phone || "") ||
+        formData.email !== (user_details.email || "") ||
+        formData.address !== (user_details.address || "") ||
+        formData.country !== (user_details.country || "") ||
+        formData.state !== (user_details.state || "") ||
+        formData.zip !== (user_details.zipcode || "");
+
+      const hasPasswordChange =
+        currentPassword && newPassword && confirmPassword && !passwordError;
 
       if (!hasProfileChanges && !hasPasswordChange) {
-        alert('No changes to save.');
+        alert("No changes to save.");
         return;
       }
 
-      await updateAccountAPI();
-      alert('Changes saved successfully!');
+      const result = await updateAccountAPI();
+
+      if (result.status) {
+        alert(result.message || "Profile updated successfully!");
+
+        // Clear password fields after successful update
+        if (hasPasswordChange) {
+          setCurrentPassword("");
+          setNewPassword("");
+          setConfirmPassword("");
+        }
+      } else {
+        alert(result.message || "Failed to update profile.");
+      }
     } catch (error) {
-      console.error('Error saving changes:', error);
-      alert('An error occurred while saving.');
+      console.error("Error saving changes:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        alert(`Error: ${error.response.data.message}`);
+      } else {
+        alert("An error occurred while saving. Please try again.");
+      }
     }
   };
 
   return (
-    <div className='AccountDetails'>
-      <div className='row'>
-        <div className='col-lg-8'>
-          <div className='card'>
-            <ul className='list-group list-group-flush'>
-              <li className='list-group-item'>Your Profile</li>
+    <div className="AccountDetails">
+      <div className="row">
+        <div className="col-lg-8">
+          <div className="card">
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item">Your Profile</li>
             </ul>
-            <div className='row'>
-              <div className='col-lg-3'>
-                <div className='col-lg-12 mb-3'>
-                  <div className="avatar-upload">
-                    <div className="avatar-edit">
+            <div className="row">
+              <div className="col-12">
+                <div className="card-body px-5">
+                  <div className="row">
+                    <div className="col-lg-6 mb-3">
+                      <label className="form-label">First Name</label>
                       <input
-                        type="file"
-                        id="imageUpload"
-                        accept=".png, .jpg, .jpeg"
-                        onChange={handleImageChange}
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="First Name"
                       />
-                      <label htmlFor="imageUpload"></label>
                     </div>
-                    <div className="avatar-preview">
-                      <div
-                        id="imagePreview"
-                        style={{
-                          backgroundImage: `url(${preview})`,
-                          display: 'block',
-                          transition: 'opacity 0.65s ease-in-out',
-                        }}
-                      ></div>
+                    <div className="col-lg-6 mb-3">
+                      <label className="form-label">Last Name</label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="Last Name"
+                      />
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className='col-lg-9'>
-                <div className='card-body px-5'>
-                  <div className='row'>
-                    <div className='col-lg-6 mb-3'>
-                      <label className='form-label'>First Name</label>
-                      <input type='text' name="firstName" value={formData.firstName} onChange={handleInputChange} className='form-control' placeholder='First Name' />
+                    <div className="col-lg-6 mb-3">
+                      <label className="form-label">Phone Number</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="+1-202-555-0118"
+                      />
                     </div>
-                    <div className='col-lg-6 mb-3'>
-                      <label className='form-label'>Last Name</label>
-                      <input type='text' name="lastName" value={formData.lastName} onChange={handleInputChange} className='form-control' placeholder='Last Name' />
-                    </div>
-                    <div className='col-lg-6 mb-3'>
-                      <label className='form-label'>Phone Number</label>
-                      <input type='tel' name="phone" value={formData.phone} onChange={handleInputChange} className='form-control' placeholder='+1-202-555-0118' />
-                    </div>
-                    <div className='col-lg-6 mb-3'>
-                      <label className='form-label'>Email Address</label>
-                      <input type='email' name="email" value={formData.email} onChange={handleInputChange} className='form-control' placeholder='name@example.com' />
-                    </div>
-                    <div className='col-lg-12 mb-3'>
-                      <label className='form-label'>Address</label>
-                      <input type='text' name="address" value={formData.address} onChange={handleInputChange} className='form-control' placeholder='Address Details' />
-                    </div>
-                    <div className='col-lg-6 mb-3'>
-                      <label className='form-label'>Country/Region</label>
-                      <select name="country" value={formData.country} onChange={handleInputChange} className='form-select'>
-                        <option value=''>Select Country</option>
-                        <option value='India'>India</option>
-                        <option value='USA'>USA</option>
-                      </select>
-                    </div>
-                    <div className='col-lg-3 mb-3'>
-                      <label className='form-label'>State</label>
-                      <select name="state" value={formData.state} onChange={handleInputChange} className='form-select'>
-                        <option value=''>Select State</option>
-                        <option value='Delhi'>Delhi</option>
-                        <option value='Maharashtra'>Maharashtra</option>
-                      </select>
-                    </div>
-                    <div className='col-lg-3 mb-3'>
-                      <label className='form-label'>Zip Code</label>
-                      <input type='text' name="zip" value={formData.zip} onChange={handleInputChange} className='form-control' placeholder='120712' />
+                    <div className="col-lg-6 mb-3">
+                      <label className="form-label">Email Address</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="form-control"
+                        placeholder="name@example.com"
+                      />
                     </div>
                   </div>
 
-                  <div className='card mt-4'>
-                    <ul className='list-group list-group-flush'>
-                      <li className='list-group-item'>Change Password</li>
+                  <div className="card mt-4">
+                    <ul className="list-group list-group-flush">
+                      <li className="list-group-item">Change Password</li>
                     </ul>
-                    <div className='card-body'>
-                      <div className='row'>
-                        <div className='col-lg-12 mb-3'>
-                          <label className='form-label'>Current Password</label>
-                          <div className='input-group'>
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-lg-12 mb-3">
+                          <label className="form-label">Current Password</label>
+                          <div className="input-group">
                             <input
-                              type={showPassword ? 'text' : 'password'}
-                              className='form-control'
-                              placeholder='Current Password'
+                              type={showPassword ? "text" : "password"}
+                              className="form-control"
+                              placeholder="Current Password"
                               value={currentPassword}
-                              onChange={(e) => setCurrentPassword(e.target.value)}
+                              onChange={(e) =>
+                                setCurrentPassword(e.target.value)
+                              }
                             />
-                            <span className='input-group-text' onClick={() => togglePasswordVisibility('password')}>
-                              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            <span
+                              className="input-group-text"
+                              onClick={() =>
+                                togglePasswordVisibility("password")
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={showPassword ? faEyeSlash : faEye}
+                              />
                             </span>
                           </div>
                         </div>
 
-                        <div className='col-lg-12 mb-3'>
-                          <label className='form-label'>New Password</label>
-                          <div className='input-group'>
+                        <div className="col-lg-12 mb-3">
+                          <label className="form-label">New Password</label>
+                          <div className="input-group">
                             <input
-                              type={showNewPassword ? 'text' : 'password'}
-                              className='form-control'
-                              placeholder='New Password'
+                              type={showNewPassword ? "text" : "password"}
+                              className="form-control"
+                              placeholder="New Password"
                               value={newPassword}
                               onChange={handlePasswordChange}
                             />
-                            <span className='input-group-text' onClick={() => togglePasswordVisibility('newPassword')}>
-                              <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
+                            <span
+                              className="input-group-text"
+                              onClick={() =>
+                                togglePasswordVisibility("newPassword")
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={showNewPassword ? faEyeSlash : faEye}
+                              />
                             </span>
                           </div>
                         </div>
 
-                        <div className='col-lg-12 mb-3'>
-                          <label className='form-label'>Confirm Password</label>
-                          <div className='input-group'>
+                        <div className="col-lg-12 mb-3">
+                          <label className="form-label">Confirm Password</label>
+                          <div className="input-group">
                             <input
-                              type={showConfirmPassword ? 'text' : 'password'}
-                              className='form-control'
-                              placeholder='Confirm Password'
+                              type={showConfirmPassword ? "text" : "password"}
+                              className="form-control"
+                              placeholder="Confirm Password"
                               value={confirmPassword}
                               onChange={handleConfirmPasswordChange}
                             />
-                            <span className='input-group-text' onClick={() => togglePasswordVisibility('confirmPassword')}>
-                              <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                            <span
+                              className="input-group-text"
+                              onClick={() =>
+                                togglePasswordVisibility("confirmPassword")
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={showConfirmPassword ? faEyeSlash : faEye}
+                              />
                             </span>
                           </div>
-                          {passwordError && <p className='text-danger'>{passwordError}</p>}
+                          {passwordError && (
+                            <p className="text-danger">{passwordError}</p>
+                          )}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className='mt-4 profile-save_btn'>
-                    <button type='button' onClick={handleSave}>Save Changes</button>
+                  <div className="mt-4 profile-save_btn">
+                    <button type="button" onClick={handleSave}>
+                      Save Changes
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }

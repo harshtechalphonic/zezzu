@@ -345,12 +345,12 @@ export default function Checkout() {
       <form onSubmit={handleSubmit}>
         <div className="row justify-content-between">
           <div className="col-md-7">
-            <div className="bolling-box">
+            <div className="bolling-box mb-4">
               <h4>Select Address</h4>
               <input name="address_id" type="hidden" value={selectAddress} />
-              <div className="address-grid">
+              <div className="address-grid ">
                 {addresses.map((address) => (
-                  <div
+                  <div  
                     className={`address-card 
                       ${selectAddress == address.id ? "default" : "active"}`}
                     key={address.id}

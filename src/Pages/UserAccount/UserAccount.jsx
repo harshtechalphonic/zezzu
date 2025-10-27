@@ -43,7 +43,6 @@ export default function UserAccount() {
         },
       })
       .then(function (response) {
-        console.log(response.data);
         setUserResponse(response.data);
       })
       .catch(function (error) {
@@ -78,9 +77,6 @@ export default function UserAccount() {
               <li className="breadcrumb-item active" aria-current="page">
                 User Account
               </li>
-              <li className="breadcrumb-item active" aria-current="page">
-                Dashboard
-              </li>
             </ol>
           </div>
         </nav>
@@ -108,7 +104,7 @@ export default function UserAccount() {
                   </>
                 }
               >
-                <DashBoard order_status={userResponse.order_status} />
+                <DashBoard order_status={userResponse.order_status} user_details={userResponse.user_details} />
               </Tab>
               <Tab
                 eventKey="Order"
@@ -152,7 +148,7 @@ export default function UserAccount() {
                   </>
                 }
               >
-                <AccountDetails />
+                <AccountDetails user_details={userResponse.user_details} />
               </Tab>
               <Tab
                 eventKey="Log_out"
