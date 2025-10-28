@@ -1,5 +1,5 @@
 {
-    "API_URL": "https://demotechalphonic.xyz/multivendor/api",
-    "API_URL_POST": "https://demotechalphonic.xyz/multivendor/api/v1",
+    "API_URL": "https://dashboard.zezzu.in/api",
+    "API_URL_POST": "https://dashboard.zezzu.in/api/v1",
     "RAZORPAY_KEY_ID": "rzp_test_RLPCBCYerPsEnt"
 }

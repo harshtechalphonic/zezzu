@@ -121,22 +121,7 @@ export default function Product({ category_type }) {
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center bg-light p-2 rounded mb-3">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="text-secondary">Active Filters:</span>
-                    {filters.map((filter, index) => (
-                      <div
-                        key={index}
-                        className="d-flex align-items-center px-2 py-1 "
-                      >
-                        <span className="me-1 fw-bold">{filter}</span>
-                        <button className="btn  p-0 text-secondary">
-                          <span size={12} className="fw-bold">
-                            X
-                          </span>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <div className="d-flex align-items-center gap-2"></div>
                   <div className="text-secondary">
                     {fetch_filter.countProduct} Results found.
                   </div>

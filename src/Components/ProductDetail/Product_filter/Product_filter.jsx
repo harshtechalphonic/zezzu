@@ -127,7 +127,7 @@ export default function ProductFilter({ products }) {
               className={`flex-wrap category-item ${
                 activeIndex === index ? "active" : ""
               }`}
-            >
+            ><Link to={`/category/${category.slug}`}>
               <div
                 className="accordion-header d-flex w-100 justify-content-between align-items-center"
                 onClick={() => toggleAccordion(index)}
@@ -137,6 +137,7 @@ export default function ProductFilter({ products }) {
                   icon={activeIndex === index ? faAngleDown : faAngleRight}
                 />
               </div>
+              </Link>
               {activeIndex === index && category.sub_categories.length > 0 && (
                 <div className="accordion-body mt-1">
                   <ul className="list-unstyled mb-0 ms-3">
