@@ -130,13 +130,13 @@ export default function Header() {
           <div className="container">
             <ul className="list-unstyled d-flex align-items-center justify-content-between mb-0">
               <li className="d-flex align-items-center flex-wrap gap-lg-5 gap-md-4 gap-2">
-                <Link to="#!">
+                <Link to="mail:zezzu@gmail.com">
                   <i className="me-2">
-                    <FontAwesomeIcon icon={faLocationDot} />
+                    <FontAwesomeIcon icon={faEnvelope} />
                   </i>{" "}
-                  Store location
+                  zezzu@gmail.com
                 </Link>
-                <Link to="#!">
+                <Link to="tel:919597495674">
                   <i className="me-2">
                     <FontAwesomeIcon icon={faPhoneVolume} />
                   </i>{" "}
