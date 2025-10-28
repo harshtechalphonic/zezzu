@@ -12,33 +12,10 @@ export default function ProductDescription({singleProduct}) {
         return (
           <div className="asdknc-desc mt-4">
             <div className="row">
-              <div className="col-lg-6">
+              <div className="col-12">
                 <div className="conte">
                   {/* <h5>Description</h5> */}
                   <div dangerouslySetInnerHTML={{ __html: singleProduct.description}} />
-                </div>
-              </div>
-              <div className="col-lg-3">
-                <div className="conte">
-                  <h5>Feature</h5>
-                  <ul className="list-unstyled">
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Medal.png" alt="Medal" /> Free 1 Year Warranty</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Truck.png" alt="Truck" /> Free Shipping & Fast Delivery</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Handshake.png" alt="Handshake" /> 100% Money-back Guarantee</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Headphones.png" alt="Headphones" /> 24/7 Customer Support</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/CreditCard.png" alt="Credit Card" /> Secure Payment Method</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-lg-3">
-                <div className="conte">
-                  <h5>Shipping Information</h5>
-                  <ul className="list-unstyled">
-                    <li className="d-flex align-items-center gap-3 mb-3">Helps maintain blood sugar levels</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">Meets protein and fibre requirements in patients with diabetes</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">High in fibre and protein</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">Low glycemic index and fat</li>
-                  </ul>
                 </div>
               </div>
             </div>
@@ -48,36 +25,14 @@ export default function ProductDescription({singleProduct}) {
         return (
           <div className="asdknc-desc mt-4">
             <div className="row">
-              <div className="col-lg-6">
+              <div className="col-12">
                 <div className="conte">
                   {/* <h5>Description</h5> */}
                   <div dangerouslySetInnerHTML={{ __html: singleProduct.additional_information
 }} />
                 </div>
               </div>
-              {/* <div className="col-lg-3">
-                <div className="conte">
-                  <h5>Feature</h5>
-                  <ul className="list-unstyled">
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Medal.png" alt="Medal" /> Free 1 Year Warranty</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Truck.png" alt="Truck" /> Free Shipping & Fast Delivery</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Handshake.png" alt="Handshake" /> 100% Money-back Guarantee</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Headphones.png" alt="Headphones" /> 24/7 Customer Support</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/CreditCard.png" alt="Credit Card" /> Secure Payment Method</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-lg-3">
-                <div className="conte">
-                  <h5>Shipping Information</h5>
-                  <ul className="list-unstyled">
-                    <li className="d-flex align-items-center gap-3 mb-3">Helps maintain blood sugar levels</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">Meets protein and fibre requirements in patients with diabetes</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">High in fibre and protein</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">Low glycemic index and fat</li>
-                  </ul>
-                </div>
-              </div> */}
+              
             </div>
           </div>
         );
@@ -85,34 +40,11 @@ export default function ProductDescription({singleProduct}) {
         return (
           <div className="asdknc-desc mt-4">
             <div className="row">
-              <div className="col-lg-6">
+              <div className="col-12">
                 <div className="conte">
                 <div dangerouslySetInnerHTML={{ __html: singleProduct.specification}} />
                 </div>
               </div>
-              {/* <div className="col-lg-3">
-                <div className="conte">
-                  <h5>Feature</h5>
-                  <ul className="list-unstyled">
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Medal.png" alt="Medal" /> Free 1 Year Warranty</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Truck.png" alt="Truck" /> Free Shipping & Fast Delivery</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Handshake.png" alt="Handshake" /> 100% Money-back Guarantee</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/Headphones.png" alt="Headphones" /> 24/7 Customer Support</li>
-                    <li className="d-flex align-items-center gap-3 mb-3"><img src="/CreditCard.png" alt="Credit Card" /> Secure Payment Method</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-lg-3">
-                <div className="conte">
-                  <h5>Shipping Information</h5>
-                  <ul className="list-unstyled">
-                    <li className="d-flex align-items-center gap-3 mb-3">Helps maintain blood sugar levels</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">Meets protein and fibre requirements in patients with diabetes</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">High in fibre and protein</li>
-                    <li className="d-flex align-items-center gap-3 mb-3">Low glycemic index and fat</li>
-                  </ul>
-                </div>
-              </div> */}
             </div>
           </div>
         );
