@@ -18,6 +18,7 @@ export default function Orders() {
   });
   const [selectedReason, setSelectedReason] = useState("");
   const [customReason, setCustomReason] = useState("");
+  const [cancellingOrder, setCancellingOrder] = useState(null); // Track which order is being cancelled
 
   useEffect(() => {
     fetchOrders();
@@ -47,6 +48,83 @@ export default function Orders() {
       setError("Failed to load orders. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Cancel Single Product
+  const cancelSingleProduct = async (orderId, productId, productName) => {
+    try {
+      setCancellingOrder(`${orderId}-${productId}`);
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        `${config.API_URL_POST}/cancil-order`,
+        {
+          cancel_type: "product",
+          order_id: orderId,
+          product_id: productId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.status) {
+        alert(`Product "${productName}" cancelled successfully!`);
+        fetchOrders(); // Refresh orders
+      } else {
+        alert(response.data.message || "Failed to cancel product");
+      }
+    } catch (err) {
+      console.error("Error cancelling product:", err);
+      alert("Failed to cancel product. Please try again.");
+    } finally {
+      setCancellingOrder(null);
+    }
+  };
+
+  // Cancel Entire Order
+  const cancelEntireOrder = async (orderId, invoiceNumber) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to cancel entire order ${invoiceNumber}? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setCancellingOrder(`order-${orderId}`);
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        `${config.API_URL_POST}/cancil-order`,
+        {
+          cancel_type: "order",
+          order_id: orderId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.status) {
+        alert(`Order ${invoiceNumber} cancelled successfully!`);
+        fetchOrders(); // Refresh orders
+      } else {
+        alert(response.data.message || "Failed to cancel order");
+      }
+    } catch (err) {
+      console.error("Error cancelling order:", err);
+      alert("Failed to cancel order. Please try again.");
+    } finally {
+      setCancellingOrder(null);
     }
   };
 
@@ -180,7 +258,10 @@ export default function Orders() {
 
   const calculateOrderTotal = (order) => {
     return order.items.reduce((total, item) => {
-      return total + parseFloat(item.sale_price) * item.quantity;
+      if (item.order_status !== "cancelled") {
+        return total + parseFloat(item.sale_price) * item.quantity;
+      }
+      return total; // Return current total for cancelled items
     }, 0);
   };
 
@@ -190,6 +271,16 @@ export default function Orders() {
     const daysDifference = (currentDate - orderDateObj) / (1000 * 60 * 60 * 24);
 
     return orderStatus === "delivered" && daysDifference <= 30;
+  };
+
+  // Check if order can be cancelled (only pending or processing orders)
+  const isOrderCancellable = (orderStatus) => {
+    return ["pending", "processing"].includes(orderStatus);
+  };
+
+  // Check if product can be cancelled (only pending or processing orders)
+  const isProductCancellable = (orderStatus) => {
+    return ["pending", "processing"].includes(orderStatus);
   };
 
   // Reason options for the modal
@@ -279,6 +370,34 @@ export default function Orders() {
                             <span className={`payment-status bg-light`}>
                               Payment Status : {order.payment_status}
                             </span>
+                            {/* Cancel Entire Order Button */}
+                            {isOrderCancellable(order.order_status) && (
+                              <button
+                                type="button"
+                                className="btn btn-outline-danger btn-sm ms-2"
+                                onClick={() =>
+                                  cancelEntireOrder(
+                                    order.id,
+                                    order.invoice_number
+                                  )
+                                }
+                                disabled={
+                                  cancellingOrder === `order-${order.id}`
+                                }
+                              >
+                                {cancellingOrder === `order-${order.id}` ? (
+                                  <>
+                                    <span
+                                      className="spinner-border spinner-border-sm me-2"
+                                      role="status"
+                                    ></span>
+                                    Cancelling...
+                                  </>
+                                ) : (
+                                  "Cancel Entire Order"
+                                )}
+                              </button>
+                            )}
                           </div>
                         </div>
 
@@ -290,11 +409,16 @@ export default function Orders() {
                             );
                             const returnRequestKey = `${order.id}-${item.product_id}-return`;
                             const replaceRequestKey = `${order.id}-${item.product_id}-replace`;
+                            const cancelRequestKey = `${order.id}-${item.product_id}`;
 
                             return (
                               <div
                                 key={itemIndex}
                                 className="order-item d-flex align-items-center gap-4"
+                                style={{
+                                  opacity:
+                                    item.order_status == "cancelled" ? 0.7 : 1,
+                                }}
                               >
                                 <div className="order-item-img">
                                   <img
@@ -336,13 +460,118 @@ export default function Orders() {
                                     </div>
                                   )}
 
-                                  {/* Return and Replace Buttons */}
+                                  {/* Return, Replace and Cancel Buttons */}
                                   <div className="product-actions mt-3">
-                                    {isAllowed ? (
+                                    {isProductCancellable(
+                                      order.order_status
+                                    ) ? (
+                                      <div className="btn-group" role="group">
+                                        {item.order_status == "cancelled" ? (
+                                          <button
+                                            type="button"
+                                            className="btn btn-outline-dark disabled btn-sm"
+                                          >
+                                            Cancelled
+                                          </button>
+                                        ) : (
+                                          <button
+                                            type="button"
+                                            className="btn btn-outline-danger btn-sm"
+                                            onClick={() =>
+                                              cancelSingleProduct(
+                                                order.id,
+                                                item.product_id,
+                                                item.product_name
+                                              )
+                                            }
+                                            disabled={
+                                              cancellingOrder ===
+                                              cancelRequestKey
+                                            }
+                                          >
+                                            {cancellingOrder ===
+                                            cancelRequestKey ? (
+                                              <>
+                                                <span
+                                                  className="spinner-border spinner-border-sm me-2"
+                                                  role="status"
+                                                  aria-hidden="true"
+                                                ></span>
+                                                Cancelling...
+                                              </>
+                                            ) : (
+                                              "Cancel Product"
+                                            )}
+                                          </button>
+                                        )}
+                                        {isAllowed && (
+                                          <>
+                                            <button
+                                              type="button"
+                                              className="btn btn-outline-warning btn-sm"
+                                              onClick={() =>
+                                                handleReturnRequest(
+                                                  order.id,
+                                                  item.product_id,
+                                                  item.product_name
+                                                )
+                                              }
+                                              disabled={
+                                                processingRequest ===
+                                                returnRequestKey
+                                              }
+                                            >
+                                              {processingRequest ===
+                                              returnRequestKey ? (
+                                                <>
+                                                  <span
+                                                    className="spinner-border spinner-border-sm me-2"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                  ></span>
+                                                  Processing...
+                                                </>
+                                              ) : (
+                                                "Return"
+                                              )}
+                                            </button>
+                                            <button
+                                              type="button"
+                                              className="btn btn-outline-info btn-sm"
+                                              onClick={() =>
+                                                handleReplaceRequest(
+                                                  order.id,
+                                                  item.product_id,
+                                                  item.product_name
+                                                )
+                                              }
+                                              disabled={
+                                                processingRequest ===
+                                                replaceRequestKey
+                                              }
+                                            >
+                                              {processingRequest ===
+                                              replaceRequestKey ? (
+                                                <>
+                                                  <span
+                                                    className="spinner-border spinner-border-sm me-2"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                  ></span>
+                                                  Processing...
+                                                </>
+                                              ) : (
+                                                "Replace"
+                                              )}
+                                            </button>
+                                          </>
+                                        )}
+                                      </div>
+                                    ) : isAllowed ? (
                                       <div className="btn-group" role="group">
                                         <button
                                           type="button"
-                                          className="btn btn-outline-danger btn-sm"
+                                          className="btn btn-outline-warning btn-sm"
                                           onClick={() =>
                                             handleReturnRequest(
                                               order.id,
@@ -371,7 +600,7 @@ export default function Orders() {
                                         </button>
                                         <button
                                           type="button"
-                                          className="btn btn-outline-warning btn-sm"
+                                          className="btn btn-outline-info btn-sm"
                                           onClick={() =>
                                             handleReplaceRequest(
                                               order.id,
