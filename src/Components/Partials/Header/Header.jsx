@@ -27,6 +27,29 @@ export default function Header() {
   const [show, setShow] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch categories from API
+  const fetchCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('https://dashboard.zezzu.in/api/v1/get-header-category');
+      const data = await response.json();
+      
+      if (data.status === "success") {
+        setCategories(data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   let detactWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
   useEffect(() => {
@@ -45,8 +68,7 @@ export default function Header() {
     setIsLoggedIn(!!token);
   }, []);
 
-  // pop up  code is here  start
-
+  // pop up code is here start
   const [Advshow, setAdvShow] = useState(false);
   let timer;
 
@@ -79,10 +101,9 @@ export default function Header() {
       clearTimeout(timer);
     };
   }, []);
-  // pop up  code is here  end
+  // pop up code is here end
 
   // all category code here start
-
   const [showCategoriesDropdown, setshowCategoriesDropdown] = useState(false);
   const dropdownCategoriesRef = useRef(null);
 
@@ -104,7 +125,6 @@ export default function Header() {
       document.removeEventListener("mousedown", handleCategoriesClickOutside);
     };
   }, []);
-
   // all category code here end
 
   // Sticky header functionality
@@ -122,6 +142,7 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <>
       <section className={`Header ${isSticky ? "sticky" : ""}`}>
@@ -144,7 +165,6 @@ export default function Header() {
                 </Link>
               </li>
               <li className="d-flex align-items-center flex-wrap gap-lg-5 gap-md-4 gap-2 text-lg-start text-end">
-                {/* <Link to="#!"><i className='me-2'><FontAwesomeIcon icon={faUser}/></i> My account</Link> */}
                 <div className="account-dropdown position-relative">
                   {isLoggedIn ? (
                     <Link to="/user-account">
@@ -186,7 +206,7 @@ export default function Header() {
                 <FontAwesomeIcon icon={faBarsStaggered} />
               </button>
               <div className=" position-relative">
-                <AllCatergory_Filter />
+                <AllCatergory_Filter categories={categories} />
               </div>
               <SearchBar />
             </div>
@@ -200,6 +220,7 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Desktop Menu with Dynamic Categories */}
         <div className="menu-box desktop">
           <ul className="d-flex align-items-center list-unstyled justify-content-center mb-0">
             <li>
@@ -208,27 +229,28 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <Link to="/product">Kitchen</Link>
+              <Link to="/product">Shop</Link>
             </li>
-            <li>
-              <Link to="/product">Clothing</Link>
-            </li>
-            <li>
-              <Link to="/product">Personal Care</Link>
-            </li>
-            <li>
-              <Link to="/about">About Us</Link>
-            </li>
-            <li>
-              <Link to="/contact-us">Contact Us</Link>
-            </li>
+            
+            {/* Dynamic Categories from API */}
+            {loading ? (
+              <li>Loading...</li>
+            ) : (
+              categories.map((category) => (
+                <li key={category.id}>
+                  <Link to={`/category/${category.slug}`}>
+                    {category.name}
+                  </Link>
+                </li>
+              ))
+            )}
             <li>
               <Link to="#!">Track Order</Link>
             </li>
           </ul>
         </div>
 
-        {/* Offcanvas Section */}
+        {/* Offcanvas Section with Dynamic Categories */}
         <Offcanvas show={show} onHide={handleClose} className="mobsideMenu">
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
@@ -241,29 +263,37 @@ export default function Header() {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <div className="menu-box">
-              <ul className="d-flex flex-wrap align-items-center list-unstyled justify-content-center mb-0">
+              <ul className="d-flex flex-column align-items-start list-unstyled mb-0">
                 <li>
-                  <Link to="/" className="active">
+                  <Link to="/" className="active" onClick={handleClose}>
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link to="/product">Kitchen</Link>
+                  <Link to="/product" onClick={handleClose}>
+                    Shop
+                  </Link>
                 </li>
+                
+                {/* Dynamic Categories for Mobile */}
+                {loading ? (
+                  <li>Loading...</li>
+                ) : (
+                  categories.map((category) => (
+                    <li key={category.id}>
+                      <Link 
+                        to={`/category/${category.slug}`} 
+                        onClick={handleClose}
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))
+                )}
                 <li>
-                  <Link to="/product">Clothing</Link>
-                </li>
-                <li>
-                  <Link to="/product">Personal Care</Link>
-                </li>
-                <li>
-                  <Link to="/about">About Us</Link>
-                </li>
-                <li>
-                  <Link to="/contact-us">Contact Us</Link>
-                </li>
-                <li>
-                  <Link to="#!">Track Order</Link>
+                  <Link to="#!" onClick={handleClose}>
+                    Track Order
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -271,7 +301,7 @@ export default function Header() {
         </Offcanvas>
       </section>
 
-      {/* pop up  code is here  start */}
+      {/* Popup code */}
       <div className={`modal ${Advshow ? "d-block" : "d-none"}`} tabIndex="-1">
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
@@ -285,7 +315,6 @@ export default function Header() {
         </div>
       </div>
       {Advshow && <div className="modal-backdrop fade show"></div>}
-      {/* pop up  code is here  end */}
     </>
   );
 }

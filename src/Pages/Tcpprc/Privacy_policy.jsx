@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
       <div className="term-Conditons_sec my-5">
         <div className="container">
           <div className="term_tiles">
-          <h1>{ tcpprc.data.privacy_policy.title || 'Privacy Policy'}</h1>
+          <h1>{ tcpprc.data.privacy_policy.title || 'Privacy Policy' }</h1>
             {!tcpprc.status ? (
               <div>
                 <div className="placeholder-glow">
