@@ -88,18 +88,19 @@ export default function SingleProductSlide({ product }) {
           <Link to={`/product/${product.slug}`}>{product.title}</Link>
         </h3>
         <div className="rating d-flex align-items-center ">
-          <FontAwesomeIcon key={0} icon={faStar} />
+          <FontAwesomeIcon icon={faStar} />
           <FontAwesomeIcon icon={faStar} />
           <FontAwesomeIcon icon={faStar} />
           <FontAwesomeIcon icon={faStarHalfAlt} />
-          <span>({product.avg_ratting})</span>
+          <span>({Number(product.avg_ratting)})</span>
         </div>
         <div className="Pricing d-flex align-items-center ">
           <p className="price">₹ {product.discount_price} </p>
           <p className="slashPrice">₹ {product.price} </p>
         </div>
       </div>
-      {Object.hasOwn(product, "product_inventory_details") && !Object.hasOwn(product.product_inventory_details, 0) ? (
+      {Object.hasOwn(product, "product_inventory_details") &&
+      !Object.hasOwn(product.product_inventory_details, 0) ? (
         <a
           onClick={() => toggleCart(product.prd_id)}
           className={`cart-btn ${

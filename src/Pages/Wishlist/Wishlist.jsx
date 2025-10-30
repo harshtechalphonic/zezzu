@@ -111,7 +111,7 @@ export default function Wishlist() {
                       <FontAwesomeIcon icon={faStar} />
                       <FontAwesomeIcon icon={faStar} />
                       <FontAwesomeIcon icon={faStarHalfAlt} />
-                      <span>({product.avg_ratting})</span>
+                      <span>({Number(product.avg_ratting)})</span>
                     </div>
                     <div className="Pricing d-flex align-items-center">
                       <p className="price">₹ {product.discount_price} </p>

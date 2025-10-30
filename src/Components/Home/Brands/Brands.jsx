@@ -57,11 +57,9 @@ export default function Brands() {
           <Slider {...settings} className="xyzg-slider">
             {data.map((item) => (
               <div key={item.id} className="Shop_by_health-card">
-                <Link to={`/product/brand/${item.slug}`}>
                 <div className="card-img">
                   <img src={`${brandImageUrl}/${item?.image?.path}`} alt={item?.image?.alt} />
                 </div>
-                </Link>
               </div>
             ))}
           </Slider>

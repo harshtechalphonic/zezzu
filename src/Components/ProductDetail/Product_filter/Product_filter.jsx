@@ -45,7 +45,7 @@ export default function ProductFilter({ products }) {
 
       // Calculate step amount based on price range
       const range = calculatedMax - calculatedMin;
-      setStepAmount(Math.max(10, Math.floor(range / 20))); // Dynamic step amount
+      setStepAmount(Math.max(10, Math.floor(range / 20)));
     }
   }, [products.status, products.data]);
 
@@ -166,7 +166,7 @@ export default function ProductFilter({ products }) {
         </div>
       </div>
 
-      <div className="card categories-card brnads mb-3">
+      {/* <div className="card categories-card brnads mb-3">
         <div className="categories-header">Brands</div>
         <div className="list-group">
           <BrandApi />
@@ -180,7 +180,7 @@ export default function ProductFilter({ products }) {
             ))}
           </ul>
         </div>
-      </div>
+      </div> */}
 
       <div className="card categories-card mb-3">
         <div className="categories-header">Price Range</div>
